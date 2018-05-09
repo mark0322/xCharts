@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+    #container {
+      width: 95%;
+      height: 95%;
+      background: #eee;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="container">
+  </div>
+</body>
+<script src="../d3.js"></script>
+<script src="../fns.js"></script>
+<script src="../charts.js"></script>
+<script type="text/javascript">
+const log = (...d) => console.log(...d)
+const options = {
+  data: [
+      {name: '待通报', val: 487, color: 'red'},
+      {name: '已通报', val: 386, color: '#122645'},
+      {name: '处置中', val: 108, color: '#122645'},
+      {name: '已整改', val: 815, color: '#1b5b6c'}
+  ],
+  padding: { top: 20, left: 40, right: 40, bottom: 10 },
+  donutGap: 20, // 每组环 的间距
+  donutWidth: 30, // 环的宽度
+  valLabel: { // 环中间的 value 值
+      color: '#333',
+      fontSize: 22,
+      dy: '1em', // TODO
+      dx: '1em' // TODO
+  },
+  nameLabel: { // 环下部的 name 值
+      color: '#333',
+      fontSize: 22,
+      dy: '1em',
+      dx: '0em'
+  }
+}
+
+donutsBoard(document.querySelector('#container'), options)
+
+
+</script>

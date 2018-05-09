@@ -49,3 +49,23 @@ function zip() {
   return resultArr
 }
 
+function sumArray(arr, iteratee = d => d) {
+  try {
+    arr = mapArray(...arguments)
+  } catch (e) {
+    throw new Error('输入参数有误！')
+  }
+  return arr.reduce((a, b) => a + b)
+}
+
+function mapArray(arr, callback = d => d) {
+  arr = arr.reduce((a, b) => {
+    if (callback(b) !== undefined) {
+      a.push(callback(b))
+      return a
+    }
+    return a
+  }, [])
+  if (!arr[0]) throw new Error('输入参数有误！')
+  return arr
+}
