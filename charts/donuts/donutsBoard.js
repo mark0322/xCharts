@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import sumArray from './util/array/sumArray'
+import sumArray from '../../util/array/sumArray'
 
 /**
  * 绘制一组或多组类似’汽车仪表板‘的 donut 图

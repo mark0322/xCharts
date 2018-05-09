@@ -1,8 +1,8 @@
 import * as d3Selection from 'd3-selection'
 const d3 = Object.assign({}, d3Selection)
 
-import _chunk from './util/array/_chunk'
-import sumArray from './util/array/sumArray'
+import _chunk from '../../util/array/_chunk'
+import sumArray from '../../util/array/sumArray'
 
 /**
  * 使用基本<rect>而非d3.treemap()绘制treemap
