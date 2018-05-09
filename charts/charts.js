@@ -623,4 +623,144 @@ function bar(container, options) {
 }
 
 // --
+function bubbles(container, options) {
+  container.innerHTML = '' // 清空 容器内容
 
+  const // *** 全局数据 ***
+    data = options.data,
+    bubbles = options.bubbles || {},
+    padding = options.padding || { top: 0, left: 0, right: 0, bottom: 0 },
+    svgWidth = container.offsetWidth,
+    svgHeight = container.offsetHeight,
+    axisWidth = svgWidth - padding.left - padding.right,
+    axisHeight = svgHeight - padding.top - padding.bottom
+
+  const // 定义画布 & g_wrawp
+    svg = d3.select(container).append('svg')
+      .attr('width', svgWidth).attr('height', svgHeight),
+    g = svg.append('g').attr('class', 'g_wrap')
+      .attr('transform', `translate(${padding.left}, ${padding.top})`)
+
+  const pack = d3.pack()
+    .padding(() => bubbles.padding ? bubbles.padding : 3)
+    .size([axisWidth, axisHeight])
+
+  const root = d3.hierarchy({ children: data })
+    .sum(d => Math.sqrt(d.val) + 3) // Math.sqrt(d.val) + 3目的是：当 val 为 0 时， ○ 大小适中
+    .each(d => {
+      d.group = d.data.groups;
+    })
+
+  const node = g.selectAll('.node')
+    .data(pack(root).leaves())
+    .enter()
+    .append('g')
+    .attr('class', 'node')
+    .attr('transform', d => `translate(${d.x}, ${d.y})`)
+
+
+  try { // draw bubble
+
+    // circle
+    const bubbleColor = bubbles.color || 'steelblue'
+    node.append('circle')
+      .attr('r', d => d.r)
+      .attr('id', d => d.data.name)
+      .attr('fill', d => {
+        if (Array.isArray(bubbleColor)) {
+          return bubbleColor[d.group]
+        }
+        return bubbleColor
+      })
+
+    { // label
+      const label = bubbles.label || {}
+      node.append('clipPath')
+        .attr('id', d => 'clip-' + d.data.name)
+        .append('use')
+        .attr('xlink:href', d => '#' + d.data.name)
+
+      node.append('text')
+        .attr('clip-path', d => `url(#clip-${d.data.name})`)
+        .attr('class', 'label')
+        .selectAll('tspan')
+        .data(d => [d.data.name, d.data.val])
+        .enter()
+        .append('tspan')
+        .attr('x', 0)
+        .attr('dy', (d, i) => i == 0 ? '0em' : '1.2em')
+        .attr('text-anchor', 'middle')
+        .text(d => d)
+        .attr('font-size', (d, i) => {
+          return i == 0 ? label.name.fontSize : label.val.fontSize
+        })
+        .attr('fill', (d, i) => {
+          return i == 0 ? label.name.fontColor : label.val.fontColor
+        })
+        .attr('font-weight', (d, i) => {
+          return i == 0 ? label.name.fontWeight : label.val.fontWeight
+        })
+    }
+
+    // tooltip - title
+    node.append('title')
+      .text(d => d.data.name + '\n' + d.data.val)
+
+    // border
+    const border = bubbles.border || {}
+    if (border.show) {
+      let interpolateColor,
+        isMappingColor = false
+
+      // mapping color
+      if (border.mappingColor && border.mappingColor.length == 2) {
+        interpolateColor = d3.scaleLinear()
+          .domain([d3.min(data, d => d.val), d3.max(data, d => d.val)])
+          .range([border.mappingColor[0], border.mappingColor[1]])
+        isMappingColor = true
+      }
+
+      g.selectAll('g.node circle')
+        .attr('stroke', d => {
+          return isMappingColor ? interpolateColor(d.data.val) : border.color
+        })
+        .attr('stroke-width', border.width)
+    }
+  } catch (e) {
+    console.warn('draw bubble', e)
+  }
+
+  try { // bubble style
+
+    // bubble 的渐变
+    const gradient = bubbles.linearGradient || {}
+    if (gradient.show) {
+
+      // define gradient
+      let linearGradient = g.append('g')
+        .attr('class', 'linearGradient')
+        .append('defs')
+        .append('linearGradient')
+        .attr('id', 'bubbleGradientLinear')
+        .attr('x1', '50%')
+        .attr('y1', '0%')
+        .attr('x2', '50%')
+        .attr('y2', '100%')
+
+      linearGradient.append('stop')
+        .attr('offset', '0%')
+        .attr('style', `stop-color:${gradient.topColor}`)
+      linearGradient.append('stop')
+        .attr('offset', '100%')
+        .attr('style', `stop-color:${gradient.bottomColor}`)
+
+      g.selectAll('g.node circle')
+        .attr('fill', 'url(#bubbleGradientLinear)')
+    }
+
+  } catch (e) {
+    console.warn('bubble style', e)
+  }
+}
+
+// --

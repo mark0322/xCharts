@@ -9,7 +9,7 @@ const d3 = Object.assign({}, d3Selection, d3Hierarchy, d3Scale, d3Array)
  * @param container 包裹svg chart的div容器
  * @param options chart的配置参数 (类似echarts)
  */
-function bubble(container, options) {
+function bubbles(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -32,7 +32,7 @@ function bubble(container, options) {
     .size([axisWidth, axisHeight])
 
   const root = d3.hierarchy({ children: data })
-    .sum(d => Math.sqrt(d.count) + 3) // Math.sqrt(d.count) + 3目的是：当 val 为 0 时， ○ 大小适中
+    .sum(d => Math.sqrt(d.val) + 3) // Math.sqrt(d.val) + 3目的是：当 val 为 0 时， ○ 大小适中
     .each(d => {
       d.group = d.data.groups;
     })
@@ -43,9 +43,7 @@ function bubble(container, options) {
     .append('g')
     .attr('class', 'node')
     .attr('transform', d => `translate(${d.x}, ${d.y})`)
-    .attr('eventIndex', d => d.data.code)
-    .attr('parent_code', d => d.data.parent_code)
-    .attr('parent_name', d => d.data.parent_name)
+
 
   try { // draw bubble
 
@@ -53,7 +51,7 @@ function bubble(container, options) {
     const bubbleColor = bubbles.color || 'steelblue'
     node.append('circle')
       .attr('r', d => d.r)
-      .attr('id', d => d.data.parent_code)
+      .attr('id', d => d.data.name)
       .attr('fill', d => {
         if (Array.isArray(bubbleColor)) {
           return bubbleColor[d.group]
@@ -64,15 +62,15 @@ function bubble(container, options) {
     { // label
       const label = bubbles.label || {}
       node.append('clipPath')
-        .attr('id', d => 'clip-' + d.data.parent_code)
+        .attr('id', d => 'clip-' + d.data.name)
         .append('use')
-        .attr('xlink:href', d => '#' + d.data.parent_code)
+        .attr('xlink:href', d => '#' + d.data.name)
 
       node.append('text')
-        .attr('clip-path', d => `url(#clip-${d.data.parent_code})`)
+        .attr('clip-path', d => `url(#clip-${d.data.name})`)
         .attr('class', 'label')
         .selectAll('tspan')
-        .data(d => [d.data.name, d.data.count])
+        .data(d => [d.data.name, d.data.val])
         .enter()
         .append('tspan')
         .attr('x', 0)
@@ -92,7 +90,7 @@ function bubble(container, options) {
 
     // tooltip - title
     node.append('title')
-      .text(d => d.data.name + '\n' + d.data.count)
+      .text(d => d.data.name + '\n' + d.data.val)
 
     // border
     const border = bubbles.border || {}
@@ -103,14 +101,14 @@ function bubble(container, options) {
       // mapping color
       if (border.mappingColor && border.mappingColor.length == 2) {
         interpolateColor = d3.scaleLinear()
-          .domain([d3.min(data, d => d.count), d3.max(data, d => d.count)])
+          .domain([d3.min(data, d => d.val), d3.max(data, d => d.val)])
           .range([border.mappingColor[0], border.mappingColor[1]])
         isMappingColor = true
       }
 
       g.selectAll('g.node circle')
         .attr('stroke', d => {
-          return isMappingColor ? interpolateColor(d.data.count) : border.color
+          return isMappingColor ? interpolateColor(d.data.val) : border.color
         })
         .attr('stroke-width', border.width)
     }
@@ -151,7 +149,7 @@ function bubble(container, options) {
   }
 }
 
-export default bubble
+export default bubbles
 
 // *** 参数 模板 ***
 // const options = {
