@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+    #container {
+      width: 95%;
+      height: 95%;
+      background: #143d66;
+    }
+
+    /* css - bgBar */
+    g.bg-bars rect {
+        opacity: 0;
+    }
+    g.bg-bars rect:hover {
+      opacity: 0.3;
+      cursor: pointer;
+    }
+
+    /* css - tooltip  */
+    p.tooltip-date {
+      text-align: center;
+    }
+    .tooltip-row-dot {
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        border-radius: 100%;
+        margin-right: 10px;
+    }
+    .tooltip-row {
+        text-align: left;
+        font-size: 14px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="container">
+  </div>
+</body>
+<script src="../d3.js"></script>
+<script src="../fns.js"></script>
+<script src="../charts.js"></script>
+<script type="text/javascript">
+  const log = (...d) => console.log(...d)
+  const options = {
+    data: { // 必填参
+
+        // dummy data , 该数据会被 覆盖
+        date: [1425331402000, 1450332152000, 1475332902000, 1500333652000, 1525334402000],
+        val: {
+            'A': [1, 2, 3, 4, 5],
+            'B': [1, 2, 1, 1, 1],
+            'C': [2, 2, 2, 2, 2],
+            'D': [6, 3, 3, 3, 3],
+            'E': [5, 4, 3, 2, 1]
+        }
+    },
+    aHoverData: [
+      {
+        date: 1425331402000,
+        list: {'A': 1, 'B': 1, 'C': 2, 'D': 6, 'E': 5}
+      },
+      {
+        date: 1450332152000,
+        list: {'A': 2, 'B': 2, 'C': 2, 'D': 3, 'E': 4}
+      },
+      {
+        date: 1475332902000,
+        list: {'A': 3, 'B': 1, 'C': 2, 'D': 3, 'E': 3}
+      },
+      {
+        date: 1500333652000,
+        list: {'A': 4, 'B': 1, 'C': 2, 'D': 3, 'E': 2}
+      },
+      {
+        date: 1525334402000,
+        list: {'A': 5, 'B': 1, 'C': 2, 'D': 3, 'E': 1}
+      },
+    ],
+    line: { // 可选参
+        color: 'steelblue', // 可选参 (默认值为 'steelblue')
+        width: 3,
+        label: { // 可选参; 将num值直接显示
+            show: true,
+            fontSize: 12, // 可选参
+            fontColor: '#eee', // 可选参
+            fontDx: 3, //  可选参； 使unit沿x轴偏移
+            fontDy: -3 //  可选参； 使unit沿y轴偏移
+        }
+    },
+    splitline: { // 可选参
+        show: true,
+        color: '#74706d', // 可选参
+        lineWidth: 1, // 可选参
+        dashMode: true // 可选参 (默认为实线，若要虚线，设true)
+    },
+    axis: { // 可选参
+        axisLineColor: '#497197', // 可选参
+        ticksColor: '#ccc', // 可选参
+        yAxisTicksNum: 8, //  可选参， 用于设置 num 轴的 ticks 个数
+        // xAxis: {
+            // hideLine: true, // 可选参
+            // hideTicks: true, // 可选参
+        // },
+        // yAxis: {
+            // hideLine: true // 可选参
+            // hideTicks: true, // 可选参
+        // },
+        // xAxisUnit: {
+            // name: 'date',
+            // fontSize: 14,   // 可选参
+            // fontColor: '#9ee' // 可选参
+            // fontDx: 10, //  可选参； 使unit沿x轴偏移
+            // fontDy: 10, //  可选参； 使unit沿y轴偏移
+        // },
+        // yAxisUnit: {
+            // name: 'value',
+            // fontSize: 14,   // 可选参
+            fontColor: '#9ee' // 可选参
+            // fontDx: 10, //  可选参； 使unit沿x轴偏移
+            // fontDy: 10, //  可选参； 使unit沿y轴偏移
+        // }
+    },
+    tooltip: { // 可选参
+        show: true
+    },
+
+    // 可选参；(默认为40); 作用:设置坐标系离画布上、下、左、右侧距离
+    padding: { top: 20, left: 50, right: 20, bottom: 20 },
+    bgBar: {
+        show: true,
+        padding: 0.3, // 0~1
+        color: '#999',
+        opacity: 0.1
+    }
+  }
+
+
+  // 绘制 chart
+  lines(document.querySelector('#container'), options)
+
+
+</script>
