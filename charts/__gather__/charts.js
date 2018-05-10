@@ -160,20 +160,20 @@ function lines(container, options) {
       let offsetXPos = 2 // 记录 tooltips 在X轴的偏移量
         
       // 单例模式 - 渲染并获得 div - tooltipWarp
-      let oTooltipWrap = singletonInitTooltipWrap()
+      const oTooltipWrap = singletonInitTooltipWrap()
       gBGbars.selectAll('rect')
         .data(options.aHoverData)
         .on('mouseenter', d => {
           oTooltipWrap.innerHTML = ''
           oTooltipWrap.style.display = 'block'
 
-          let tooltipWrap = d3.select(oTooltipWrap)
+          const tooltipWrap = d3.select(oTooltipWrap)
           tooltipWrap.append('p')
             .text(parseStamp2DayIncludeYear(d['date']))
             .attr('class', 'tooltip-date')
             .style('text-align', 'center')
 
-          let tooltipsRow = tooltipWrap.append('div')
+          const tooltipsRow = tooltipWrap.append('div')
             .attr('class', 'tooltip-body')
             .selectAll('div')
             .data(Object.entries(d['list']))

@@ -1,7 +1,3 @@
-/** 
- * 创建tooltip的最外层 div wrap
- * @return div-tooltipWrap 的DOM对象
-*/
 const initTooltipWrap = function() {
 
   // 意图为 获取 Vue 的最外层 <div id='app'>
@@ -21,7 +17,6 @@ const initTooltipWrap = function() {
   return tooltipWrap
 }
 
-// 单例模式 - 模板
 const getSingleton = function(fn) {
   let instance = null
   return function() {
@@ -29,10 +24,6 @@ const getSingleton = function(fn) {
   }
 }
 
-/** 
- * 给 <div> - tooltipWrap 包装成单例模式
- * @return div-tooltipWrap 的DOM对象
-*/
 const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
 
 function parseStamp2Day(d) {

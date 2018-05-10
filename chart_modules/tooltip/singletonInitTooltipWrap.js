@@ -19,6 +19,7 @@ const initTooltipWrap = function() {
     border-radius: 10px;
     display:none;
     z-index:9999;`
+
   appWrap.appendChild(tooltipWrap)
   return tooltipWrap
 }
