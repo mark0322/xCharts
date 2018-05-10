@@ -143,20 +143,6 @@ function lines(container, options) {
 
   try { // backgroundBar & tooltips
     if (bgBar) {
-
-      // div - tooltips 框
-      const oDiv = document.createElement('div')
-      oDiv.classList.add('bar-tooltip')
-      oDiv.style.cssText =
-        `padding:10px 15px;
-        background:rgba(0,0,0,0.7);
-        position:fixed;
-        color:white;
-        border-radius: 10px;
-        display:none;
-        z-index:9999;`
-
-      container.appendChild(oDiv);
       const gBGbars = g.append('g').attr('class', 'bg-bars')
 
       // draw bgBar
@@ -171,19 +157,21 @@ function lines(container, options) {
         .attr('eventIndex', d => d)
         .attr('fill', d => bgBar.color ? bgBar.color : '#666')
 
-      // tooltips
-      // 注：需额外使用css
       let offsetXPos = 2 // 记录 tooltips 在X轴的偏移量
+        
+      // 单例模式 - 渲染并获得 div - tooltipWarp
+      let oTooltipWrap = singletonInitTooltipWrap()
       gBGbars.selectAll('rect')
         .data(options.aHoverData)
         .on('mouseenter', d => {
-          oDiv.innerHTML = ''
-          oDiv.style.display = 'block'
+          oTooltipWrap.innerHTML = ''
+          oTooltipWrap.style.display = 'block'
 
-          let tooltipWrap = d3.select(oDiv)
+          let tooltipWrap = d3.select(oTooltipWrap)
           tooltipWrap.append('p')
             .text(parseStamp2DayIncludeYear(d['date']))
             .attr('class', 'tooltip-date')
+            .style('text-align', 'center')
 
           let tooltipsRow = tooltipWrap.append('div')
             .attr('class', 'tooltip-body')
@@ -192,10 +180,18 @@ function lines(container, options) {
             .enter()
             .append('div')
             .attr('class', 'tooltip-row')
+            .style('text-align', 'left')
+            .style('font-size', '14px')
 
           tooltipsRow.append('span')
             .attr('class', 'tooltip-row-dot')
             .style('background', d => z(d[0]))
+            .style('width','10px')
+            .style('height', '10px')
+            .style('border-radius', '100%')
+            .style('margin-right', '10px')
+            .style('display', 'inline-block')
+
           tooltipsRow.append('span')
             .attr('class', 'tooltip-row-name')
             .text(d => d[0] + ': ')
@@ -204,16 +200,16 @@ function lines(container, options) {
             .text(d => d[1])
 
           // 鼠标进入 bgBar 时，计算初始 tooltips 在X轴的偏移量
-          d3.event.offsetX > svgWidth / 2 ?
-            offsetXPos = -oDiv.offsetWidth - 2 :
-            offsetXPos = 2
+          d3.event.offsetX > svgWidth / 2
+            ? offsetXPos = -oTooltipWrap.offsetWidth - 2
+            : offsetXPos = 2
         })
         .on('mousemove', () => {
-          oDiv.style.left = d3.event.pageX + offsetXPos + 'px'
-          oDiv.style.top = d3.event.pageY + 2 + 'px'
+          oTooltipWrap.style.left = d3.event.pageX + offsetXPos + 'px'
+          oTooltipWrap.style.top = d3.event.pageY + 2 + 'px'
         })
         .on('mouseout', () => {
-          oDiv.style.display = 'none'
+          oTooltipWrap.style.display = 'none'
         })
     }
   } catch (e) {
@@ -868,3 +864,4 @@ function donutsBoard(container, options) {
       .attr('fill', nameLabel.color)
   }
 }
+
