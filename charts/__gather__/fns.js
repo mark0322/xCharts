@@ -16,14 +16,12 @@ const initTooltipWrap = function() {
   appWrap.appendChild(tooltipWrap)
   return tooltipWrap
 }
-
 const getSingleton = function(fn) {
   let instance = null
   return function() {
     return instance || (instance = fn(...arguments))
   }
 }
-
 const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
 
 function parseStamp2Day(d) {
@@ -96,4 +94,20 @@ function mapArray(arr, callback = d => d) {
   }, [])
   if (!arr[0]) throw new Error('输入参数有误！')
   return arr
+}
+
+function _chunk(arr, size) {
+  let chunkArr = [],
+      chunkSize = size == 0 ? arr.length : Math.ceil(arr.length / size),
+      inputArr = JSON.parse(JSON.stringify(arr))
+  for (let i = 0; i < chunkSize; i++) {
+      let tempArr = []
+      for (let j = 0; j < size; j++) {
+          let tempEle = inputArr.shift()
+          if (tempEle) tempArr.push(tempEle)
+          else break
+      }
+      chunkArr.push(tempArr)
+  }
+  return chunkArr
 }
