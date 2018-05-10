@@ -167,37 +167,41 @@ function lines(container, options) {
           oTooltipWrap.innerHTML = ''
           oTooltipWrap.style.display = 'block'
 
-          const tooltipWrap = d3.select(oTooltipWrap)
-          tooltipWrap.append('p')
-            .text(parseStamp2DayIncludeYear(d['date']))
-            .attr('class', 'tooltip-date')
-            .style('text-align', 'center')
-
-          const tooltipsRow = tooltipWrap.append('div')
-            .attr('class', 'tooltip-body')
-            .selectAll('div')
-            .data(Object.entries(d['list']))
-            .enter()
-            .append('div')
-            .attr('class', 'tooltip-row')
-            .style('text-align', 'left')
-            .style('font-size', '14px')
-
-          tooltipsRow.append('span')
-            .attr('class', 'tooltip-row-dot')
-            .style('background', d => z(d[0]))
-            .style('width','10px')
-            .style('height', '10px')
-            .style('border-radius', '100%')
-            .style('margin-right', '10px')
-            .style('display', 'inline-block')
-
-          tooltipsRow.append('span')
-            .attr('class', 'tooltip-row-name')
-            .text(d => d[0] + ': ')
-          tooltipsRow.append('span')
-            .attr('class', 'tooltip-row-val')
-            .text(d => d[1])
+          try { // tooltip-innerHTML
+            const tooltipWrap = d3.select(oTooltipWrap)
+            tooltipWrap.append('p')
+              .text(parseStamp2DayIncludeYear(d['date']))
+              .attr('class', 'tooltip-date')
+              .style('text-align', 'center')
+  
+            const tooltipsRow = tooltipWrap.append('div')
+              .attr('class', 'tooltip-body')
+              .selectAll('div')
+              .data(Object.entries(d['list']))
+              .enter()
+              .append('div')
+              .attr('class', 'tooltip-row')
+              .style('text-align', 'left')
+              .style('font-size', '14px')
+  
+            tooltipsRow.append('span')
+              .attr('class', 'tooltip-row-dot')
+              .style('background', d => z(d[0]))
+              .style('width','10px')
+              .style('height', '10px')
+              .style('border-radius', '100%')
+              .style('margin-right', '10px')
+              .style('display', 'inline-block')
+  
+            tooltipsRow.append('span')
+              .attr('class', 'tooltip-row-name')
+              .text(d => d[0] + ': ')
+            tooltipsRow.append('span')
+              .attr('class', 'tooltip-row-val')
+              .text(d => d[1])
+          } catch (e) {
+            console.warn('tooltip-innerHTML:\n', e)
+          }
 
           // 鼠标进入 bgBar 时，计算初始 tooltips 在X轴的偏移量
           d3.event.offsetX > svgWidth / 2
@@ -989,3 +993,47 @@ function treemap(container, options) {
   }
 }
 
+// --
+function heatMap(container, options) {
+  container.innerHTML = '' // 清空 容器内容
+
+  const // *** 全局数据 ***
+    data = options.data || {},
+    blocks = options.blocks || {},
+    gap = blocks.gap,
+    svgWidth = container.offsetWidth,
+    svgHeight = container.offsetHeight,
+    padding = options.padding || {
+      top: 40,
+      left: 40,
+      right: 40,
+      bottom: 40
+    },
+    axisHeight = svgHeight - padding.top - padding.bottom,
+    axisWidth = svgWidth - padding.left - padding.right,
+    maxVal = Math.max.apply(null, flatArray(data)),
+    interpolateColor = d3.interpolate(blocks['minColor'], blocks['maxColor'])
+
+  const // 定义画布 & g_wrawp
+    svg = d3.select(container).append('svg')
+      .attr('width', svgWidth).attr('height', svgHeight),
+    g = svg.append('g').attr('class', 'g_wrap')
+      .attr('transform', `translate(${padding.left}, ${padding.top})`)
+
+  // draw blocks
+  let blockHeight = axisHeight / data.length - gap
+  for (let i = 0; i < data.length; i++) {
+    let blockWidth = axisWidth / data[i].length - gap
+    g.append('g')
+      .attr('class', 'g-row')
+      .selectAll('rect')
+      .data(data[i])
+      .enter()
+      .append('rect')
+      .attr('height', blockHeight)
+      .attr('width', blockWidth)
+      .attr('x', (d, i) => (blockWidth + gap) * i)
+      .attr('y', d => (blockHeight + gap) * i)
+      .attr('fill', d => interpolateColor(d / maxVal))
+  }
+}

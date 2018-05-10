@@ -111,3 +111,10 @@ function _chunk(arr, size) {
   }
   return chunkArr
 }
+
+function flatArray(arr) {
+  return arr.reduce((a, b) => {
+    Array.isArray(b) ? a.push(...b) : a.push(b)
+    return a
+  }, [])
+}

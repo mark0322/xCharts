@@ -2,6 +2,8 @@
 
 /** 
  * 创建tooltip的最外层 div wrap
+ * 
+ * @private
  * @return div-tooltipWrap 的DOM对象
 */
 const initTooltipWrap = function() {
@@ -24,7 +26,11 @@ const initTooltipWrap = function() {
   return tooltipWrap
 }
 
-// 单例模式 - 模板
+/** 
+ * 单例模式 - 模板
+ * 
+ * @private
+*/
 const getSingleton = function(fn) {
   let instance = null
   return function() {
