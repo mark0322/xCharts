@@ -96,18 +96,10 @@ function mapArray(arr, callback = d => d) {
   return arr
 }
 
-function _chunk(arr, size) {
-  let chunkArr = [],
-      chunkSize = size == 0 ? arr.length : Math.ceil(arr.length / size),
-      inputArr = JSON.parse(JSON.stringify(arr))
-  for (let i = 0; i < chunkSize; i++) {
-      let tempArr = []
-      for (let j = 0; j < size; j++) {
-          let tempEle = inputArr.shift()
-          if (tempEle) tempArr.push(tempEle)
-          else break
-      }
-      chunkArr.push(tempArr)
+function _chunk(arr, size = 1) {
+  let chunkArr = []
+  for (let i = 0, l = arr.length; i < l;) {
+    chunkArr.push(arr.slice(i, i += size))
   }
   return chunkArr
 }

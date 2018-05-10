@@ -1,4 +1,4 @@
-// *** 该模块作用：使用单例模式创建 tooltips 的 <div> 外壳， 共所有 charts 使用***
+// *** 该模块作用：创建唯一 tooltips 的 <div> 外壳， 供所有 charts 使用***
 
 /** 
  * 创建tooltip的最外层 div wrap
@@ -14,13 +14,13 @@ const initTooltipWrap = function() {
   const tooltipWrap = document.createElement('div')
   tooltipWrap.classList.add('stiCharts-tooltip-wrap')
   tooltipWrap.style.cssText = `
-    padding:10px 15px;
     background:rgba(0,0,0,0.7);
-    position:fixed;
-    color:white;
     border-radius: 10px;
+    padding:10px 15px;
+    position:fixed;
     display:none;
-    z-index:9999;`
+    z-index:9999;
+    color:white;`
 
   appWrap.appendChild(tooltipWrap)
   return tooltipWrap

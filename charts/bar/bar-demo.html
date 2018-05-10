@@ -30,37 +30,37 @@
   let options = {
           data: {// 必填参
               aBarNum: [55, 77, 33, 22, 99, 10, 100, 60, 80, 10], // 必填参
-              aStr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'] // 必填参
+              aStr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], // 必填参
 
               // numUnit: { // 可选参
-                  // name: 'num',
-                  // fontSize: 14,   // 可选参
-                  // fontColor: '#9ee' // 可选参
-                  // fontDx: 10, // 可选参； 使unit沿x轴偏移
-                  // fontDy: 10, // 可选参； 使unit沿y轴偏移
+              //     name: 'num',
+              //     fontSize: 14,   // 可选参
+              //     fontColor: '#9ee', // 可选参
+              //     fontDx: 10, // 可选参； 使unit沿x轴偏移
+              //     fontDy: 10, // 可选参； 使unit沿y轴偏移
               // },
               // strUnit: { // 可选参
-                  // name: 'str',
-                  // fontSize: 14,   // 可选参
-                  // fontColor: '#9ee' // 可选参
-                  // fontDx: 10, // 可选参； 使unit沿x轴偏移
-                  // fontDy: 10, // 可选参； 使unit沿y轴偏移
+              //     name: 'str',
+              //     fontSize: 14,   // 可选参
+              //     fontColor: '#9ee', // 可选参
+              //     fontDx: 10, // 可选参； 使unit沿x轴偏移
+              //     fontDy: 10, // 可选参； 使unit沿y轴偏移
               // }
           },
-          hori_Chart: true, // 可选参 (作用：将chart方向由默认纵向，变为横向)
+          hori_Chart: false, // 可选参 (作用：将chart方向由默认纵向，变为横向)
           bar: { // 可选参
 
               // 作用：将mappingColor[0]映射至val最小值；将mappingColor[1]映射至val最大值
-              mappingColor: ['#117fb8', '#23ece1'] // 可选参
+              mappingColor: ['#117fb8', '#23ece1'], // 可选参
 
-              // padding: 0.5,   // 可选参; 作用：设bar的宽度百分比；参数值为0~1;
-            //   label: { // 可选参; 将num值直接显示
-            //       show: true,
-            //       fontSize: 12, // 可选参
-            //       fontColor: '#eee', // 可选参
-            //       fontDx: 3, // 可选参； 使unit沿x轴偏移
-            //       fontDy: -3 // 可选参； 使unit沿y轴偏移
-            //   }
+              // padding: 0.3,   // 可选参; 作用：设bar的宽度百分比；参数值为0~1;
+              // label: { // 可选参; 将num值直接显示
+              //     show: true,
+              //     fontSize: 18, // 可选参
+              //     fontColor: '#333', // 可选参
+              //     fontDx: 0, // 可选参； 使unit沿x轴偏移
+              //     fontDy: 18 // 可选参； 使unit沿y轴偏移
+              // }
 
           },
           splitline: {// 可选参
@@ -89,7 +89,7 @@
           },
 
           // 可选参；(默认为40); 作用:设置坐标系离画布上、下、左、右侧距离
-          padding: { top: 10, left: 40, right: 20, bottom: 20 }
+          padding: { top: 40, left: 40, right: 40, bottom: 40 }
       }
 
   bar(document.querySelector('#container'), options)

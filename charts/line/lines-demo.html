@@ -73,7 +73,7 @@
     ],
     line: { // 可选参
         color: 'steelblue', // 可选参 (默认值为 'steelblue')
-        width: 3,
+        width: 10,
         label: { // 可选参; 将num值直接显示
             show: true,
             fontSize: 12, // 可选参
@@ -92,28 +92,28 @@
         axisLineColor: '#497197', // 可选参
         ticksColor: '#ccc', // 可选参
         yAxisTicksNum: 8, //  可选参， 用于设置 num 轴的 ticks 个数
-        // xAxis: {
+        xAxis: {
+            hideLine: true, // 可选参
+            hideTicks: true, // 可选参
+        },
+        yAxis: {
             // hideLine: true, // 可选参
             // hideTicks: true, // 可选参
-        // },
-        // yAxis: {
-            // hideLine: true // 可选参
-            // hideTicks: true, // 可选参
-        // },
-        // xAxisUnit: {
-            // name: 'date',
-            // fontSize: 14,   // 可选参
-            // fontColor: '#9ee' // 可选参
-            // fontDx: 10, //  可选参； 使unit沿x轴偏移
-            // fontDy: 10, //  可选参； 使unit沿y轴偏移
-        // },
-        // yAxisUnit: {
-            // name: 'value',
-            // fontSize: 14,   // 可选参
-            fontColor: '#9ee' // 可选参
-            // fontDx: 10, //  可选参； 使unit沿x轴偏移
-            // fontDy: 10, //  可选参； 使unit沿y轴偏移
-        // }
+        },
+        xAxisUnit: {
+            name: 'date',
+            fontSize: 14,   // 可选参
+            fontColor: '#9ee', // 可选参
+            fontDx: 2, //  可选参； 使unit沿x轴偏移
+            fontDy: 2, //  可选参； 使unit沿y轴偏移
+        },
+        yAxisUnit: {
+            name: 'value',
+            fontSize: 14,   // 可选参
+            fontColor: '#9ee', // 可选参
+            fontDx: 10, //  可选参； 使unit沿x轴偏移
+            fontDy: 10, //  可选参； 使unit沿y轴偏移
+        }
     },
     tooltip: { // 可选参
         show: true

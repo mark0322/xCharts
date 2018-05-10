@@ -31,7 +31,6 @@ function heatMap(container, options) {
   let blockHeight = axisHeight / data.length - gap
   for (let i = 0; i < data.length; i++) {
     let blockWidth = axisWidth / data[i].length - gap
-
     g.append('g')
       .attr('class', 'g-row')
       .selectAll('rect')
@@ -40,9 +39,7 @@ function heatMap(container, options) {
       .append('rect')
       .attr('height', blockHeight)
       .attr('width', blockWidth)
-      .attr('x', (d, i) => {
-        return (blockWidth + gap) * i
-      })
+      .attr('x', (d, i) => (blockWidth + gap) * i)
       .attr('y', d => (blockHeight + gap) * i)
       .attr('fill', d => interpolateColor(d / maxVal))
   }

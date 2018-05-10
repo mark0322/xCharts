@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bar</title>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        #container {
+            width: 70%;
+            height: 50%;
+            background: #143d66;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+    </div>
+</body>
+
+<script src="../../__gather__/d3.js"></script>
+<script>
+let log = (...d) => console.log(...d);
+
+let data = [
+    {
+      "count": 5,
+      "key": "176.122.125.39",
+      "pot_dict": {
+        "city_name": "",
+        "continent_code": "EU",
+        "country_code2": "UA",
+        "country_name": "Ukraine",
+        "ip": "176.122.125.39",
+        "latitude": "50.4500",
+        "longitude": "30.5233",
+        "subdivision": "",
+        "timezone": ""
+      }
+    },
+    {
+      "count": 5,
+      "key": "177.65.104.45",
+      "pot_dict": {
+        "city_name": "",
+        "continent_code": "SA",
+        "country_code2": "BR",
+        "country_name": "Brazil",
+        "ip": "177.65.104.45",
+        "latitude": "-23.5477",
+        "longitude": "-46.6358",
+        "subdivision": "",
+        "timezone": ""
+      }
+    },
+    {
+      "count": 10,
+      "key": "46.180.150.90",
+      "pot_dict": {
+        "city_name": "Kemerovo",
+        "continent_code": "EU",
+        "country_code2": "RU",
+        "country_name": "Russia",
+        "ip": "46.180.150.90",
+        "latitude": "55.3333",
+        "longitude": "86.0833",
+        "subdivision": "Kemerovskaya Oblast'",
+        "timezone": "Asia/Novokuznetsk"
+      }
+    },
+    {
+      "count": 5,
+      "key": "5.35.113.117",
+      "pot_dict": {
+        "city_name": "",
+        "continent_code": "EU",
+        "country_code2": "RU",
+        "country_name": "Russia",
+        "ip": "5.35.113.117",
+        "latitude": "55.7500",
+        "longitude": "37.6166",
+        "subdivision": "",
+        "timezone": ""
+      }
+    }
+]
+
+
+function bar(container, data) {
+    container.innerHTML = ''; // 清空 容器内容
+
+    const // *** 全局数据 ***
+        padding = { top: 40, left: 40, right: 40, bottom: 40 },
+        svgWidth = container.offsetWidth,
+        svgHeight = container.offsetHeight,
+        axisWidth = svgWidth - padding.left - padding.right,
+        axisHeight = svgHeight - padding.top - padding.bottom,
+        rowHeight = 50, // 每一行的高度
+        flagWidth = 40, // 国旗栏宽度
+        IPWidth = 150, // IP 栏宽度
+        barHeight = 30,
+        barWidth = axisWidth - flagWidth - IPWidth - 20, // 定义 barChart 的宽度
+        IPColor = 'white',
+        IP2BarGap = 10 // IP 与 bar 的间距
+    const // 定义画布 & g_wrawp
+        svg = d3.select(container).append('svg')
+                .attr('width', svgWidth).attr('height', svgHeight),
+        g = svg.append('g').attr('class', 'g_wrap')
+               .attr('transform', `translate(${padding.left}, ${padding.top})`)
+
+    let gRows = g.selectAll('g')
+        .data(data)
+        .enter()
+        .append('g')
+        .attr('class', d => d.key)
+        .attr('transform', (d, i) => `translate(0, ${i * rowHeight})`)
+
+    // draw flag
+    gRows.append('image')
+        .attr('width', flagWidth)
+        .attr('height', rowHeight)
+        .attr('x', 2)
+        .attr('xlink:href', d => `./national_flags/${d.pot_dict.country_code2}.png`)
+        .attr('preserveAspectRatio', 'xMinYMin')
+
+    // draw IP
+    gRows.append('text')
+        .attr('x', flagWidth + IPWidth)
+        .attr('dy', '1em')
+        .text(d => d.key)
+        .attr('fill', IPColor)
+        .attr('text-anchor', 'end')
+
+    // draw bar
+    const x = d3.scaleLinear()
+        .domain([0, getMaxCount(data)])
+        .range([0, barWidth])
+    gRows.append('rect')
+        .attr('x', flagWidth + IPWidth + IP2BarGap)
+        .attr('width', d => x(d.count))
+        .attr('height', barHeight)
+        .attr('fill', 'steelblue')
+
+    // draw axis
+    const xAxis = d3.axisBottom(x)
+    xAxis.tickFormat(d3.format(".0f"))
+    
+    if (getMaxCount(data) < 10) {
+        xAxis.ticks(getMaxCount(data))
+    }
+
+    g.append('g')
+        .attr('class', 'axis')
+        .attr('transform', `translate(${flagWidth + IPWidth + IP2BarGap}, ${axisHeight})`)
+        .call(xAxis)
+
+    function getMaxCount(arr) {
+        let tempArr = arr.map(d => d.count)
+        return Math.max.apply(null, tempArr)
+    }
+}
+
+bar(document.querySelector('#container'), data)
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

@@ -3,23 +3,15 @@
  * @param {Array} arr 要被chunk的数组
  * @param {Number} size 要被chunk的子数组大小
  * @return {Array} chunkedData
- * eg _chunk(['a', 'b', 'c', 'd'], 2) -> [['a', 'b'], ['c', 'd']]
+ * eg _chunk(['a', 'b', 'c', 'd', 'e'], 2) -> [['a', 'b'], ['c', 'd'], ['e']]
  * eg _chunk(['a', 'b', 'c', 'd'], 3) -> [['a', 'b', 'c'], ['d']]
 */
-function _chunk(arr, size) {
-  let chunkArr = [],
-      chunkSize = size == 0 ? arr.length : Math.ceil(arr.length / size),
-      inputArr = JSON.parse(JSON.stringify(arr))
-  for (let i = 0; i < chunkSize; i++) {
-      let tempArr = []
-      for (let j = 0; j < size; j++) {
-          let tempEle = inputArr.shift()
-          if (tempEle) tempArr.push(tempEle)
-          else break
-      }
-      chunkArr.push(tempArr)
+function _chunk(arr, size = 1) {
+    let chunkArr = []
+    for (let i = 0, l = arr.length; i < l;) {
+      chunkArr.push(arr.slice(i, i += size))
+    }
+    return chunkArr
   }
-  return chunkArr
-}
 
 export default _chunk
