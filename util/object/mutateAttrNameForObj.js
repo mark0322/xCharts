@@ -5,8 +5,8 @@
  *
  * eg
  * let o = {'a': 111,'b': 222}
-    mutateAttrNameForObj(o, [['a', 'a111'], ['b', 'b111']])
-    log(o) -> {a111: 111, b111: 222}
+    mutateAttrNameForObj(o, [['a', 'x'], ['b', 'y']])
+    log(o) -> {x: 111, y: 222}
  */
 function mutateAttrNameForObj(obj, aMatchAttr) {
   let m = new Map(aMatchAttr)

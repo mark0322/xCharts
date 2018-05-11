@@ -247,3 +247,19 @@ function trim(s) {
 function parseStamp2Day(d) {
   return new Date(d).getDate() + '日'
 }
+
+function parseStamp2Day(d) {
+  let month = new Date(d).getMonth() + 1,
+    day = new Date(d).getDate()
+  month < 10 && (month = '0' + month)
+  day < 10 && (day = '0' + day)
+  return month + '-' + day
+}
+function parseStamp2DayIncludeYear(d) {
+  let month = new Date(d).getMonth() + 1,
+    day = new Date(d).getDate(),
+    year = new Date(d).getFullYear()
+  month < 10 && (month = '0' + month)
+  day < 10 && (day = '0' + day)
+  return year + '-' + month + '-' + day
+}
