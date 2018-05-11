@@ -6,9 +6,9 @@ import mutateAttrNameForObj from '../object/mutateAttrNameForObj'
  * @param {Array} aMatchAttr 二维数组：[[oldAttrName, newAttrName], [oldAttrName, newAttrName], ...]
  *
  * eg
- * let arr = [{'a': 111,'b': 222}, {'a': 111,'b': 222}]
+ * let arr = [{'a': 111,'b': 222}, {'a': 777,'b': 666}]
     mutateAttrNameForObjOfArray(arr, [['a', 'x'], ['b', 'y']])
-    arr -> [{'x': 111,'y': 222}, {'x': 111,'y': 222}]
+    arr -> [{'x': 111,'y': 222}, {'x': 777,'y': 666}]
  */
 function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
   arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))

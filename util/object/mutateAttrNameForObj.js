@@ -1,12 +1,12 @@
 /**
  * 改变原对象的属性名 注：该方法直接改变原数据 - mutation
- * @param {Object} obj
+ * @param {Object} obj 需要修改属性名的对象
  * @param {Array} aMatchAttr 二维数组：[[oldAttrName, newAttrName], [oldAttrName, newAttrName], ...]
- *
+ * @return *** 无返回值 ***
  * eg
  * let o = {'a': 111,'b': 222}
     mutateAttrNameForObj(o, [['a', 'x'], ['b', 'y']])
-    log(o) -> {x: 111, y: 222}
+    o -> {x: 111, y: 222}
  */
 function mutateAttrNameForObj(obj, aMatchAttr) {
   let m = new Map(aMatchAttr)

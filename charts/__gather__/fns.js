@@ -60,8 +60,10 @@ function flatDeepArray(arr) {
 }
 
 function mapArray(arr, callback = d => d) {
+  const is = Object.is
   arr = arr.reduce((a, b) => {
-    if (callback(b) !== undefined) {
+    if (!(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, ''))) {
+      if (is(callback(b), undefined)) return a
       a.push(callback(b))
       return a
     }
