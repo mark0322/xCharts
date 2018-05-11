@@ -22,7 +22,7 @@ function mapArray(arr, callback = d => d) {
     }
     return a
   }, [])
-  if (!arr[0]) throw new Error('输入参数有误！')
+  if (arr[0] === undefined) throw new Error('输入参数有误！')
   return arr
 }
 
