@@ -1,5 +1,7 @@
 /**
- * 功能类似array.map(), 其区别如下：
+ * 功能类似array.map()
+ * 其区别为 mapArray 能过滤数组中的 NaN / undefined / null / '' 四种特殊数据情况：
+ * 
  * eg1: let arr = [0, 1, NaN, 2, undefined, 3, null, 4, '', 5]
  * arr.map(d => d + 1)  ->  [1, 2, NaN, 3, NaN, 4, 1, 5, "1", 6]
  * mapArray(arr, d => d + 1)  ->  [1, 2, 3, 4, 5, 6]
