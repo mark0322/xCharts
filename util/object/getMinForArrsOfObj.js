@@ -3,7 +3,7 @@ import flatDeepArray from '../array/flatDeepArray'
 /**
  * 获得对象中，所有数组的最小值
  * @param {Object} o 包含数组属性的对象
- * @param {Array} targetArr 可选参 在指定的字段中获得最小值
+ * @param {Array} targetArr 可选参 指定数组，以获取指定数组中的其最小值
  *
  * val = {
  *        'email': [28,74,29,3,50,71],

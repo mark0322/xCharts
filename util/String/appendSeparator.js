@@ -7,22 +7,22 @@
  *
  * eg appendSeparator(1234568901, '--', 3) -> '1--234--568--901'
  * eg appendSeparator(1234568901, '--', 3, false) -> '123--456--890--1'
-*/
+ */
 
 function appendSeparator(tar, separator, step, reverse = true) {
-    let aStr = reverse
-          ? String(tar).split('').reverse()
-          : String(tar).split(''),
-        aTemp = []
-    while (aStr[0]) {
-        aTemp.push(...aStr.slice(0, step))
-        aTemp.push(separator)
-        aStr = aStr.slice(step)
-    }
-    aTemp.pop()
-    return reverse
-      ? aTemp.reverse().reduce((a, b) => a + b)
-      : aTemp.reduce((a, b) => a + b)
+  let aStr = reverse
+    ? String(tar).split('').reverse()
+    : String(tar).split(''),
+    aTemp = []
+  while (aStr[0]) {
+    aTemp.push(...aStr.slice(0, step))
+    aTemp.push(separator)
+    aStr = aStr.slice(step)
+  }
+  aTemp.pop()
+  return reverse
+    ? aTemp.reverse().reduce((a, b) => a + b)
+    : aTemp.reduce((a, b) => a + b)
 }
 
 export default appendSeparator

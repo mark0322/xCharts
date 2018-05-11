@@ -7,7 +7,7 @@ import mapArray from './mapArray'
  * @return {Number} 数组的汇总值
  * eg sumArray([1,2,3,4,5]) -> 15
  * eg sumArray([{val:1}, {val:2}, {val:3}], d => d.val) -> 6
-*/
+ */
 function sumArray(arr, iteratee = d => d) {
   try {
     arr = mapArray(...arguments)

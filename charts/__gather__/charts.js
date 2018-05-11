@@ -901,7 +901,7 @@ function treemap(container, options) {
     columnsCount = blocks.columns || 3, // treemap 的列数
 
     // rowsCount = Math.ceil(data.length / blocks.columns), // treemap 的行数
-    aChunkData = _chunk(data, columnsCount) // 生成绘制 treemap 的数据
+    aChunkData = chunk(data, columnsCount) // 生成绘制 treemap 的数据
 
   try { // drawBlocks
 

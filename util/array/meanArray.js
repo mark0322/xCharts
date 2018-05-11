@@ -6,7 +6,7 @@ import mapArray from './mapArray'
  * @param {Function} callback 可选参
  * eg meanArray([1,2,3,4,5]) -> 3
  * eg meanArray([{a:1}, {a:2, b:44}, {a:3, b:33}], d => d.b) -> 38.5
-*/
+ */
 function meanArray(arr, iteratee) {
   let sum = 0,
     tempArr = []

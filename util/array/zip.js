@@ -15,11 +15,3 @@ function zip() {
 }
 
 export default zip
-
-// function zip(arr1, arr2) {
-//   let tempArr = []
-//   for (let i = 0; i < arr1.length; i++) {
-//       tempArr.push([arr1[i], arr2[i]])
-//   }
-//   return tempArr
-// }

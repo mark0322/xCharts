@@ -1,7 +1,7 @@
 /**
- * 获得对象中，所有(或指定属性数组)的最后一个值
+ * 获得对象中，所有数组(或指定数组)的末尾值
  * @param {Object} obj 包含数组属性的对象
- * @param {Array} targetArr 可选参 指定字段获得其数组的最后一个值
+ * @param {Array} targetArr 可选参 获得指定数组，以获取其末尾只
  *
  * eg
  * val = {

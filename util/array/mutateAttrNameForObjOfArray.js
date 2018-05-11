@@ -7,8 +7,8 @@ import mutateAttrNameForObj from '../object/mutateAttrNameForObj'
  *
  * eg
  * let arr = [{'a': 111,'b': 222}, {'a': 111,'b': 222}]
-    mutateAttrNameForObjOfArray(arr, [['a', 'aa'], ['b', 'bb']])
-    log(arr) -> [{'aa': 111,'bb': 222}, {'aa': 111,'bb': 222}]
+    mutateAttrNameForObjOfArray(arr, [['a', 'x'], ['b', 'y']])
+    arr -> [{'x': 111,'y': 222}, {'x': 111,'y': 222}]
  */
 function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
   arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))

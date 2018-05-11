@@ -8,8 +8,8 @@ function random(start = 0, end = 1, isFloat = false) {
   (arguments.length == 1) && (end = start, start = 0)
   const interval = end - start
   return isFloat
-      ? start + interval * Math.random()
-      : (start + interval * Math.random()) | 0
+    ? start + interval * Math.random()
+    : (start + interval * Math.random()) | 0
 }
 
 export default random

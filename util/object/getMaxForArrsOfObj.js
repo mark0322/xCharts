@@ -3,7 +3,7 @@ import flatDeepArray from '../array/flatDeepArray'
 /**
  * 获得对象中，所有数组的最大值
  * @param {Obje} o 包含数组属性的对象
- * @param {Array} targetArr 可选参 在指定的字段中获得最大值
+ * @param {Array} targetArr 可选参 指定数组，以获取指定数组中的其最大值
  * @return {Number}
  *
  * eg1 val = {
