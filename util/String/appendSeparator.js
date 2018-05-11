@@ -11,13 +11,12 @@
 
 function appendSeparator(tar, separator, step, reverse = false) {
   let aStr = reverse
-    ? String(tar).split('').reverse()
-    : String(tar).split(''),
+        ? String(tar).split('').reverse()
+        : String(tar).split(''),
     aTemp = []
-  while (aStr[0]) {
-    aTemp.push(...aStr.slice(0, step))
+  for (let i = 0, l = aStr.length; i < l;) {
+    aTemp.push(...aStr.slice(i, i += step))
     aTemp.push(separator)
-    aStr = aStr.slice(step)
   }
   aTemp.pop()
   return reverse
