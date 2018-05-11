@@ -5,11 +5,11 @@
  * @param {Number} step 步长
  * @param {Boolean} reverse 判断是从左或右开始计算 step
  *
- * eg appendSeparator(1234568901, '--', 3) -> '1--234--568--901'
- * eg appendSeparator(1234568901, '--', 3, false) -> '123--456--890--1'
+ * eg appendSeparator(1234568901, '--', 3) -> '123--456--890--1'
+ * eg appendSeparator(1234568901, '--', 3, true) -> '1--234--568--901'
  */
 
-function appendSeparator(tar, separator, step, reverse = true) {
+function appendSeparator(tar, separator, step, reverse = false) {
   let aStr = reverse
     ? String(tar).split('').reverse()
     : String(tar).split(''),
