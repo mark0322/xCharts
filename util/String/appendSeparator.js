@@ -9,7 +9,7 @@
  * eg appendSeparator(1234568901, '--', 3, true) -> '1--234--568--901'
  */
 
-function appendSeparator(tar, separator, step, reverse = false) {
+function appendSeparator(tar, separator, step, reverse) {
   let aStr = reverse
         ? String(tar).split('').reverse()
         : String(tar).split(''),

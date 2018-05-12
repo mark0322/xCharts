@@ -178,10 +178,10 @@ function workFixTime(func, time = 1) {
   }
 }
 
-function random(start = 0, end = 1, isFloat = false) {
+function random(start = 0, end = 1, isInteger) {
   (arguments.length == 1) && (end = start, start = 0)
   const interval = end - start
-  return isFloat
+  return isInteger
     ? (start + interval * Math.random()) | 0
     : start + interval * Math.random()
 }
@@ -226,7 +226,7 @@ function mutateAttrNameForObj(obj, aMatchAttr) {
   }
 }
 
-function appendSeparator(tar, separator, step, reverse = false) {
+function appendSeparator(tar, separator, step, reverse) {
   let aStr = reverse
         ? String(tar).split('').reverse()
         : String(tar).split(''),
