@@ -11,5 +11,5 @@ function difference(arr1, arr2) {
       s2.delete(item)
     }
   }
-  return [].concat(...s1, ...s2)
+  return [...s1, ...s2]
 }
