@@ -32,12 +32,41 @@ function parseStamp2Day(d) {
   return month + '-' + day
 }
 
-function chunk(arr, size = arr.length) {
-  let chunkArr = []
-  for (let i = 0, l = arr.length; i < l;) {
-    chunkArr.push(arr.slice(i, i += size))
+// *** array ***
+
+function difference(arr1, arr2) {
+  let s1 = new Set(arr1),
+    s2 = new Set(arr2)
+  for (let item of s2) {
+    if (s1.has(item)) {
+      s1.delete(item)
+      s2.delete(item)
+    }
   }
-  return chunkArr
+  return [].concat(...s1, ...s2)
+}
+
+function common(arr1, arr2) {
+  let s1 = new Set(arr1),
+    s2 = new Set(arr2),
+    result = [],
+    resIndex = 0
+  for (let item of s2) {
+    if (s1.has(item)) {
+      result[resIndex++] = item
+    }
+  }
+  return result
+}
+// *** array ***
+
+
+function chunk(arr, size = arr.length) {
+  const result = []
+  for (let i = 0, l = arr.length; i < l;) {
+    result.push(arr.slice(i, i += size))
+  }
+  return result
 }
 
 function flatArray(arr) {
