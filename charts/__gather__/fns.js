@@ -15,7 +15,7 @@ function parseStamp2Day(d) {
     }
     return result
   }
-  
+
   function difference(arr1, arr2) {
     let s1 = new Set(arr1),
       s2 = new Set(arr2)
@@ -34,7 +34,7 @@ function parseStamp2Day(d) {
       return a
     }, [])
   }
-  
+
   function flatDeepArray(arr) {
     const tempArr = []
     flatArray(arr)
@@ -56,7 +56,7 @@ function parseStamp2Day(d) {
     }
     return result
   }
-  
+
   function mapArray(arr, callback = d => d) {
     const is = Object.is
     arr = arr.reduce((a, b) => {
@@ -70,13 +70,13 @@ function parseStamp2Day(d) {
     if (arr[0] === undefined) throw new Error('输入参数有误！')
     return arr
   }
-  
+
   function matchArrayVal(arr, matchVal, iteratee) {
     (typeof iteratee === 'function') && (arr = arr.map(iteratee))
     let sum = arr.reduce((a, b) => a + b)
     return arr.map(d => d / sum * matchVal)
   }
-  
+
   function maxArray(arr, callback = d => d) {
     try {
       arr = mapArray(...arguments)
@@ -85,19 +85,7 @@ function parseStamp2Day(d) {
     }
     return Math.max.apply(null, arr)
   }
-  
-  function meanArray(arr, iteratee) {
-    let sum = 0,
-      tempArr = []
-    try {
-      tempArr = mapArray(...arguments)
-      sum = tempArr.reduce((a, b) => a + b)
-    } catch (e) {
-      throw new Error('输入参数有误！')
-    }
-    return sum / tempArr.length
-  }
-  
+
   function minArray(arr, iteratee = d => d) {
     try {
       arr = mapArray(...arguments)
@@ -106,11 +94,11 @@ function parseStamp2Day(d) {
     }
     return Math.min.apply(null, arr)
   }
-  
+
   function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
     arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))
   }
-  
+
   function range(start, stop, step = 1) {
     (arguments.length == 1) && (stop = start, start = 0)
   
@@ -124,7 +112,7 @@ function parseStamp2Day(d) {
   
     return range
   }
-  
+
   function sumArray(arr, iteratee = d => d) {
     try {
       arr = mapArray(...arguments)
@@ -155,7 +143,7 @@ function parseStamp2Day(d) {
   function union(arr1, arr2) {
     return [...new Set([...arr1, ...arr2])]
   }
-  
+
   function zip() {
     let resultArr = [],
       tempArr = [...arguments],
@@ -179,7 +167,7 @@ function parseStamp2Day(d) {
     }
     return tempObj
   }
-  
+
   function getMaxForArrsOfObj(obj, targetProps = Object.keys(obj)) {
     let tempArr = []
     for (let item of targetProps) {
@@ -189,7 +177,7 @@ function parseStamp2Day(d) {
     }
     return Math.max.apply(null, tempArr)
   }
-  
+
   function getMinForArrsOfObj(obj, targetProps = Object.keys(obj)) {
     let tempArr = []
     for (let item of targetProps) {
@@ -199,7 +187,7 @@ function parseStamp2Day(d) {
     }
     return Math.min.apply(null, tempArr)
   }
-  
+
   function mutateAttrNameForObj(obj, aMatchAttr) {
     let m = new Map(aMatchAttr)
     for (let attr of Object.keys(obj)) {
@@ -211,6 +199,23 @@ function parseStamp2Day(d) {
   }
 }
 
+{ // *** function ***
+  function delay(func, wait, ...args) {
+    if (typeof func != 'function') {
+      throw new TypeError('第一个参数必须是函数！');
+    }
+    return setTimeout(function() {
+      func.apply(null, args)
+    }, wait)
+  }
+
+  function workFixTime(func, time = 1) {
+    let i = -1
+    return function() {
+      if (++i < time) return func(...arguments)
+    }
+  }
+}
 function throttle(fn, interval) {
   let __self = fn // 保存需要被延迟执行的函数引用
   let timer // 定时器
@@ -231,13 +236,6 @@ function throttle(fn, interval) {
       timer = null
       __self.apply(__me, args)
     }, interval || 500)
-  }
-}
-
-function workFixTime(func, time = 1) {
-  let i = -1
-  return function() {
-    if (++i < time) return func(...arguments)
   }
 }
 

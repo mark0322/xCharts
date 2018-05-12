@@ -4,6 +4,7 @@
  * @param {Function} func The function to delay.
  * @param {Number} time  The number of milliseconds to delay invocation.
  * @param {arguments} 可选参
+ * @return timer id
  */
 
 function delay(func, wait, ...args) {
