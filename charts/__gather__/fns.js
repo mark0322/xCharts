@@ -134,6 +134,24 @@ function parseStamp2Day(d) {
     return arr.reduce((a, b) => a + b)
   }
 
+  function sample(arr, sampleSize = 1) {
+    if (sampleSize === 1) {
+      return arr[random(0, arr.length, true)]
+    }
+
+    if (arr.length < sampleSize) {
+      throw new Error('sampleSize > arr.length!')
+    }
+
+    const result = [],
+      inputArr = JSON.parse(JSON.stringify(arr))
+    while (result.length < sampleSize) {
+      let i = random(0, inputArr.length, true)
+      result.push(...inputArr.splice(i, 1))
+    }
+    return result
+  }
+
   function union(arr1, arr2) {
     return [...new Set([...arr1, ...arr2])]
   }
