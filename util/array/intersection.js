@@ -5,10 +5,9 @@
 function intersection(arr1, arr2) {
   let s1 = new Set(arr1),
     s2 = new Set(arr2),
-    result = [],
-    resIndex = 0
+    result = []
   for (let item of s2) {
-    s1.has(item) && (result[resIndex++] = item)
+    s1.has(item) && result.push(item)
   }
   return result
 }

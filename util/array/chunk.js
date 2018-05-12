@@ -7,11 +7,11 @@
  * eg chunk(['a', 'b', 'c', 'd'], 3) -> [['a', 'b', 'c'], ['d']]
  */
 function chunk(arr, size = arr.length) {
-  let chunkArr = []
+  const result = []
   for (let i = 0, l = arr.length; i < l;) {
-    chunkArr.push(arr.slice(i, i += size))
+    result.push(arr.slice(i, i += size))
   }
-  return chunkArr
+  return result
 }
 
 export default chunk

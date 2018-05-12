@@ -1,29 +1,3 @@
-const initTooltipWrap = function() {
-
-  // 意图为 获取 Vue 的最外层 <div id='app'>
-  const appWrap = document.querySelector('div')
-
-  const tooltipWrap = document.createElement('div')
-  tooltipWrap.classList.add('stiCharts-tooltip-wrap')
-  tooltipWrap.style.cssText = `
-    padding:10px 15px;
-    background:rgba(0,0,0,0.7);
-    position:fixed;
-    color:white;
-    border-radius: 10px;
-    display:none;
-    z-index:9999;`
-  appWrap.appendChild(tooltipWrap)
-  return tooltipWrap
-}
-const getSingleton = function(fn) {
-  let instance = null
-  return function() {
-    return instance || (instance = fn(...arguments))
-  }
-}
-const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
-
 function parseStamp2Day(d) {
   let month = new Date(d).getMonth() + 1,
     day = new Date(d).getDate()
@@ -32,147 +6,191 @@ function parseStamp2Day(d) {
   return month + '-' + day
 }
 
-// *** array ***
 
-function difference(arr1, arr2) {
-  let s1 = new Set(arr1),
-    s2 = new Set(arr2)
-  for (let item of s2) {
-    if (s1.has(item)) {
-      s1.delete(item)
-      s2.delete(item)
+{ // *** array ***
+  function chunk(arr, size = arr.length) {
+    const result = []
+    for (let i = 0, l = arr.length; i < l;) {
+      result.push(arr.slice(i, i += size))
     }
+    return result
   }
-  return [...s1, ...s2]
-}
+  
+  function difference(arr1, arr2) {
+    let s1 = new Set(arr1),
+      s2 = new Set(arr2)
+    for (let item of s2) {
+      if (s1.has(item)) {
+        s1.delete(item)
+        s2.delete(item)
+      }
+    }
+    return [...s1, ...s2]
+  }  
 
-function intersection(arr1, arr2) {
-  let s1 = new Set(arr1),
-    s2 = new Set(arr2),
-    result = [],
-    resIndex = 0
-  for (let item of s2) {
-    s1.has(item) && (result[resIndex++] = item)
-  }
-  return result
-}
-// *** array ***
-
-
-function chunk(arr, size = arr.length) {
-  const result = []
-  for (let i = 0, l = arr.length; i < l;) {
-    result.push(arr.slice(i, i += size))
-  }
-  return result
-}
-
-function flatArray(arr) {
-  return arr.reduce((a, b) => {
-    Array.isArray(b) ? a.push(...b) : a.push(b)
-    return a
-  }, [])
-}
-
-function flatDeepArray(arr) {
-  const tempArr = []
-  flatArray(arr)
-  return tempArr
-
-  function flatArray(arrSub) {
-    arrSub.forEach(d => {
-      Array.isArray(d) ? flatArray(d) : tempArr.push(d)
-    })
-  }
-}
-
-function mapArray(arr, callback = d => d) {
-  const is = Object.is
-  arr = arr.reduce((a, b) => {
-    if (!(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, ''))) {
-      if (is(callback(b), undefined)) return a
-      a.push(callback(b))
+  function flatArray(arr) {
+    return arr.reduce((a, b) => {
+      Array.isArray(b) ? a.push(...b) : a.push(b)
       return a
+    }, [])
+  }
+  
+  function flatDeepArray(arr) {
+    const tempArr = []
+    flatArray(arr)
+    return tempArr
+  
+    function flatArray(arrSub) {
+      arrSub.forEach(d => {
+        Array.isArray(d) ? flatArray(d) : tempArr.push(d)
+      })
     }
-    return a
-  }, [])
-  if (arr[0] === undefined) throw new Error('输入参数有误！')
-  return arr
-}
-
-function matchArrayVal(arr, matchVal, iteratee) {
-  (typeof iteratee === 'function') && (arr = arr.map(iteratee))
-  let sum = arr.reduce((a, b) => a + b)
-  return arr.map(d => d / sum * matchVal)
-}
-
-function maxArray(arr, callback = d => d) {
-  try {
-    arr = mapArray(...arguments)
-  } catch (e) {
-    throw new Error('输入参数有误！')
-  }
-  return Math.max.apply(null, arr)
-}
-
-function meanArray(arr, iteratee) {
-  let sum = 0,
-    tempArr = []
-  try {
-    tempArr = mapArray(...arguments)
-    sum = tempArr.reduce((a, b) => a + b)
-  } catch (e) {
-    throw new Error('输入参数有误！')
-  }
-  return sum / tempArr.length
-}
-
-function minArray(arr, iteratee = d => d) {
-  try {
-    arr = mapArray(...arguments)
-  } catch (e) {
-    throw new Error('输入参数有误！')
-  }
-  return Math.min.apply(null, arr)
-}
-
-function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
-  arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))
-}
-
-function range(start, stop, step = 1) {
-  (arguments.length == 1) && (stop = start, start = 0)
-
-  let i = -1,
-    n = Math.max(0, Math.ceil((stop - start) / step)),
-    range = new Array(n)
-
-  while (++i < n) {
-    range[i] = start + step * i
   }
 
-  return range
+  function intersection(arr1, arr2) {
+    let s1 = new Set(arr1),
+      s2 = new Set(arr2),
+      result = []
+    for (let item of s2) {
+      s1.has(item) && result.push(item)
+    }
+    return result
+  }
+  
+  function mapArray(arr, callback = d => d) {
+    const is = Object.is
+    arr = arr.reduce((a, b) => {
+      if (!(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, ''))) {
+        if (is(callback(b), undefined)) return a
+        a.push(callback(b))
+        return a
+      }
+      return a
+    }, [])
+    if (arr[0] === undefined) throw new Error('输入参数有误！')
+    return arr
+  }
+  
+  function matchArrayVal(arr, matchVal, iteratee) {
+    (typeof iteratee === 'function') && (arr = arr.map(iteratee))
+    let sum = arr.reduce((a, b) => a + b)
+    return arr.map(d => d / sum * matchVal)
+  }
+  
+  function maxArray(arr, callback = d => d) {
+    try {
+      arr = mapArray(...arguments)
+    } catch (e) {
+      throw new Error('输入参数有误！')
+    }
+    return Math.max.apply(null, arr)
+  }
+  
+  function meanArray(arr, iteratee) {
+    let sum = 0,
+      tempArr = []
+    try {
+      tempArr = mapArray(...arguments)
+      sum = tempArr.reduce((a, b) => a + b)
+    } catch (e) {
+      throw new Error('输入参数有误！')
+    }
+    return sum / tempArr.length
+  }
+  
+  function minArray(arr, iteratee = d => d) {
+    try {
+      arr = mapArray(...arguments)
+    } catch (e) {
+      throw new Error('输入参数有误！')
+    }
+    return Math.min.apply(null, arr)
+  }
+  
+  function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
+    arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))
+  }
+  
+  function range(start, stop, step = 1) {
+    (arguments.length == 1) && (stop = start, start = 0)
+  
+    let i = -1,
+      n = Math.max(0, Math.ceil((stop - start) / step)),
+      range = new Array(n)
+  
+    while (++i < n) {
+      range[i] = start + step * i
+    }
+  
+    return range
+  }
+  
+  function sumArray(arr, iteratee = d => d) {
+    try {
+      arr = mapArray(...arguments)
+    } catch (e) {
+      throw new Error('输入参数有误！')
+    }
+    return arr.reduce((a, b) => a + b)
+  }
+
+  function union(arr1, arr2) {
+    return [...new Set([...arr1, ...arr2])]
+  }
+  
+  function zip() {
+    let resultArr = [],
+      tempArr = [...arguments],
+      minLengthForTempArr = Math.min.apply(null, tempArr.map(d => d.length))
+  
+    for (let i = 0; i < minLengthForTempArr; i++) {
+      resultArr.push(tempArr.map(d => d[i]))
+    }
+  
+    return resultArr
+  }
 }
 
-function sumArray(arr, iteratee = d => d) {
-  try {
-    arr = mapArray(...arguments)
-  } catch (e) {
-    throw new Error('输入参数有误！')
+{ // *** object ***
+  function getLastElementForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+    let tempObj = {}
+    for (let item of targetProps) {
+      if (Array.isArray(obj[item])) {
+        tempObj[item] = obj[item].slice(-1)[0]
+      }
+    }
+    return tempObj
   }
-  return arr.reduce((a, b) => a + b)
-}
-
-function zip() {
-  let resultArr = [],
-    tempArr = [...arguments],
-    minLengthForTempArr = Math.min.apply(null, tempArr.map(d => d.length))
-
-  for (let i = 0; i < minLengthForTempArr; i++) {
-    resultArr.push(tempArr.map(d => d[i]))
+  
+  function getMaxForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+    let tempArr = []
+    for (let item of targetProps) {
+      if (Array.isArray(obj[item])) {
+        tempArr.push(...flatDeepArray(obj[item]))
+      }
+    }
+    return Math.max.apply(null, tempArr)
   }
-
-  return resultArr
+  
+  function getMinForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+    let tempArr = []
+    for (let item of targetProps) {
+      if (Array.isArray(obj[item])) {
+        tempArr.push(...flatDeepArray(obj[item]))
+      }
+    }
+    return Math.min.apply(null, tempArr)
+  }
+  
+  function mutateAttrNameForObj(obj, aMatchAttr) {
+    let m = new Map(aMatchAttr)
+    for (let attr of Object.keys(obj)) {
+      if (m.has(attr)) {
+        obj[m.get(attr)] = obj[attr]
+        delete obj[attr]
+      }
+    }
+  }
 }
 
 function throttle(fn, interval) {
@@ -213,46 +231,6 @@ function random(start = 0, end = 1, isInteger) {
     : start + interval * Math.random()
 }
 
-function getLastElementForArrsOfObj(obj, targetProps = Object.keys(obj)) {
-  let tempObj = {}
-  for (let item of targetProps) {
-    if (Array.isArray(obj[item])) {
-      tempObj[item] = obj[item].slice(-1)[0]
-    }
-  }
-  return tempObj
-}
-
-function getMaxForArrsOfObj(obj, targetProps = Object.keys(obj)) {
-  let tempArr = []
-  for (let item of targetProps) {
-    if (Array.isArray(obj[item])) {
-      tempArr.push(...flatDeepArray(obj[item]))
-    }
-  }
-  return Math.max.apply(null, tempArr)
-}
-
-function getMinForArrsOfObj(obj, targetProps = Object.keys(obj)) {
-  let tempArr = []
-  for (let item of targetProps) {
-    if (Array.isArray(obj[item])) {
-      tempArr.push(...flatDeepArray(obj[item]))
-    }
-  }
-  return Math.min.apply(null, tempArr)
-}
-
-function mutateAttrNameForObj(obj, aMatchAttr) {
-  let m = new Map(aMatchAttr)
-  for (let attr of Object.keys(obj)) {
-    if (m.has(attr)) {
-      obj[m.get(attr)] = obj[attr]
-      delete obj[attr]
-    }
-  }
-}
-
 function appendSeparator(tar, separator, step, reverse) {
   let aStr = reverse
         ? String(tar).split('').reverse()
@@ -290,4 +268,33 @@ function parseStamp2DayIncludeYear(d) {
   month < 10 && (month = '0' + month)
   day < 10 && (day = '0' + day)
   return year + '-' + month + '-' + day
+}
+
+{ // others
+  const initTooltipWrap = function() {
+
+    // 意图为 获取 Vue 的最外层 <div id='app'>
+    const appWrap = document.querySelector('div')
+  
+    const tooltipWrap = document.createElement('div')
+    tooltipWrap.classList.add('stiCharts-tooltip-wrap')
+    tooltipWrap.style.cssText = `
+      padding:10px 15px;
+      background:rgba(0,0,0,0.7);
+      position:fixed;
+      color:white;
+      border-radius: 10px;
+      display:none;
+      z-index:9999;`
+    appWrap.appendChild(tooltipWrap)
+    return tooltipWrap
+  }
+  const getSingleton = function(fn) {
+    let instance = null
+    return function() {
+      return instance || (instance = fn(...arguments))
+    }
+  }
+  const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
+
 }
