@@ -1,4 +1,4 @@
-import mapArray from './mapArray'
+import compactArray from './compactArray'
 
 /**
  * 获取数组的最小值
@@ -9,7 +9,7 @@ import mapArray from './mapArray'
  */
 function minArray(arr, iteratee = d => d) {
   try {
-    arr = mapArray(...arguments)
+    arr = compactArray(...arguments)
   } catch (e) {
     throw new Error('输入参数有误！')
   }

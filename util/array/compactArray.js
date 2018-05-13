@@ -5,10 +5,10 @@
  * @return {Array} 被过滤后的数组
  * 
  * @example
- * mapArray([0, 1, NaN, 2, undefined, 3, null, 4, '', 5])  ->  [0, 1, 2, 3, 4, 5]
- * mapArray([{a:1}, {a:2, b:22}, {a:3, b:33}], d => d.b)  ->  [22, 33]
+ * compactArray([0, 1, NaN, 2, undefined, 3, null, 4, '', 5])  ->  [0, 1, 2, 3, 4, 5]
+ * compactArray([{a:1}, {a:2, b:22}, {a:3, b:33}], d => d.b)  ->  [22, 33]
 */
-function mapArray(arr, callback = d => d) {
+function compactArray(arr, callback = d => d) {
   const is = Object.is
   return arr.reduce((a, b) => {
     b = callback(b)
@@ -17,4 +17,4 @@ function mapArray(arr, callback = d => d) {
   }, [])
 }
 
-export default mapArray
+export default compactArray

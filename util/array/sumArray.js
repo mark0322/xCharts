@@ -1,4 +1,4 @@
-import mapArray from './mapArray'
+import compactArray from './compactArray'
 
 /**
  * 汇总数组数值
@@ -10,7 +10,7 @@ import mapArray from './mapArray'
  */
 function sumArray(arr, iteratee = d => d) {
   try {
-    arr = mapArray(...arguments)
+    arr = compactArray(...arguments)
   } catch (e) {
     throw new Error('输入参数有误！')
   }

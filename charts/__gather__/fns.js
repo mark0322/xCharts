@@ -57,7 +57,7 @@ function parseStamp2Day(d) {
     return result
   }
 
-  function mapArray(arr, callback = d => d) {
+  function compactArray(arr, callback = d => d) {
     const is = Object.is
     return arr.reduce((a, b) => {
       b = callback(b)
@@ -74,7 +74,7 @@ function parseStamp2Day(d) {
 
   function maxArray(arr, callback = d => d) {
     try {
-      arr = mapArray(...arguments)
+      arr = compactArray(...arguments)
     } catch (e) {
       throw new Error('输入参数有误！')
     }
@@ -83,7 +83,7 @@ function parseStamp2Day(d) {
 
   function minArray(arr, iteratee = d => d) {
     try {
-      arr = mapArray(...arguments)
+      arr = compactArray(...arguments)
     } catch (e) {
       throw new Error('输入参数有误！')
     }
@@ -110,7 +110,7 @@ function parseStamp2Day(d) {
 
   function sumArray(arr, iteratee = d => d) {
     try {
-      arr = mapArray(...arguments)
+      arr = compactArray(...arguments)
     } catch (e) {
       throw new Error('输入参数有误！')
     }
@@ -287,31 +287,31 @@ function parseStamp2DayIncludeYear(d) {
   return year + '-' + month + '-' + day
 }
 
-{ // others
-  const initTooltipWrap = function() {
 
-    // 意图为 获取 Vue 的最外层 <div id='app'>
-    const appWrap = document.querySelector('div')
-  
-    const tooltipWrap = document.createElement('div')
-    tooltipWrap.classList.add('stiCharts-tooltip-wrap')
-    tooltipWrap.style.cssText = `
-      padding:10px 15px;
-      background:rgba(0,0,0,0.7);
-      position:fixed;
-      color:white;
-      border-radius: 10px;
-      display:none;
-      z-index:9999;`
-    appWrap.appendChild(tooltipWrap)
-    return tooltipWrap
-  }
-  const getSingleton = function(fn) {
-    let instance = null
-    return function() {
-      return instance || (instance = fn(...arguments))
-    }
-  }
-  const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
+const initTooltipWrap = function() {
 
+  // 意图为 获取 Vue 的最外层 <div id='app'>
+  const appWrap = document.querySelector('div')
+
+  const tooltipWrap = document.createElement('div')
+  tooltipWrap.classList.add('stiCharts-tooltip-wrap')
+  tooltipWrap.style.cssText = `
+    padding:10px 15px;
+    background:rgba(0,0,0,0.7);
+    position:fixed;
+    color:white;
+    border-radius: 10px;
+    display:none;
+    z-index:9999;`
+  appWrap.appendChild(tooltipWrap)
+  return tooltipWrap
 }
+const getSingleton = function(fn) {
+  let instance = null
+  return function() {
+    return instance || (instance = fn(...arguments))
+  }
+}
+const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
+
+
