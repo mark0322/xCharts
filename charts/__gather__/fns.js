@@ -239,12 +239,18 @@ function throttle(fn, interval) {
   }
 }
 
-function random(start = 0, end = 1, isInteger) {
-  (arguments.length == 1) && (end = start, start = 0)
-  const interval = end - start
-  return isInteger
-    ? (start + interval * Math.random()) | 0
-    : start + interval * Math.random()
+{ // number
+  function random(start = 0, end = 1, isInteger) {
+    (arguments.length == 1) && (end = start, start = 0)
+    const interval = end - start
+    return isInteger
+      ? (start + interval * Math.random()) | 0
+      : start + interval * Math.random()
+  }
+  
+  function round(num, ndigits = 0) {
+    return Math.round(num * 10 ** ndigits) / (10 ** ndigits)
+  }
 }
 
 function appendSeparator(tar, separator, step, reverse) {

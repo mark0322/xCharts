@@ -4,10 +4,7 @@
  * @param ndigits 要保留的小数位数
  */
 function round(num, ndigits = 0) {
-  if (ndigits > 0) {
-    return Math.round(num * 10 ** ndigits) / (10 ** ndigits)
-  }
-  return Math.round(num)
+  return Math.round(num * 10 ** ndigits) / (10 ** ndigits)
 }
 
 export default round
