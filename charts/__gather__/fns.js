@@ -59,16 +59,11 @@ function parseStamp2Day(d) {
 
   function mapArray(arr, callback = d => d) {
     const is = Object.is
-    arr = arr.reduce((a, b) => {
-      if (!(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, ''))) {
-        if (is(callback(b), undefined)) return a
-        a.push(callback(b))
-        return a
-      }
+    return arr.reduce((a, b) => {
+      b = callback(b)
+      !(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, '')) && a.push(b)
       return a
     }, [])
-    if (arr[0] === undefined) throw new Error('输入参数有误！')
-    return arr
   }
 
   function matchArrayVal(arr, matchVal, iteratee) {
