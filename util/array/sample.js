@@ -1,8 +1,8 @@
 import random from '../number/random'
 
 /**
- * 从数组中随机抽取一个或多个元素
- * 相当于 python 中的 1)random.choice 2)random.sample 3)random.shuffle
+ * 从数组中随机抽取 1 ~ arr.length 个元素
+ * 相当于python的 1)random.choice 2)random.sample 3)random.shuffle
  * @param {Array} arr 
  * @param {Number} sampleSize 获取随机样本的大小
  * @return {Array | Number}

@@ -10,11 +10,14 @@
 */
 function compactArray(arr, callback = d => d) {
   const is = Object.is
-  return arr.reduce((a, b) => {
+  arr = arr.reduce((a, b) => {
     b = callback(b)
-    !(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, '')) && a.push(b)
+    const isPassVal = !(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, ''))
+    isPassVal && a.push(b)
     return a
   }, [])
+  if (arr.length == 0) throw new Error('输入参数有误！')
+  return arr
 }
 
 export default compactArray

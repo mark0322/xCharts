@@ -1,12 +1,3 @@
-function parseStamp2Day(d) {
-  let month = new Date(d).getMonth() + 1,
-    day = new Date(d).getDate()
-  month < 10 && (month = '0' + month)
-  day < 10 && (day = '0' + day)
-  return month + '-' + day
-}
-
-
 { // *** array ***
   function chunk(arr, size = arr.length) {
     const result = []
@@ -14,6 +5,18 @@ function parseStamp2Day(d) {
       result.push(arr.slice(i, i += size))
     }
     return result
+  }
+
+  function compactArray(arr, callback = d => d) {
+    const is = Object.is
+    arr = arr.reduce((a, b) => {
+      b = callback(b)
+      const isPassVal = !(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, ''))
+      isPassVal && a.push(b)
+      return a
+    }, [])
+    if (arr.length == 0) throw new Error('输入参数有误！')
+    return arr
   }
 
   function difference(arr1, arr2) {
@@ -55,15 +58,6 @@ function parseStamp2Day(d) {
       s1.has(item) && result.push(item)
     }
     return result
-  }
-
-  function compactArray(arr, callback = d => d) {
-    const is = Object.is
-    return arr.reduce((a, b) => {
-      b = callback(b)
-      !(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, '')) && a.push(b)
-      return a
-    }, [])
   }
 
   function matchArrayVal(arr, matchVal, iteratee) {
@@ -140,15 +134,16 @@ function parseStamp2Day(d) {
   }
 
   function zip() {
-    let resultArr = [],
+    if (arguments.length === 0) return []
+    let result = [],
       tempArr = [...arguments],
       minLengthForTempArr = Math.min.apply(null, tempArr.map(d => d.length))
   
     for (let i = 0; i < minLengthForTempArr; i++) {
-      resultArr.push(tempArr.map(d => d[i]))
+      result.push(tempArr.map(d => d[i]))
     }
   
-    return resultArr
+    return result
   }
 }
 
@@ -210,31 +205,32 @@ function parseStamp2Day(d) {
       if (++i < time) return func(...arguments)
     }
   }
-}
-function throttle(fn, interval) {
-  let __self = fn // 保存需要被延迟执行的函数引用
-  let timer // 定时器
-  let firstTime = true // 是否是第一次调用
-  return function() {
-    let args = arguments
-    let __me = this
-    if (firstTime) { // 如果是第一次调用，不需延迟执行
-      __self.apply(__me, args)
-      firstTime = false
-      return false
+
+  function throttle(fn, interval) {
+    let __self = fn // 保存需要被延迟执行的函数引用
+    let timer // 定时器
+    let firstTime = true // 是否是第一次调用
+    return function() {
+      let args = arguments
+      let __me = this
+      if (firstTime) { // 如果是第一次调用，不需延迟执行
+        __self.apply(__me, args)
+        firstTime = false
+        return false
+      }
+      if (timer) { // 如果定时器还在，说明前一次延迟执行还没有完成
+        return false
+      }
+      timer = setTimeout(function() { // 延迟一段时间执行
+        clearTimeout(timer)
+        timer = null
+        __self.apply(__me, args)
+      }, interval || 500)
     }
-    if (timer) { // 如果定时器还在，说明前一次延迟执行还没有完成
-      return false
-    }
-    timer = setTimeout(function() { // 延迟一段时间执行
-      clearTimeout(timer)
-      timer = null
-      __self.apply(__me, args)
-    }, interval || 500)
-  }
+  }  
 }
 
-{ // number
+{ // *** number ***
   function random(start = 0, end = 1, isInteger) {
     (arguments.length == 1) && (end = start, start = 0)
     const interval = end - start
@@ -248,28 +244,28 @@ function throttle(fn, interval) {
   }
 }
 
-function appendSeparator(tar, separator, step, reverse) {
-  let aStr = reverse
-        ? String(tar).split('').reverse()
-        : String(tar).split(''),
-    aTemp = []
-  for (let i = 0, l = aStr.length; i < l;) {
-    aTemp.push(...aStr.slice(i, i += step))
-    aTemp.push(separator)
+{ // *** string ***
+  function appendSeparator(tar, separator, step, reverse) {
+    let aStr = reverse
+          ? String(tar).split('').reverse()
+          : String(tar).split(''),
+      aTemp = []
+    for (let i = 0, l = aStr.length; i < l;) {
+      aTemp.push(...aStr.slice(i, i += step))
+      aTemp.push(separator)
+    }
+    aTemp.pop()
+    return reverse
+      ? aTemp.reverse().reduce((a, b) => a + b)
+      : aTemp.reduce((a, b) => a + b)
   }
-  aTemp.pop()
-  return reverse
-    ? aTemp.reverse().reduce((a, b) => a + b)
-    : aTemp.reduce((a, b) => a + b)
+  
+  function trim(s) {
+    return s.replace(/^\s+ | \s+$/g, '')
+  }
 }
 
-function trim(s) {
-  return s.replace(/^\s+ | \s+$/g, '')
-}
 
-function parseStamp2Day(d) {
-  return new Date(d).getDate() + '日'
-}
 
 function parseStamp2Day(d) {
   let month = new Date(d).getMonth() + 1,
