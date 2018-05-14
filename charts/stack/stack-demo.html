@@ -28,33 +28,15 @@
 <script type="text/javascript">
   const log = (...d) => console.log(...d)
 const options = {
-    /** data {Array}
-     * @param {String} name 必填参，用于显示 block 的 label
-     * @param {Number} val 必填参，用于表示 block 的数值，且将数值与 block 的面积映射至一起
-     * @param {String} desc 选填参，以 tooltip 形式表示每个 block 的描述
-     * @param {Number} groups 选填参，用于将 block 分组，并将不同的颜色映射至不同组
-     */
-    data: [
-        {name: 'SMTP', val: 1, groups: 0}, {name: 'SMTPS', val: 2, groups: 1},
-        {name: 'POP3', val: 3, groups: 2}, {name: 'POP3S', val: 4, groups: 0},
-        {name: 'IMAP', val: 5, groups: 1}, {name: 'IMAPS', val: 6, groups: 2}
-    ],
-    blocks: { // 可选参
-        columns: 3, // 可参选； 作用:设每列有几个 block（@default 3)
-
-        // @param {String | Array}; 若为Array则需分为options.data分groups，以指定groups颜色
-        color: '#00a7d8', // 可选参
-        // color: ['#88e4dd', '#c4e4db', '#99b7c8'],
-        gap: 2, // 可选参 @default 1
-
-        label: {
-            color: '#333', // 可选参 @default 'steelblue';
-            fontSize: 18
-        }
-    }
+  data: {
+    
+  }
 }
   // 绘制 chart
-  treemap(document.querySelector('#container'), options)
+  stack(document.querySelector('#container'), options)
 
+function stack(container, options) {
+  log(options)
+}
 
 </script>
