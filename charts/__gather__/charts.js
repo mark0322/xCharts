@@ -22,19 +22,19 @@ function lines(container, options) {
 
   const // 定义画布 & g_wrawp
     svg = d3.select(container).append('svg')
-    .attr('width', svgWidth).attr('height', svgHeight),
+      .attr('width', svgWidth).attr('height', svgHeight),
     g = svg.append('g').attr('class', 'g_wrap')
-    .attr('transform', `translate(${padding.left}, ${padding.top})`)
+      .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
   const // 比例尺
     x = d3.scaleBand()
-    .domain(aDateForXAxis)
-    .range([0, axisWidth]),
+      .domain(aDateForXAxis)
+      .range([0, axisWidth]),
     y = d3.scaleLinear()
-    .domain([0, maxVal * 1.1])
-    .rangeRound([axisHeight, 0]),
+      .domain([0, maxVal * 1.1])
+      .rangeRound([axisHeight, 0]),
     z = d3.scaleOrdinal(lineColor) // 各 line 的颜色
-    .domain(linesName)
+      .domain(linesName)
   x.align(0)
 
   // *** BGbar 的 padding ***
@@ -46,12 +46,15 @@ function lines(container, options) {
     const linePath = d3.line()
       .x(d => x(d[0]) + x.bandwidth() / 2)
       .y(d => y(d[1]))
-      .curve(d3.curveCatmullRom.alpha(0.99))
-
-    // draw lines
+    lines.curve && linePath.curve(d3.curveCatmullRom.alpha(0.99))
     const gWrapLines = g.append('g').attr('class', 'gWrapLines')
 
-    for (let item of linesName) {
+    // label data
+    const label = lines.label || {}
+
+    // linesName的数据：拿到 data.val 下每条线数组的最后一个元素
+    const xTextVal = getLastElementForArrsOfObj(data.val)
+    for (let item of linesName) { // draw lines
       gWrapLines
         .append('path')
         .attr('class', item)
@@ -60,6 +63,17 @@ function lines(container, options) {
         .attr('fill', 'none')
         .attr('stroke', z(item))
         .attr('stroke-width', d => lines.width ? lines.width : 2)
+
+      if (label.show) {
+        gWrapLines.append('text')
+          .attr('x', x(parseStamp2Day(data.date[data.date.length - 1])) + x.bandwidth() / 2)
+          .attr('y', y(xTextVal[item]))
+          .text(item)
+          .attr('fill', z(item))
+          .attr('dy', d => label.fontDy ? label.fontDy : 0)
+          .attr('dx', d => label.fontDx ? label.fontDx : 0)
+          .attr('font-size', d => label.fontSize ? label.fontSize : 14)
+      }
     }
   } catch (e) {
     console.warn('draw line:\n', e)
@@ -218,6 +232,12 @@ function lines(container, options) {
     }
   } catch (e) {
     console.warn('others - backgroundBar:\n', e)
+  }
+
+  try { // label相关
+
+  } catch (e) {
+    console.warn('label相关:\n', e)
   }
 
   (function others() {

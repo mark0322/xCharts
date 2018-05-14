@@ -71,16 +71,18 @@
         list: {'A': 5, 'B': 1, 'C': 2, 'D': 3, 'E': 1}
       },
     ],
-    line: { // 可选参
-        color: 'steelblue', // 可选参 (默认值为 'steelblue')
-        width: 10,
+    lines: { // 可选参
+        width: 2,
         label: { // 可选参; 将num值直接显示
-            show: true,
-            fontSize: 12, // 可选参
+            show: false,
+            fontSize: 22, // 可选参
             fontColor: '#eee', // 可选参
             fontDx: 3, //  可选参； 使unit沿x轴偏移
             fontDy: -3 //  可选参； 使unit沿y轴偏移
-        }
+        },
+        curve: true,
+        // color: ['red', 'green', 'blue', 'yellow', 'black'] // 可选参， 定义每条线的颜色
+
     },
     splitline: { // 可选参
         show: true,
@@ -93,8 +95,8 @@
         ticksColor: '#ccc', // 可选参
         yAxisTicksNum: 8, //  可选参， 用于设置 num 轴的 ticks 个数
         xAxis: {
-            hideLine: true, // 可选参
-            hideTicks: true, // 可选参
+            // hideLine: true, // 可选参
+            // hideTicks: true, // 可选参
         },
         yAxis: {
             // hideLine: true, // 可选参
