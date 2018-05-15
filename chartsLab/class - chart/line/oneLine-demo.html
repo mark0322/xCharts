@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 95%;
+            height: 95%;
+            background: #143d66;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+
+    </div>
+</body>
+<script src="../__gather__/d3.js"></script>
+<script src="../__gather__/fns.js"></script>
+<script src="../__gather__/charts.js"></script>
+<script type="text/javascript">
+    const log = (...d) => console.log(...d)
+
+    class DrawLineChart {
+        constructor(options) {
+            this.options = options
+            this.container = options.container
+            this.dataset = options.dataset
+            this.padding = options.padding || {
+                top: 40,
+                left: 40,
+                right: 40,
+                bottom: 40
+            }
+
+            this.svgWidth = this.container.offsetWidth
+            this.svgHeight = this.container.offsetHeight
+            this.axisWidth = this.svgWidth - this.padding.left - this.padding.right
+            this.axisHeight = this.svgHeight - this.padding.top - this.padding.bottom
+
+            this.yAxisMaxVal = getMaxForArrsOfObj(this.dataset.yData)
+            this.linesColor = options.lines.color || d3.schemeCategory10
+            this.linesName = Object.keys(this.dataset.yData)
+            this.svg = d3.select(this.container)
+                .append('svg').attr('width', this.svgWidth).attr('height', this.svgHeight)
+            this.g = this.svg.append('g').attr('class', 'g_wrap')
+                .attr('transform',`translate(${this.padding.left}, ${this.padding.top})`)
+            this.x = d3.scaleBand().domain(this.dataset.xData).range([0, this.axisWidth])
+            this.y = d3.scaleLinear().domain([0, this.yAxisMaxVal * 1.1]).rangeRound([this.axisHeight, 0])
+            this.z = d3.scaleOrdinal(this.linesColor).domain(this.linesName)
+        }
+        init() {
+            log(this.options.lines)
+            this.line()
+        }
+
+/** 
+ * @param oLinesData
+ * {
+ *      show: {Boolean} @default true
+        width: 3,
+        curve: true,
+        color: ['red', 'green', ' blue', 'cyan', 'brown', 'sreelblue'],
+        animate: true
+ * }
+*/
+        line(oLinesData) {
+            const lines = this.options.lines || {}
+            typeof lines.show === 'undefined' && (lines.show = true)
+            oLinesData && replaceAttrForObj(oLinesData, lines)
+            d3.select(this.container).select('g.gWrapLines').remove()
+
+            if (lines.show) {
+                const linePath = d3.line()
+                    .x(d => this.x(d[0]) + this.x.bandwidth() / 2)
+                    .y(d => this.y(d[1]))
+                lines.curve && linePath.curve(d3.curveCatmullRom.alpha(0.99))
+
+                const gWrapLines = this.g.append('g')
+                    .attr('class', 'gWrapLines')
+                    .attr('fill', 'none')
+                    .attr('stroke-width', d => lines.width ? lines.width : 2)
+
+                for (let item of this.linesName) {
+                    gWrapLines
+                        .append('path')
+                        .attr('class', item)
+                        .datum(zip(this.dataset.xData, this.dataset.yData[item]))
+                        .attr('d', linePath)
+                        .attr('stroke', this.z(item))
+                }
+            }
+
+        }
+    }
+
+    const oMultiLine = new DrawLineChart({
+        container: document.querySelector('#container'),
+        dataset: {
+            xData: ['11', '22', '33', '44', '55'],
+            yData: {
+                'A': [1, 2, 3, 4, 5],
+                'B': [1, 2, 1, 1, 1],
+                'C': [2, 2, 2, 2, 2],
+                'D': [6, 3, 3, 3, 3],
+                'E': [5, 4, 3, 2, 1]
+            }
+        },
+        label: {
+            show: true,
+            fontSize: 14,
+            fontColor: 'steelblue',
+            fontDx: 3,
+            fontDy: 6
+        },
+        lines: {
+            show: true,
+            width: 3,
+            curve: true,
+            color: ['red', 'green', ' blue', 'cyan', 'brown', 'sreelblue'],
+            animate: true
+        },
+        axis: {
+            xAxis: {
+                axisLine: {
+                    show: true,
+                    color: 'steelblue',
+                    opacity: 1
+                },
+                axisTicks: {
+                    show: true,
+                    color: 'steelblue',
+                    opacity: 1
+                },
+                unit: {
+                    show: true,
+                    name: 'xAxisName',
+                    size: 18,
+                    color: 'steelblue',
+                    dx: 0,
+                    dy: 0,
+                    rotate: 0,
+                    opacity: 1
+                }
+            },
+            yAxis: {
+                axisLine: {
+                    show: true,
+                    color: 'steelblue',
+                    opacity: 1
+                },
+                axisTicks: {
+                    show: true,
+                    color: 'steelblue',
+                    opacity: 1
+                },
+                unit: {
+                    show: true,
+                    name: 'yAxisName',
+                    size: 18,
+                    color: 'steelblue',
+                    dx: 0,
+                    dy: 0,
+                    rotate: 0,
+                    opacity: 1
+                }
+            }
+        },
+        padding: {
+            top: 40,
+            left: 40,
+            right: 40,
+            bottom: 40
+        }
+    })
+
+    // oMultiLine.init()
+
+    oMultiLine.line({
+        curve: false,
+        width: 1
+    })
+
+    function getMaxForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+        let tempArr = []
+        for (let item of targetProps) {
+            if (Array.isArray(obj[item])) {
+                tempArr.push(...flatDeepArray(obj[item]))
+            }
+        }
+        return Math.max.apply(null, tempArr)
+    }
+
+    function flatDeepArray(arr) {
+        const tempArr = []
+        flatArray(arr)
+        return tempArr
+
+        function flatArray(arrSub) {
+            arrSub.forEach(d => {
+                Array.isArray(d) ? flatArray(d) : tempArr.push(d)
+            })
+        }
+    }
+
+    function replaceAttrForObj(newObj, oldObj) {
+        for (let attrName of Object.keys(newObj)) {
+            oldObj[attrName] = newObj[attrName]
+        }
+    }
+</script>
