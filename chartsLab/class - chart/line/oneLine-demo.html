@@ -76,7 +76,7 @@
         line(oLinesData) {
             const lines = this.options.lines || {}
             typeof lines.show === 'undefined' && (lines.show = true)
-            oLinesData && replaceAttrForObj(oLinesData, lines)
+            oLinesData && replaceFieldForObj(oLinesData, lines)
             d3.select(this.container).select('g.gWrapLines').remove()
 
             if (lines.show) {
@@ -212,7 +212,7 @@
         }
     }
 
-    function replaceAttrForObj(newObj, oldObj) {
+    function replaceFieldForObj(newObj, oldObj) {
         for (let attrName of Object.keys(newObj)) {
             oldObj[attrName] = newObj[attrName]
         }
