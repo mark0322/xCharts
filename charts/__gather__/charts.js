@@ -1011,6 +1011,28 @@ function treemap(container, options) {
     let vals = gBlocks.append('text').text(d => d.val).attr('dy', '1em')
     labelStyle(vals)
   }
+
+  { // tooltip
+    const oDiv = document.createElement('div')
+    oDiv.classList.add('bar-tooltip')
+    oDiv.style.cssText = 'padding:10px 15px;background:rgba(0,0,0,0.7);position:fixed;color:white;border-radius: 10px;display:none;'
+    container.appendChild(oDiv)
+    const gBlock = d3.select(container).selectAll('g.block').data(data)
+
+    gBlock
+      .on('mouseenter', d => {
+        oDiv.innerHTML = d.name + ': ' + d.val
+        oDiv.style.display = 'block' // TODO hover 至文字上， 会 display = 'none'
+      })
+      .on('mousemove', () => {
+        oDiv.style.display = 'block'
+        oDiv.style.left = d3.event.pageX - oDiv.offsetWidth / 2 + 'px'
+        oDiv.style.top = d3.event.pageY - oDiv.offsetHeight - 5 + 'px'
+      })
+      .on('mouseout', () => {
+        oDiv.style.display = 'none'
+      });
+  }
 }
 
 // --
