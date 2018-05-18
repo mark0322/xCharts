@@ -5,13 +5,13 @@
  * eg flatDeepArray([1, 2,[3, 4, [5, 6, ['x', 'y']]]]) -> [1, 2, 3, 4, 5, 6, "x", "y"]
  */
 function flatDeepArray(arr) {
-  const tempArr = []
+  const result = []
   flatArray(arr)
-  return tempArr
+  return result
 
   function flatArray(arrSub) {
     arrSub.forEach(d => {
-      Array.isArray(d) ? flatArray(d) : tempArr.push(d)
+      Array.isArray(d) ? flatArray(d) : result.push(d)
     })
   }
 }

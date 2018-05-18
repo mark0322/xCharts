@@ -39,13 +39,13 @@
   }
 
   function flatDeepArray(arr) {
-    const tempArr = []
+    const result = []
     flatArray(arr)
-    return tempArr
+    return result
   
     function flatArray(arrSub) {
       arrSub.forEach(d => {
-        Array.isArray(d) ? flatArray(d) : tempArr.push(d)
+        Array.isArray(d) ? flatArray(d) : result.push(d)
       })
     }
   }
@@ -149,13 +149,13 @@
 
 { // *** object ***
   function getLastElementForArrsOfObj(obj, targetProps = Object.keys(obj)) {
-    let tempObj = {}
+    let result = {}
     for (let item of targetProps) {
       if (Array.isArray(obj[item])) {
-        tempObj[item] = obj[item].slice(-1)[0]
+        result[item] = obj[item].slice(-1)[0]
       }
     }
-    return tempObj
+    return result
   }
 
   function getMaxForArrsOfObj(obj, targetProps = Object.keys(obj)) {
