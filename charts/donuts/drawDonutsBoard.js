@@ -7,7 +7,7 @@ import sumArray from '../../util/array/sumArray'
  * @param {Object} options 配置参数
  */
 
-function donutsBoard(container, options) {
+function drawDonutsBoard(container, options) {
   container.innerHTML = ''; // 清空 容器内容
   let // *** 全局参数 ***
     data = options.data,
@@ -112,7 +112,7 @@ function donutsBoard(container, options) {
   }
 }
 
-export default donutsBoard
+export default drawDonutsBoard
 
 // *** options 模板 ***
 // const options = {

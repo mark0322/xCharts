@@ -1,4 +1,4 @@
-function lines(container, options) {
+function drawLines(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -269,7 +269,7 @@ function lines(container, options) {
 }
 
 // --
-function bar(container, options) {
+function drawBar(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -643,7 +643,7 @@ function bar(container, options) {
 }
 
 // --
-function bubbles(container, options) {
+function drawBubbles(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -784,7 +784,7 @@ function bubbles(container, options) {
 }
 
 // --
-function donutsBoard(container, options) {
+function drawDonutsBoard(container, options) {
   container.innerHTML = ''; // 清空 容器内容
   let // *** 全局参数 ***
     data = options.data,
@@ -890,7 +890,7 @@ function donutsBoard(container, options) {
 }
 
 // --
-function treemap(container, options) {
+function drawTreemap(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -1036,7 +1036,7 @@ function treemap(container, options) {
 }
 
 // --
-function heatMap(container, options) {
+function drawHeatMap(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -1081,7 +1081,7 @@ function heatMap(container, options) {
 }
 
 // --
-function oneLine(container, options) {
+function drawOneLine(container, options) {
   container.innerHTML = ''; // 清空 容器内容
 
   const // *** 全局数据 ***

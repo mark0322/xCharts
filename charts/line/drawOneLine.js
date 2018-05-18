@@ -8,7 +8,7 @@ const d3 = Object.assign({}, d3Selection, d3Scale, d3Array, d3Axis, d3Shape)
 import parseStamp2Day from './util/time/parseStamp2Day'
 import zip from './util/array/zip'
 
-function oneLine(container, options) {
+function drawOneLine(container, options) {
   container.innerHTML = ''; // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -251,7 +251,7 @@ function oneLine(container, options) {
   })()
 }
 
-export default oneLine
+export default drawOneLine
 
 // *** options 数据模板 ***
 // const options = {

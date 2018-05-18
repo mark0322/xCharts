@@ -7,7 +7,7 @@ import sumArray from '../../util/array/sumArray'
 /**
  * 使用基本<rect>而非d3.treemap()绘制treemap
  */
-function treemap(container, options) {
+function drawTreemap(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -130,7 +130,7 @@ function treemap(container, options) {
   }
 }
 
-export default treemap
+export default drawTreemap
 
 // *** 参数 模板 ***
 // const options = {

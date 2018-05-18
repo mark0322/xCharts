@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-function bar(container, options) {
+function drawBar(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -373,7 +373,7 @@ function bar(container, options) {
   })()
 }
 
-export default bar
+export default drawBar
 
 // *** options 模板 ***
 // const options = {

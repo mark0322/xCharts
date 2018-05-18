@@ -9,7 +9,7 @@ const d3 = Object.assign({}, d3Selection, d3Hierarchy, d3Scale, d3Array)
  * @param container 包裹svg chart的div容器
  * @param options chart的配置参数 (类似echarts)
  */
-function bubbles(container, options) {
+function drawBubbles(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -149,7 +149,7 @@ function bubbles(container, options) {
   }
 }
 
-export default bubbles
+export default drawBubbles
 
 // *** 参数 模板 ***
 // const options = {

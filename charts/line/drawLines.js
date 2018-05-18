@@ -4,7 +4,7 @@ import getMaxForArrsOfObj from '../../util/object/getMaxForArrsOfObj'
 import getLastElementForArrsOfObj from '../../util/object/getLastElementForArrsOfObj'
 import singletonInitTooltipWrap from '../../chart_modules/tooltip/singletonInitTooltipWrap'
 
-function lines(container, options) {
+function drawLines(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -291,7 +291,7 @@ function parseStamp2DayIncludeYear(d) {
   return year + '-' + month + '-' + day
 }
 
-export default lines
+export default drawLines
 
 // ** 数据模板 **
 // const options = {

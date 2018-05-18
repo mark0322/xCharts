@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import flatArray from '../../util/array/flatArray'
 
-function heatMap(container, options) {
+function drawHeatMap(container, options) {
   container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
@@ -45,7 +45,7 @@ function heatMap(container, options) {
   }
 }
 
-export default heatMap
+export default drawHeatMap
 
 // *** 数据模板 ***
 // const options = {
