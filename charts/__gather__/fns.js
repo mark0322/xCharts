@@ -311,3 +311,17 @@ const getSingleton = function(fn) {
 const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
 
 
+function isEqual(obj1, obj2) {
+  let m1 = new Map(Object.entries(obj1)),
+    m2 = new Map(Object.entries(obj2))
+  if (m1.size !== m2.size) return false
+  for (let key of m1.keys()) {
+    if (!m2.has(key)) return false
+    if (typeof m1.get(key) === 'object') {
+      if(!isEqual(m1.get(key), m2.get(key))) return false
+      continue
+    }
+    if (m1.get(key) !== m2.get(key)) return false
+  }
+  return true
+}
