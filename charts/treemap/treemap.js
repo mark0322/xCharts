@@ -27,17 +27,15 @@ function drawTreemap(container, options) {
 
   const // 定义画布 & g_wrawp
     svg = d3.select(container).append('svg')
-    .attr('width', svgWidth).attr('height', svgHeight),
+      .attr('width', svgWidth).attr('height', svgHeight),
     g = svg.append('g').attr('class', 'gWrap')
-    .attr('transform', `translate(${padding.left}, ${padding.top})`)
+      .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
   // 定义 blocks 相关的数据
   const
     color = blocks.color || 'steelblue',
     gap = blocks.gap || 1,
     columnsCount = blocks.columns || 3, // treemap 的列数
-
-    // rowsCount = Math.ceil(data.length / blocks.columns), // treemap 的行数
     aChunkData = chunk(data, columnsCount) // 生成绘制 treemap 的数据
 
   try { // drawBlocks
