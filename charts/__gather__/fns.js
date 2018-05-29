@@ -21,15 +21,11 @@
 
   function difference(arr1, arr2) {
     let s1 = new Set(arr1),
-      s2 = new Set(arr2)
-    for (let item of s2) {
-      if (s1.has(item)) {
-        s1.delete(item)
-        s2.delete(item)
-      }
-    }
-    return [...s1, ...s2]
-  }  
+      s2 = new Set(arr2),
+      diff1 = [...arr1.filter(d => !s2.has(d))],
+      diff2 = [...arr2.filter(d => !s1.has(d))]
+    return [...diff1, ...diff2]
+  }
 
   function flatArray(arr) {
     return arr.reduce((a, b) => {
@@ -51,13 +47,8 @@
   }
 
   function intersection(arr1, arr2) {
-    let result = [],
-      s1 = new Set(arr1),
-      s2 = new Set(arr2)
-    for (let item of s2) {
-      s1.has(item) && result.push(item)
-    }
-    return result
+    const s2 = new Set(arr2)
+    return arr1.filter(d => s2.has(d))
   }
 
   function matchArrayVal(arr, matchVal, iteratee) {
