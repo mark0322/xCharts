@@ -1,5 +1,5 @@
 /**
- * 模仿 lodash 的 _.chunk 函数
+ * 将一维数组生成为二维数组；并统一指定子数组的元素个数。
  * @param {Array} arr 要被chunk的数组
  * @param {Number} size 要被chunk的子数组大小
  * @return {Array}

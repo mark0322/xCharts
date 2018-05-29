@@ -1,6 +1,5 @@
 /**
  * delay func 函数的执行
- * 即 lodash 的 _.delay
  * @param {Function} func The function to delay.
  * @param {Number} time  The number of milliseconds to delay invocation.
  * @param {arguments} 可选参
