@@ -20,7 +20,6 @@
   }
 
   function difference(arr1, arr2) {
-    log(111)
     let s1 = new Set(arr1),
       s2 = new Set(arr2)
     return [...arr1.filter(d => !s2.has(d)), ...arr2.filter(d => !s1.has(d))]
