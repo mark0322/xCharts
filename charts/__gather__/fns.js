@@ -250,9 +250,10 @@
       aTemp.push(separator)
     }
     aTemp.pop()
+    log(aTemp, '1')
     return reverse
-      ? aTemp.reverse().reduce((a, b) => a + b)
-      : aTemp.reduce((a, b) => a + b)
+      ? aTemp.reverse().join('')
+      : aTemp.join('')
   }
   
   function trim(s) {
