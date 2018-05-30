@@ -106,24 +106,24 @@ function drawTreemap(container, options) {
 
     // block label
     const label = blocks.label || {}
-    let labelStyle = o => {
+    const labelStyle = o => {
       o.attr('fill', () => label.color ? label.color : '#333')
         .attr('font-size', () => label.fontSize ? label.fontSize : '12')
         .attr('text-anchor', 'middle')
         .attr('x', function() {
-          let rectWidth = d3.select(this.parentNode).select('rect').attr('width')
+          const rectWidth = d3.select(this.parentNode).select('rect').attr('width')
           return rectWidth / 2
         })
         .attr('y', function() {
-          let rectHeight = d3.select(this.parentNode).select('rect').attr('height')
+          const rectHeight = d3.select(this.parentNode).select('rect').attr('height')
           return rectHeight / 2
         })
     }
 
-    let names = gBlocks.append('text').text(d => d.name)
+    const names = gBlocks.append('text').text(d => d.name)
     labelStyle(names)
 
-    let vals = gBlocks.append('text').text(d => d.val).attr('dy', '1em')
+    const vals = gBlocks.append('text').text(d => d.val).attr('dy', '1em')
     labelStyle(vals)
   }
 }

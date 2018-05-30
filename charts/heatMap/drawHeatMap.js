@@ -29,7 +29,7 @@ function drawHeatMap(container, options) {
 
   // draw blocks
   let blockHeight = axisHeight / data.length - gap
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0, l = data.length; i < l; i++) {
     let blockWidth = axisWidth / data[i].length - gap
     g.append('g')
       .attr('class', 'g-row')

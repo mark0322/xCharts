@@ -4,6 +4,7 @@
  * @param {String} separator 分隔符
  * @param {Number} step 步长
  * @param {Boolean} reverse 判断是从左或右开始计算 step
+ * @return {String} 加入分隔符后的字符串
  *
  * eg appendSeparator(1234568901, '--', 3) -> '123--456--890--1'
  * eg appendSeparator(1234568901, '--', 3, true) -> '1--234--568--901'

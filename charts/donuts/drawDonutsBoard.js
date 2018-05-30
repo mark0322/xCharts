@@ -40,9 +40,9 @@ function drawDonutsBoard(container, options) {
 
   const // 定义画布 & g_wrawp
     svg = d3.select(container).append('svg')
-    .attr('width', svgWidth).attr('height', svgHeight),
+      .attr('width', svgWidth).attr('height', svgHeight),
     g = svg.append('g').attr('class', 'g_wrap')
-    .attr('transform', `translate(${padding.left + outerRadius}, ${padding.top + outerRadius})`)
+      .attr('transform', `translate(${padding.left + outerRadius}, ${padding.top + outerRadius})`)
 
   const arcPath = d3.arc()
     .innerRadius(innerRadius)

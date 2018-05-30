@@ -2,7 +2,8 @@
  * 相当于 lodash 的 _.before + _.once
  * @param {Function} func The function to restrict.
  * @param {Number} time 可选参，指定func的执行次数 @default 1
- *
+ * @return {Function} 指定了可执行次数的函数
+ * 
  * @example
  * const show = n => console.log(n)
  * let fn = workFixTime(show, 2)
