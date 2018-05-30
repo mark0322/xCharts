@@ -16,11 +16,11 @@ import flatDeepArray from '../array/flatDeepArray'
  *
  * eg2 getMinForArrsOfObj(val, ['email', 'VPN']) -> 3
  */
-function getMinForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+function getMinForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
   let tempArr = []
-  for (let item of targetProps) {
-    if (Array.isArray(obj[item])) {
-      tempArr.push(...flatDeepArray(obj[item]))
+  for (let attr of targetAttrs) {
+    if (Array.isArray(obj[attr])) {
+      tempArr.push(...flatDeepArray(obj[attr]))
     }
   }
   return Math.min.apply(null, tempArr)

@@ -15,11 +15,11 @@
  *
  * eg2 getLastElementForArrsOfObj(val, ['email', 'VPN']) -> {email: 71, VPN: 92}
  */
-function getLastElementForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+function getLastElementForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
   let result = {}
-  for (let item of targetProps) {
-    if (Array.isArray(obj[item])) {
-      result[item] = obj[item].slice(-1)[0]
+  for (let attr of targetAttrs) {
+    if (Array.isArray(obj[attr])) {
+      result[attr] = obj[attr].slice(-1)[0]
     }
   }
   return result

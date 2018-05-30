@@ -1,5 +1,6 @@
 /**
- * 如Array.prototype.forEach()方法, 遍历 object 每个属性
+ * 对象的迭代器
+ * 类似Array.prototype.forEach()方法, 遍历 object 每个属性
  * @param {Object} obj 被遍历的对象
  * @param {Function} callback fn有三参数： key, value, self
  * 

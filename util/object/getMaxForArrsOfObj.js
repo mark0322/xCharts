@@ -16,11 +16,11 @@ import flatDeepArray from '../array/flatDeepArray'
  *
  * eg2 getMaxForArrsOfObj(val, ['email', 'VPN']) -> 94
  */
-function getMaxForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+function getMaxForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
   let tempArr = []
-  for (let item of targetProps) {
-    if (Array.isArray(obj[item])) {
-      tempArr.push(...flatDeepArray(obj[item]))
+  for (let attr of targetAttrs) {
+    if (Array.isArray(obj[attr])) {
+      tempArr.push(...flatDeepArray(obj[attr]))
     }
   }
   return Math.max.apply(null, tempArr)

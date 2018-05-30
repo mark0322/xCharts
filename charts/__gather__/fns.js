@@ -137,31 +137,37 @@
 }
 
 { // *** object ***
-  function getLastElementForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+  function each(obj, callback) {
+    for (let key of Object.keys(obj)) {
+      callback.call(null, key, obj[key], obj)
+    }
+  }
+
+  function getLastElementForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
     let result = {}
-    for (let item of targetProps) {
-      if (Array.isArray(obj[item])) {
-        result[item] = obj[item].slice(-1)[0]
+    for (let attr of targetAttrs) {
+      if (Array.isArray(obj[attr])) {
+        result[attr] = obj[attr].slice(-1)[0]
       }
     }
     return result
   }
 
-  function getMaxForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+  function getMaxForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
     let tempArr = []
-    for (let item of targetProps) {
-      if (Array.isArray(obj[item])) {
-        tempArr.push(...flatDeepArray(obj[item]))
+    for (let attr of targetAttrs) {
+      if (Array.isArray(obj[attr])) {
+        tempArr.push(...flatDeepArray(obj[attr]))
       }
     }
     return Math.max.apply(null, tempArr)
   }
 
-  function getMinForArrsOfObj(obj, targetProps = Object.keys(obj)) {
+  function getMinForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
     let tempArr = []
-    for (let item of targetProps) {
-      if (Array.isArray(obj[item])) {
-        tempArr.push(...flatDeepArray(obj[item]))
+    for (let attr of targetAttrs) {
+      if (Array.isArray(obj[attr])) {
+        tempArr.push(...flatDeepArray(obj[attr]))
       }
     }
     return Math.min.apply(null, tempArr)
