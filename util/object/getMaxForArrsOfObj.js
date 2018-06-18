@@ -1,4 +1,4 @@
-import flatDeepArray from '../array/flatDeepArray'
+import deepFlatten from '../array/deepFlatten'
 
 /**
  * 获得对象中，所有数组的最大值
@@ -20,7 +20,7 @@ function getMaxForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
   let tempArr = []
   for (let attr of targetAttrs) {
     if (Array.isArray(obj[attr])) {
-      tempArr.push(...flatDeepArray(obj[attr]))
+      tempArr.push(...deepFlatten(obj[attr]))
     }
   }
   return Math.max.apply(null, tempArr)

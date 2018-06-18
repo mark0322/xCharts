@@ -19,6 +19,12 @@
     return arr
   }
 
+  function countOccurrences(arr, val) {
+    return arr.reduce((a, b) => {
+      return b === val ? a + 1 : a
+    }, 0)
+  }
+
   function difference(arr1, arr2) {
     let s1 = new Set(arr1),
       s2 = new Set(arr2)
@@ -32,16 +38,10 @@
     }, [])
   }
 
-  function flatDeepArray(arr) {
-    const result = []
-    flatArray(arr)
-    return result
-  
-    function flatArray(arrSub) {
-      arrSub.forEach(d => {
-        Array.isArray(d) ? flatArray(d) : result.push(d)
-      })
-    }
+  function deepFlatten(arr) {
+    return arr.reduce((a, v) => {
+      return a.concat(Array.isArray(v) ? deepFlatten(v) : v)
+    }, [])
   }
 
   function intersection(arr1, arr2) {
@@ -157,7 +157,7 @@
     let tempArr = []
     for (let attr of targetAttrs) {
       if (Array.isArray(obj[attr])) {
-        tempArr.push(...flatDeepArray(obj[attr]))
+        tempArr.push(...deepFlatten(obj[attr]))
       }
     }
     return Math.max.apply(null, tempArr)
@@ -167,7 +167,7 @@
     let tempArr = []
     for (let attr of targetAttrs) {
       if (Array.isArray(obj[attr])) {
-        tempArr.push(...flatDeepArray(obj[attr]))
+        tempArr.push(...deepFlatten(obj[attr]))
       }
     }
     return Math.min.apply(null, tempArr)

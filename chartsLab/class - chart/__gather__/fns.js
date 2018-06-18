@@ -38,7 +38,7 @@
     }, [])
   }
 
-  function flatDeepArray(arr) {
+  function deepFlatten(arr) {
     const tempArr = []
     flatArray(arr)
     return tempArr
@@ -162,7 +162,7 @@
     let tempArr = []
     for (let item of targetProps) {
       if (Array.isArray(obj[item])) {
-        tempArr.push(...flatDeepArray(obj[item]))
+        tempArr.push(...deepFlatten(obj[item]))
       }
     }
     return Math.max.apply(null, tempArr)
@@ -172,7 +172,7 @@
     let tempArr = []
     for (let item of targetProps) {
       if (Array.isArray(obj[item])) {
-        tempArr.push(...flatDeepArray(obj[item]))
+        tempArr.push(...deepFlatten(obj[item]))
       }
     }
     return Math.min.apply(null, tempArr)

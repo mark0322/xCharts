@@ -20,9 +20,7 @@ function appendSeparator(tar, separator, step, reverse) {
     aTemp.push(separator)
   }
   aTemp.pop()
-  return reverse
-    ? aTemp.reverse().join('')
-    : aTemp.join('')
+  return reverse ? aTemp.reverse().join('') : aTemp.join('')
 }
 
 export default appendSeparator
