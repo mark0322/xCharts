@@ -8,8 +8,9 @@ import random from '../number/random'
  * @return {Array | Number}
  * 
  * @example
- * sample([1,2,3,4,5])  ->  任意一数字
- * sample([1,2,3,4,5], 2) ->  该数组中任意两元素组成的数组， 如： [4, 2]
+ * eg1: sample([1,2,3,4,5])  ->  任意一数字
+ * eg2: sample([1,2,3,4,5], 2) ->  该数组中任意两元素组成的数组， 如： [4, 2]
+ * eg3: sample(arr, arr.length) -> 相当于 shuffle() 即随机化数组的元素
  */
 function sample(arr, sampleSize = 1) {
   if (sampleSize === 1) {
