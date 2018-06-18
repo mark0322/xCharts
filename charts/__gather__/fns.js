@@ -31,7 +31,7 @@
     return [...arr1.filter(d => !s2.has(d)), ...arr2.filter(d => !s1.has(d))]
   }
 
-  function flatArray(arr) {
+  function flatten(arr) {
     return arr.reduce((a, b) => {
       Array.isArray(b) ? a.push(...b) : a.push(b)
       return a

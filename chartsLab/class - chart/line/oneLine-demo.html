@@ -202,12 +202,12 @@
 
     function deepFlatten(arr) {
         const tempArr = []
-        flatArray(arr)
+        flatten(arr)
         return tempArr
 
-        function flatArray(arrSub) {
+        function flatten(arrSub) {
             arrSub.forEach(d => {
-                Array.isArray(d) ? flatArray(d) : tempArr.push(d)
+                Array.isArray(d) ? flatten(d) : tempArr.push(d)
             })
         }
     }

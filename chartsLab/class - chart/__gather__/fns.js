@@ -31,7 +31,7 @@
     return [...s1, ...s2]
   }  
 
-  function flatArray(arr) {
+  function flatten(arr) {
     return arr.reduce((a, b) => {
       Array.isArray(b) ? a.push(...b) : a.push(b)
       return a
@@ -40,12 +40,12 @@
 
   function deepFlatten(arr) {
     const tempArr = []
-    flatArray(arr)
+    flatten(arr)
     return tempArr
   
-    function flatArray(arrSub) {
+    function flatten(arrSub) {
       arrSub.forEach(d => {
-        Array.isArray(d) ? flatArray(d) : tempArr.push(d)
+        Array.isArray(d) ? flatten(d) : tempArr.push(d)
       })
     }
   }

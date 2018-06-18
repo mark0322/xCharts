@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import flatArray from '../../util/array/flatArray'
+import flatten from '../../util/array/flatten'
 
 function drawHeatMap(container, options) {
   container.innerHTML = '' // 清空 容器内容
@@ -18,7 +18,7 @@ function drawHeatMap(container, options) {
     },
     axisHeight = svgHeight - padding.top - padding.bottom,
     axisWidth = svgWidth - padding.left - padding.right,
-    maxVal = Math.max.apply(null, flatArray(data)),
+    maxVal = Math.max.apply(null, flatten(data)),
     interpolateColor = d3.interpolate(blocks['minColor'], blocks['maxColor'])
 
   const // 定义画布 & g_wrawp
