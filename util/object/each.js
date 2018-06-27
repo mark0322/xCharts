@@ -20,7 +20,7 @@
  */
 function each(obj, callback) {
   for (let key of Object.keys(obj)) {
-    callback.call(null, key, obj[key], obj)
+    callback(key, obj[key], obj)
   }
 }
 
