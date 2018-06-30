@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>d3 test</title>
+    <style type="text/css">
+        #box {
+            width: 500px;
+            height: 500px;
+            /*border: 1px solid #333;*/
+        }
+/*        svg {
+            background: #ccc;
+            border: 1px solid red;
+        }*/
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+</body>
+
+<script src="../__gather__/d3.js"></script>
+<script>
+const log = (...d) => console.log(...d)
+const options = {
+    max_n: 10,
+    container: null,
+    gap: 2,
+    shine_num: 1
+}
+options.container = document.querySelector('#box');
+function drawShineSquare(options) {
+    const max_n = options.max_n || 10;
+    const container = options.container;
+    const gap = options.gap;
+    // const svgHeight = container.clientHeight;
+    const svgWidth = container.clientWidth;
+    const blockWidth = svgWidth / max_n;
+    // log(svgWidth)
+
+    const svg = d3.select(container)
+        .append('svg')
+        .attr('width', svgWidth)
+        .attr('height', svgWidth)
+        .style('background', '#ccc');
+
+    function drawBlocks(n) {
+        svg.select('g').remove();
+        const g = svg.append('g');
+        const data = Array(n).fill('placeholder');
+
+        const index = (n - 1) * blockWidth;
+        // draw horizontal blocks
+        g.append('g').attr('class', 'g-horizontal-wrap')
+            .attr('transform', `translate(0, ${index})`)
+            .selectAll('rect')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('x', (d, i) => i * blockWidth)
+            .attr('width', blockWidth - gap)
+            .attr('height', blockWidth - gap)
+            .attr('fill', '#e38');
+
+        // draw vertical blocks
+        g.append('g').attr('class', 'g-vertical-wrap')
+            .attr('transform', `translate(${index}, 0)`)
+            .selectAll('rect')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('y', (d, i) => i * blockWidth)
+            .attr('width', blockWidth - gap)
+            .attr('height', blockWidth - gap)
+            .attr('fill', '#e38');
+    }
+
+    // drawBlocks(8)
+    let i = 1;
+    setInterval(() => {
+        drawBlocks(i++);
+        if (i > max_n) i = 1;
+    }, 200)
+}
+drawShineSquare(options)
+
+
+
+
+</script>
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
