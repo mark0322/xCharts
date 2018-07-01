@@ -28,7 +28,7 @@ function drawBubbles(container, options) {
       .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
   const pack = d3.pack()
-    .padding(() => bubbles.padding ? bubbles.padding : 3)
+    .padding(() => bubbles.padding || 3)
     .size([axisWidth, axisHeight])
 
   const root = d3.hierarchy({ children: data })

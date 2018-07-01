@@ -11,6 +11,6 @@ function delay(func, wait, ...args) {
     throw new TypeError('第一个参数必须是函数！');
   }
   return setTimeout(function() {
-    func.apply(null, args)
+    func(...args)
   }, wait)
 }

@@ -13,7 +13,7 @@ function maxArray(arr, callback = d => d) {
   } catch (e) {
     throw new Error('输入参数有误！')
   }
-  return Math.max.apply(null, arr)
+  return Math.max(...arr)
 }
 
 export default maxArray

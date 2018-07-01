@@ -44,8 +44,8 @@ function drawBar(container, options) {
       if (splitline.show) {
         g.append('g')
           .attr('class', 'splitline')
-          .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-          .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+          .attr('stroke', () => splitline.color || '#ccc')
+          .attr('stroke-width', () => splitline.lineWidth || 1)
           .attr('stroke-dasharray', () => splitline.dashMode ? '5 5' : 0)
           .selectAll('line')
           .data(y.ticks(axis.num_TicksCount).slice(1))
@@ -94,7 +94,7 @@ function drawBar(container, options) {
         .attr('width', x.bandwidth())
         .attr('height', d => axisHeight - y(d))
         .attr('eventIndex', (d, i) => data.aStr[i])
-        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color ? bar.color : 'steelblue')
+        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color || 'steelblue')
 
       // label
       const label = bar.label || {};
@@ -106,7 +106,7 @@ function drawBar(container, options) {
           .text(d => d)
           .attr('x', (d, i) => x(data.aStr[i]) + x.bandwidth() / 2)
           .attr('y', y)
-          .attr('fill', () => label.fontColor ? label.fontColor : 'white')
+          .attr('fill', () => label.fontColor || 'white')
           .attr('font-size', label.fontSize)
           .attr('dx', label.fontDx)
           .attr('dy', label.fontDy)
@@ -142,7 +142,7 @@ function drawBar(container, options) {
           .text(numUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => numUnit.fontColor ? numUnit.fontColor : 'white')
+          .attr('fill', () => numUnit.fontColor || 'white')
           .attr('font-size', numUnit.fontSize)
           .attr('dx', numUnit.fontDx)
           .attr('dy', numUnit.fontDy);
@@ -155,7 +155,7 @@ function drawBar(container, options) {
           .text(strUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => strUnit.fontColor ? strUnit.fontColor : 'white')
+          .attr('fill', () => strUnit.fontColor || 'white')
           .attr('font-size', strUnit.fontSize)
           .attr('dx', strUnit.fontDx)
           .attr('dy', strUnit.fontDy);
@@ -196,8 +196,8 @@ function drawBar(container, options) {
       const splitline = options.splitline || {};
       if (splitline.show) {
         g.append('g')
-          .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-          .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+          .attr('stroke', () => splitline.color || '#ccc')
+          .attr('stroke-width', () => splitline.lineWidth || 1)
           .attr('stroke-dasharray', () => splitline.dashMode ? '5 5' : 0)
           .attr('class', 'splitline')
           .selectAll('line')
@@ -253,7 +253,7 @@ function drawBar(container, options) {
           }
           return data.aStr[i]
         })
-        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color ? bar.color : 'steelblue');
+        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color || 'steelblue');
 
       // label
       const label = bar.label || {};
@@ -265,7 +265,7 @@ function drawBar(container, options) {
           .text(d => d)
           .attr('x', x)
           .attr('y', (d, i) => y(data.aStr[i]) + y.bandwidth())
-          .attr('fill', () => label.fontColor ? label.fontColor : 'white')
+          .attr('fill', () => label.fontColor || 'white')
           .attr('font-size', label.fontSize)
           .attr('dx', label.fontDx)
           .attr('dy', label.fontDy)
@@ -300,7 +300,7 @@ function drawBar(container, options) {
           .text(numUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => numUnit.fontColor ? numUnit.fontColor : 'white')
+          .attr('fill', () => numUnit.fontColor || 'white')
           .attr('font-size', numUnit.fontSize)
           .attr('dx', numUnit.fontDx)
           .attr('dy', numUnit.fontDy);
@@ -313,7 +313,7 @@ function drawBar(container, options) {
           .text(strUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => strUnit.fontColor ? strUnit.fontColor : 'white')
+          .attr('fill', () => strUnit.fontColor || 'white')
           .attr('font-size', strUnit.fontSize)
           .attr('dx', strUnit.fontDx)
           .attr('dy', strUnit.fontDy);

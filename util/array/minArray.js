@@ -13,7 +13,7 @@ function minArray(arr, iteratee = d => d) {
   } catch (e) {
     throw new Error('输入参数有误！')
   }
-  return Math.min.apply(null, arr)
+  return Math.min(...arr)
 }
 
 export default minArray

@@ -23,7 +23,7 @@ function getMinForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
       tempArr.push(...deepFlatten(obj[attr]))
     }
   }
-  return Math.min.apply(null, tempArr)
+  return Math.min(...tempArr)
 }
 
 export default getMinForArrsOfObj

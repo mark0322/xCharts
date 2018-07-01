@@ -27,15 +27,17 @@ function drawTreemap(container, options) {
 
   const // 定义画布 & g_wrawp
     svg = d3.select(container).append('svg')
-      .attr('width', svgWidth).attr('height', svgHeight),
+    .attr('width', svgWidth).attr('height', svgHeight),
     g = svg.append('g').attr('class', 'gWrap')
-      .attr('transform', `translate(${padding.left}, ${padding.top})`)
+    .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
   // 定义 blocks 相关的数据
   const
     color = blocks.color || 'steelblue',
     gap = blocks.gap || 1,
     columnsCount = blocks.columns || 3, // treemap 的列数
+
+    // rowsCount = Math.ceil(data.length / blocks.columns), // treemap 的行数
     aChunkData = chunk(data, columnsCount) // 生成绘制 treemap 的数据
 
   try { // drawBlocks
@@ -106,25 +108,47 @@ function drawTreemap(container, options) {
 
     // block label
     const label = blocks.label || {}
-    const labelStyle = o => {
-      o.attr('fill', () => label.color ? label.color : '#333')
-        .attr('font-size', () => label.fontSize ? label.fontSize : '12')
+    let labelStyle = o => {
+      o.attr('fill', () => label.color || '#333')
+        .attr('font-size', () => label.fontSize || '12')
         .attr('text-anchor', 'middle')
         .attr('x', function() {
-          const rectWidth = d3.select(this.parentNode).select('rect').attr('width')
+          let rectWidth = d3.select(this.parentNode).select('rect').attr('width')
           return rectWidth / 2
         })
         .attr('y', function() {
-          const rectHeight = d3.select(this.parentNode).select('rect').attr('height')
+          let rectHeight = d3.select(this.parentNode).select('rect').attr('height')
           return rectHeight / 2
         })
     }
 
-    const names = gBlocks.append('text').text(d => d.name)
+    let names = gBlocks.append('text').text(d => d.name)
     labelStyle(names)
 
-    const vals = gBlocks.append('text').text(d => d.val).attr('dy', '1em')
+    let vals = gBlocks.append('text').text(d => d.val).attr('dy', '1em')
     labelStyle(vals)
+  }
+
+  { // tooltip
+    const oDiv = document.createElement('div')
+    oDiv.classList.add('bar-tooltip')
+    oDiv.style.cssText = 'padding:10px 15px;background:rgba(0,0,0,0.7);position:fixed;color:white;border-radius: 10px;display:none;'
+    container.appendChild(oDiv)
+    const gBlock = d3.select(container).selectAll('g.block').data(data)
+
+    gBlock
+      .on('mouseenter', d => {
+        oDiv.innerHTML = d.name + ': ' + d.val
+        oDiv.style.display = 'block' // TODO hover 至文字上， 会 display = 'none'
+      })
+      .on('mousemove', () => {
+        oDiv.style.display = 'block'
+        oDiv.style.left = d3.event.pageX - oDiv.offsetWidth / 2 + 'px'
+        oDiv.style.top = d3.event.pageY - oDiv.offsetHeight - 5 + 'px'
+      })
+      .on('mouseout', () => {
+        oDiv.style.display = 'none'
+      });
   }
 }
 

@@ -68,7 +68,7 @@ function drawLines(container, options) {
         .attr('d', linePath)
         .attr('fill', 'none')
         .attr('stroke', z(item))
-        .attr('stroke-width', d => lines.width ? lines.width : 2)
+        .attr('stroke-width', d => lines.width || 2)
 
       if (label.show) {
         gWrapLines.append('text')
@@ -76,9 +76,9 @@ function drawLines(container, options) {
           .attr('y', y(xTextVal[item]))
           .text(item)
           .attr('fill', z(item))
-          .attr('dy', d => label.fontDy ? label.fontDy : 0)
-          .attr('dx', d => label.fontDx ? label.fontDx : 0)
-          .attr('font-size', d => label.fontSize ? label.fontSize : 14)
+          .attr('dy', d => label.fontDy || 0)
+          .attr('dx', d => label.fontDx || 0)
+          .attr('font-size', d => label.fontSize || 14)
       }
     }
   } catch (e) {
@@ -112,7 +112,7 @@ function drawLines(container, options) {
           .text(xAxisUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => xAxisUnit.fontColor ? xAxisUnit.fontColor : 'white')
+          .attr('fill', () => xAxisUnit.fontColor || 'white')
           .attr('font-size', xAxisUnit.fontSize)
           .attr('dx', xAxisUnit.fontDx)
           .attr('dy', xAxisUnit.fontDy)
@@ -124,7 +124,7 @@ function drawLines(container, options) {
           .text(yAxisUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => yAxisUnit.fontColor ? yAxisUnit.fontColor : 'white')
+          .attr('fill', () => yAxisUnit.fontColor || 'white')
           .attr('font-size', yAxisUnit.fontSize)
           .attr('dx', yAxisUnit.fontDx)
           .attr('dy', yAxisUnit.fontDy)
@@ -138,8 +138,8 @@ function drawLines(container, options) {
     const splitline = options.splitline || {}
     if (splitline.show) {
       g.append('g')
-        .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-        .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+        .attr('stroke', () => splitline.color || '#ccc')
+        .attr('stroke-width', () => splitline.lineWidth || 1)
         .attr('stroke-dasharray', () => splitline.dashMode ? '2 5' : 0)
         .attr('class', 'splitline')
         .selectAll('line')
@@ -175,7 +175,7 @@ function drawLines(container, options) {
         .attr('width', x.bandwidth())
         .attr('height', axisHeight)
         .attr('eventIndex', d => d)
-        .attr('fill', d => bgBar.color ? bgBar.color : '#666')
+        .attr('fill', d => bgBar.color || '#666')
 
       let offsetXPos = 2 // 记录 tooltips 在X轴的偏移量
         

@@ -23,7 +23,7 @@ function getMaxForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
       tempArr.push(...deepFlatten(obj[attr]))
     }
   }
-  return Math.max.apply(null, tempArr)
+  return Math.max(...tempArr)
 }
 
 export default getMaxForArrsOfObj

@@ -62,7 +62,7 @@ function drawLines(container, options) {
         .attr('d', linePath)
         .attr('fill', 'none')
         .attr('stroke', z(item))
-        .attr('stroke-width', d => lines.width ? lines.width : 2)
+        .attr('stroke-width', d => lines.width || 2)
 
       if (label.show) {
         gWrapLines.append('text')
@@ -70,9 +70,9 @@ function drawLines(container, options) {
           .attr('y', y(xTextVal[item]))
           .text(item)
           .attr('fill', z(item))
-          .attr('dy', d => label.fontDy ? label.fontDy : 0)
-          .attr('dx', d => label.fontDx ? label.fontDx : 0)
-          .attr('font-size', d => label.fontSize ? label.fontSize : 14)
+          .attr('dy', d => label.fontDy || 0)
+          .attr('dx', d => label.fontDx || 0)
+          .attr('font-size', d => label.fontSize || 14)
       }
     }
   } catch (e) {
@@ -106,7 +106,7 @@ function drawLines(container, options) {
           .text(xAxisUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => xAxisUnit.fontColor ? xAxisUnit.fontColor : 'white')
+          .attr('fill', () => xAxisUnit.fontColor || 'white')
           .attr('font-size', xAxisUnit.fontSize)
           .attr('dx', xAxisUnit.fontDx)
           .attr('dy', xAxisUnit.fontDy)
@@ -118,7 +118,7 @@ function drawLines(container, options) {
           .text(yAxisUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => yAxisUnit.fontColor ? yAxisUnit.fontColor : 'white')
+          .attr('fill', () => yAxisUnit.fontColor || 'white')
           .attr('font-size', yAxisUnit.fontSize)
           .attr('dx', yAxisUnit.fontDx)
           .attr('dy', yAxisUnit.fontDy)
@@ -132,8 +132,8 @@ function drawLines(container, options) {
     const splitline = options.splitline || {}
     if (splitline.show) {
       g.append('g')
-        .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-        .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+        .attr('stroke', () => splitline.color || '#ccc')
+        .attr('stroke-width', () => splitline.lineWidth || 1)
         .attr('stroke-dasharray', () => splitline.dashMode ? '2 5' : 0)
         .attr('class', 'splitline')
         .selectAll('line')
@@ -169,7 +169,7 @@ function drawLines(container, options) {
         .attr('width', x.bandwidth())
         .attr('height', axisHeight)
         .attr('eventIndex', d => d)
-        .attr('fill', d => bgBar.color ? bgBar.color : '#666')
+        .attr('fill', d => bgBar.color || '#666')
 
       let offsetXPos = 2 // 记录 tooltips 在X轴的偏移量
         
@@ -313,8 +313,8 @@ function drawBar(container, options) {
       if (splitline.show) {
         g.append('g')
           .attr('class', 'splitline')
-          .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-          .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+          .attr('stroke', () => splitline.color || '#ccc')
+          .attr('stroke-width', () => splitline.lineWidth || 1)
           .attr('stroke-dasharray', () => splitline.dashMode ? '5 5' : 0)
           .selectAll('line')
           .data(y.ticks(axis.num_TicksCount).slice(1))
@@ -363,7 +363,7 @@ function drawBar(container, options) {
         .attr('width', x.bandwidth())
         .attr('height', d => axisHeight - y(d))
         .attr('eventIndex', (d, i) => data.aStr[i])
-        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color ? bar.color : 'steelblue')
+        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color || 'steelblue')
 
       // label
       const label = bar.label || {};
@@ -375,7 +375,7 @@ function drawBar(container, options) {
           .text(d => d)
           .attr('x', (d, i) => x(data.aStr[i]) + x.bandwidth() / 2)
           .attr('y', y)
-          .attr('fill', () => label.fontColor ? label.fontColor : 'white')
+          .attr('fill', () => label.fontColor || 'white')
           .attr('font-size', label.fontSize)
           .attr('dx', label.fontDx)
           .attr('dy', label.fontDy)
@@ -411,7 +411,7 @@ function drawBar(container, options) {
           .text(numUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => numUnit.fontColor ? numUnit.fontColor : 'white')
+          .attr('fill', () => numUnit.fontColor || 'white')
           .attr('font-size', numUnit.fontSize)
           .attr('dx', numUnit.fontDx)
           .attr('dy', numUnit.fontDy);
@@ -424,7 +424,7 @@ function drawBar(container, options) {
           .text(strUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => strUnit.fontColor ? strUnit.fontColor : 'white')
+          .attr('fill', () => strUnit.fontColor || 'white')
           .attr('font-size', strUnit.fontSize)
           .attr('dx', strUnit.fontDx)
           .attr('dy', strUnit.fontDy);
@@ -465,8 +465,8 @@ function drawBar(container, options) {
       const splitline = options.splitline || {};
       if (splitline.show) {
         g.append('g')
-          .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-          .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+          .attr('stroke', () => splitline.color || '#ccc')
+          .attr('stroke-width', () => splitline.lineWidth || 1)
           .attr('stroke-dasharray', () => splitline.dashMode ? '5 5' : 0)
           .attr('class', 'splitline')
           .selectAll('line')
@@ -522,7 +522,7 @@ function drawBar(container, options) {
           }
           return data.aStr[i]
         })
-        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color ? bar.color : 'steelblue');
+        .attr('fill', (d, i) => isMappingColor ? interpolateColor(i) : bar.color || 'steelblue');
 
       // label
       const label = bar.label || {};
@@ -534,7 +534,7 @@ function drawBar(container, options) {
           .text(d => d)
           .attr('x', x)
           .attr('y', (d, i) => y(data.aStr[i]) + y.bandwidth())
-          .attr('fill', () => label.fontColor ? label.fontColor : 'white')
+          .attr('fill', () => label.fontColor || 'white')
           .attr('font-size', label.fontSize)
           .attr('dx', label.fontDx)
           .attr('dy', label.fontDy)
@@ -569,7 +569,7 @@ function drawBar(container, options) {
           .text(numUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => numUnit.fontColor ? numUnit.fontColor : 'white')
+          .attr('fill', () => numUnit.fontColor || 'white')
           .attr('font-size', numUnit.fontSize)
           .attr('dx', numUnit.fontDx)
           .attr('dy', numUnit.fontDy);
@@ -582,7 +582,7 @@ function drawBar(container, options) {
           .text(strUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => strUnit.fontColor ? strUnit.fontColor : 'white')
+          .attr('fill', () => strUnit.fontColor || 'white')
           .attr('font-size', strUnit.fontSize)
           .attr('dx', strUnit.fontDx)
           .attr('dy', strUnit.fontDy);
@@ -662,7 +662,7 @@ function drawBubbles(container, options) {
       .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
   const pack = d3.pack()
-    .padding(() => bubbles.padding ? bubbles.padding : 3)
+    .padding(() => bubbles.padding || 3)
     .size([axisWidth, axisHeight])
 
   const root = d3.hierarchy({ children: data })
@@ -992,8 +992,8 @@ function drawTreemap(container, options) {
     // block label
     const label = blocks.label || {}
     let labelStyle = o => {
-      o.attr('fill', () => label.color ? label.color : '#333')
-        .attr('font-size', () => label.fontSize ? label.fontSize : '12')
+      o.attr('fill', () => label.color || '#333')
+        .attr('font-size', () => label.fontSize || '12')
         .attr('text-anchor', 'middle')
         .attr('x', function() {
           let rectWidth = d3.select(this.parentNode).select('rect').attr('width')
@@ -1128,8 +1128,8 @@ function drawOneLine(container, options) {
 
       // draw bgBar
       gBGbars
-        .attr('fill', d => bgBar.color ? bgBar.color : '#666')
-        .attr('fill-opacity', bgBar.opacity ? bgBar.opacity : 0.5)
+        .attr('fill', d => bgBar.color || '#666')
+        .attr('fill-opacity', bgBar.opacity || 0.5)
         .selectAll('rect')
         .data(data.date)
         .enter()
@@ -1201,9 +1201,9 @@ function drawOneLine(container, options) {
       .datum(lineData)
       .attr('d', linePath)
       .attr('fill', 'none')
-      .attr('stroke', d => line.color ? line.color : 'steelblue')
-      .attr('stroke-width', d => line.width ? line.width : 2)
-      .attr('stroke-opacity', d => line.opacity ? line.opacity : 0.9)
+      .attr('stroke', d => line.color || 'steelblue')
+      .attr('stroke-width', d => line.width || 2)
+      .attr('stroke-opacity', d => line.opacity || 0.9)
   } catch (e) {
     console.warn('draw line:\n', e)
   }
@@ -1234,7 +1234,7 @@ function drawOneLine(container, options) {
           .text(xAxisUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => xAxisUnit.fontColor ? xAxisUnit.fontColor : 'white')
+          .attr('fill', () => xAxisUnit.fontColor || 'white')
           .attr('font-size', xAxisUnit.fontSize)
           .attr('dx', xAxisUnit.fontDx)
           .attr('dy', xAxisUnit.fontDy)
@@ -1246,7 +1246,7 @@ function drawOneLine(container, options) {
           .text(yAxisUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => yAxisUnit.fontColor ? yAxisUnit.fontColor : 'white')
+          .attr('fill', () => yAxisUnit.fontColor || 'white')
           .attr('font-size', yAxisUnit.fontSize)
           .attr('dx', yAxisUnit.fontDx)
           .attr('dy', yAxisUnit.fontDy)
@@ -1260,8 +1260,8 @@ function drawOneLine(container, options) {
     const splitline = options.splitline || {};
     if (splitline.show) {
       g.append('g')
-        .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-        .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+        .attr('stroke', () => splitline.color || '#ccc')
+        .attr('stroke-width', () => splitline.lineWidth || 1)
         .attr('stroke-dasharray', () => splitline.dashMode ? '2 5' : 0)
         .attr('class', 'splitline')
         .selectAll('line')

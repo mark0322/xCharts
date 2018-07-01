@@ -61,7 +61,7 @@
     } catch (e) {
       throw new Error('输入参数有误！')
     }
-    return Math.max.apply(null, arr)
+    return Math.max(...arr)
   }
 
   function minArray(arr, iteratee = d => d) {
@@ -70,7 +70,7 @@
     } catch (e) {
       throw new Error('输入参数有误！')
     }
-    return Math.min.apply(null, arr)
+    return Math.min(...arr)
   }
 
   function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
@@ -139,7 +139,7 @@
 { // *** object ***
   function each(obj, callback) {
     for (let key of Object.keys(obj)) {
-      callback.call(null, key, obj[key], obj)
+      callback(key, obj[key], obj)
     }
   }
 
@@ -160,7 +160,7 @@
         tempArr.push(...deepFlatten(obj[attr]))
       }
     }
-    return Math.max.apply(null, tempArr)
+    return Math.max(...tempArr)
   }
 
   function getMinForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
@@ -170,7 +170,7 @@
         tempArr.push(...deepFlatten(obj[attr]))
       }
     }
-    return Math.min.apply(null, tempArr)
+    return Math.min(...tempArr)
   }
 
   function mutateAttrNameForObj(obj, aMatchAttr) {
@@ -190,7 +190,7 @@
       throw new TypeError('第一个参数必须是函数！');
     }
     return setTimeout(function() {
-      func.apply(null, args)
+      func(...args)
     }, wait)
   }
 

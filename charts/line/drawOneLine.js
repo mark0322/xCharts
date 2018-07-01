@@ -49,14 +49,14 @@ function drawOneLine(container, options) {
 
   try { // backgroundBar
     const bgBar = options.bgBar || {}
-    if (bgBar) {
+    if (bgBar.show) {
       bgBar.padding ? x.padding(bgBar.padding) : x.padding(0.5)
       const gBGbars = g.append('g').attr('class', 'bg-bars');
 
       // draw bgBar
       gBGbars
-        .attr('fill', d => bgBar.color ? bgBar.color : '#666')
-        .attr('fill-opacity', bgBar.opacity ? bgBar.opacity : 0.5)
+        .attr('fill', d => bgBar.color || '#666')
+        .attr('fill-opacity', bgBar.opacity || 0.5)
         .selectAll('rect')
         .data(data.date)
         .enter()
@@ -128,9 +128,9 @@ function drawOneLine(container, options) {
       .datum(lineData)
       .attr('d', linePath)
       .attr('fill', 'none')
-      .attr('stroke', d => line.color ? line.color : 'steelblue')
-      .attr('stroke-width', d => line.width ? line.width : 2)
-      .attr('stroke-opacity', d => line.opacity ? line.opacity : 0.9)
+      .attr('stroke', d => line.color || 'steelblue')
+      .attr('stroke-width', d => line.width || 2)
+      .attr('stroke-opacity', d => line.opacity || 0.9)
   } catch (e) {
     console.warn('draw line:\n', e)
   }
@@ -161,7 +161,7 @@ function drawOneLine(container, options) {
           .text(xAxisUnit.name)
           .attr('x', axisWidth)
           .attr('y', '1.2em')
-          .attr('fill', () => xAxisUnit.fontColor ? xAxisUnit.fontColor : 'white')
+          .attr('fill', () => xAxisUnit.fontColor || 'white')
           .attr('font-size', xAxisUnit.fontSize)
           .attr('dx', xAxisUnit.fontDx)
           .attr('dy', xAxisUnit.fontDy)
@@ -173,7 +173,7 @@ function drawOneLine(container, options) {
           .text(yAxisUnit.name)
           .attr('y', '-0.2em')
           .attr('text-anchor', 'middle')
-          .attr('fill', () => yAxisUnit.fontColor ? yAxisUnit.fontColor : 'white')
+          .attr('fill', () => yAxisUnit.fontColor || 'white')
           .attr('font-size', yAxisUnit.fontSize)
           .attr('dx', yAxisUnit.fontDx)
           .attr('dy', yAxisUnit.fontDy)
@@ -187,8 +187,8 @@ function drawOneLine(container, options) {
     const splitline = options.splitline || {};
     if (splitline.show) {
       g.append('g')
-        .attr('stroke', () => splitline.color ? splitline.color : '#ccc')
-        .attr('stroke-width', () => splitline.lineWidth ? splitline.lineWidth : 1)
+        .attr('stroke', () => splitline.color || '#ccc')
+        .attr('stroke-width', () => splitline.lineWidth || 1)
         .attr('stroke-dasharray', () => splitline.dashMode ? '2 5' : 0)
         .attr('class', 'splitline')
         .selectAll('line')
