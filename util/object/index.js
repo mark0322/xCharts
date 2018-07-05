@@ -4,6 +4,7 @@ import getMaxForArrsOfObj from './getMaxForArrsOfObj'
 import getMinForArrsOfObj from './getMinForArrsOfObj'
 import isEqual from './isEqual'
 import mutateAttrNameForObj from './mutateAttrNameForObj'
+import getNoUndefined_proxy from './getNoUndefined_proxy'
 
 export {
   each,
@@ -11,5 +12,6 @@ export {
   getMaxForArrsOfObj,
   getMinForArrsOfObj,
   isEqual,
-  mutateAttrNameForObj
+  mutateAttrNameForObj,
+  getNoUndefined_proxy
 }
