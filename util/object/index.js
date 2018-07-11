@@ -5,6 +5,7 @@ import getMinForArrsOfObj from './getMinForArrsOfObj'
 import isEqual from './isEqual'
 import mutateAttrNameForObj from './mutateAttrNameForObj'
 import getNoUndefined_proxy from './getNoUndefined_proxy'
+import deepClone from './deepClone'
 
 export {
   each,
@@ -13,5 +14,6 @@ export {
   getMinForArrsOfObj,
   isEqual,
   mutateAttrNameForObj,
-  getNoUndefined_proxy
+  getNoUndefined_proxy,
+  deepClone
 }

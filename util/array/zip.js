@@ -5,17 +5,16 @@
  * eg2 zip([1, 2, 3], ['a', 'b', 'c'], ['x', 'y', 'z']) 
  *      ->  [[1, 'a', 'x'],[2, 'b', 'x'],[3, 'c', 'z']]
  */
-function zip() {
-  if (arguments.length === 0) return []
-  let result = [],
-    tempArr = [...arguments],
-    minLengthForTempArr = Math.min.apply(null, tempArr.map(d => d.length))
+function zip(...args) {
+  if (args.length === 0) return [];
+  let result = [];
+  let minLengthForTempArr = Math.min(...args.map(d => d.length));
 
   for (let i = 0; i < minLengthForTempArr; i++) {
-    result.push(tempArr.map(d => d[i]))
+      result.push(args.map(d => d[i]));
   }
 
-  return result
+  return result;
 }
 
 export default zip
