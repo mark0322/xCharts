@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import tooltip_wrap from '../_chart_modules/tooltip/tooltipWrap_singleton'
 
 // default config.
 const defaults = {
@@ -230,32 +231,23 @@ export default class BarChart {
   }
 
   tooltip(show = true) {
-    let oDiv = document.querySelector('.bar-tooltip')
-    // 单例模式：tooltip 只能绘制一次
-    if (show && !this.hasTooltip) {
-      this.hasTooltip = true
-
-      const { container, g } = this
-      oDiv = document.createElement('div')
-      oDiv.classList.add('bar-tooltip')
-      oDiv.style.cssText = 'padding:10px 15px;background:rgba(0,0,0,0.7);position:fixed;color:white;border-radius: 10px;display:none;'
-      container.appendChild(oDiv)
+    if (show) {
+      const oTooltipWrap = tooltip_wrap()
+      const { g } = this
       const rects = g.selectAll('.g-warp-bars rect')
-
+  
       rects
         .on('mouseenter', d => {
-          oDiv.innerHTML = d
-          oDiv.style.display = 'block'
+          oTooltipWrap.innerHTML = d
+          oTooltipWrap.style.display = 'block'
         })
         .on('mousemove', () => {
-          oDiv.style.left = d3.event.pageX + 2 + 'px'
-          oDiv.style.top = d3.event.pageY + 2 + 'px'
+          oTooltipWrap.style.left = d3.event.pageX + 2 + 'px'
+          oTooltipWrap.style.top = d3.event.pageY + 2 + 'px'
         })
         .on('mouseout', () => {
-          oDiv.style.display = 'none'
+          oTooltipWrap.style.display = 'none'
         });
-    } else {
-        d3.select(oDiv).remove()
     }
     return this
   }

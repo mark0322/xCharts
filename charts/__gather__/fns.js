@@ -185,6 +185,21 @@
     return Math.min(...tempArr)
   }
 
+  function isEqual(obj1, obj2) {
+    let m1 = new Map(Object.entries(obj1)),
+      m2 = new Map(Object.entries(obj2))
+    if (m1.size !== m2.size) return false
+    for (let key of m1.keys()) {
+      if (!m2.has(key)) return false
+      if (typeof m1.get(key) === 'object') {
+        if(!isEqual(m1.get(key), m2.get(key))) return false
+        continue
+      }
+      if (m1.get(key) !== m2.get(key)) return false
+    }
+    return true
+  }
+
   function mutateAttrNameForObj(obj, aMatchAttr) {
     let m = new Map(aMatchAttr)
     for (let attr of Object.keys(obj)) {
@@ -287,46 +302,42 @@ function parseStamp2DayIncludeYear(d) {
   day < 10 && (day = '0' + day)
   return year + '-' + month + '-' + day
 }
+const log = (...d) => console.log(...d)
 
 
+
+
+/** 
+ * 创建tooltip的最外层 div wrap
+ * 
+ * @private
+ * @return div-tooltipWrap 的DOM对象
+*/
 const initTooltipWrap = function() {
-
-  // 意图为 获取 Vue 的最外层 <div id='app'>
-  const appWrap = document.querySelector('div')
+  // tooltip 位于 body 子级
+  const body = document.querySelector('body')
 
   const tooltipWrap = document.createElement('div')
   tooltipWrap.classList.add('stiCharts-tooltip-wrap')
   tooltipWrap.style.cssText = `
-    padding:10px 15px;
     background:rgba(0,0,0,0.7);
-    position:fixed;
-    color:white;
     border-radius: 10px;
+    padding:10px 15px;
+    position:fixed;
     display:none;
-    z-index:9999;`
-  appWrap.appendChild(tooltipWrap)
+    z-index:9999;
+    color:white;`
+
+  body.appendChild(tooltipWrap)
   return tooltipWrap
 }
+
+/** 
+ * 单例模式 - 模板
+*/
 const getSingleton = function(fn) {
   let instance = null
   return function() {
     return instance || (instance = fn(...arguments))
   }
-}
-const singletonInitTooltipWrap = getSingleton(initTooltipWrap)
-
-
-function isEqual(obj1, obj2) {
-  let m1 = new Map(Object.entries(obj1)),
-    m2 = new Map(Object.entries(obj2))
-  if (m1.size !== m2.size) return false
-  for (let key of m1.keys()) {
-    if (!m2.has(key)) return false
-    if (typeof m1.get(key) === 'object') {
-      if(!isEqual(m1.get(key), m2.get(key))) return false
-      continue
-    }
-    if (m1.get(key) !== m2.get(key)) return false
-  }
-  return true
 }
