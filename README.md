@@ -13,18 +13,24 @@
 ## charts，使用方法：
 以 bar 为例：
 ```bash
+// 设置配置项， 以设置所绘制chart的细节，
+// 可配置的信息与 BarChart.js 中 defaults 变量内容一致。
 const options = {
   container: document.querySelector('#container'),
   strData: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
   valData: [55, 77, 33, 22, 99, 10, 100, 60, 80, 10]
 }
+
+// new 绘图对象 drawBarChart
 const drawBarChart = new BarChart(options)
+
 drawBarChart
-  .render()
-  .tooltip()
+  .render()  // 渲染 chart
+  .tooltip() // 为 chart 增加 tooltip
+  .splitLine() // 为 chart 增加 splitLine
 ```
-options 为配置项，可配置所绘制chart的细节，
-具体配置与 BarChart.js 中 defaults 变量内容一直。
+
+
 
 代码文件路径：
 ```bash
