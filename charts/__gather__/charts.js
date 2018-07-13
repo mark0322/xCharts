@@ -30,10 +30,14 @@ let BarChart = null;
       }
     },
     splitLine: {
-
+      show: true,
+      color: '#74706d',
+      lineWidth: 1,
+      dasharray: '5 5',
+      opacity: 0.5,
     },
     animation: true,
-    // isHoriz: true, // 将 bar 设为水平
+    isHoriz: true, // 将 bar 设为水平
   }
 
   BarChart = class BarChart {
@@ -96,6 +100,7 @@ let BarChart = null;
         .append('g')
         .attr('class', 'g_wrap')
         .attr('transform', `translate(${padding.left}, ${padding.top})`)
+      this.g_splitLine = this.g.append('g').attr('class', 'g-warp-splitLine')
       this.g_bars = this.g.append('g').attr('class', 'g-warp-bars')
       this.g_labels = this.g.append('g').attr('class', 'g-warp-labels')
       this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
@@ -109,7 +114,7 @@ let BarChart = null;
       valScale = valScale.domain([0, d3.max(valData) * 1.1])
       return { strScale, valScale }
     }
-  
+
     renderChart({ strData, valData } = this) {
       const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
       const { strScale, valScale } = this.processScale({ strData, valData })
@@ -204,7 +209,7 @@ let BarChart = null;
       }
       return this
     }
-  
+
     renderAxis({ strData, valData } = this) {
       const {axisWidth, axisHeight, isHoriz, g_axis, strAxis, valAxis, bar} = this
       const { strScale, valScale } = this.processScale({ strData, valData })
@@ -231,7 +236,7 @@ let BarChart = null;
       }
       return this
     }
-  
+
     tooltip(show = true) {
       let oDiv = document.querySelector('.bar-tooltip')
       // 单例模式：tooltip 只能绘制一次
@@ -263,12 +268,48 @@ let BarChart = null;
       return this
     }
 
-    splitLine(show = true) {
+    renderSplitLine({ strData, valData }) {
+      const {show, color, lineWidth, dasharray, opacity} = this.splitLine
+      const {g_splitLine, isHoriz, axisHeight, axisWidth} = this
+      const { valScale, strScale } = this.processScale({ strData, valData })
 
+      if (show) {
+        const splitline = g_splitLine
+          .attr('class', 'splitline')
+          .attr('stroke', color)
+          .attr('stroke-width', lineWidth)
+          .attr('opacity', opacity)
+          .attr('stroke-dasharray', dasharray)
+          .selectAll('line')
+          .data(valScale.ticks().slice(1))
+
+          if (isHoriz) {
+            splitline
+              .enter()
+                .append('line')
+              .merge(splitline)
+                .attr('x1', valScale)
+                .attr('y1', 0)
+                .attr('x2', valScale)
+                .attr('y2', axisHeight)
+            splitline.exit().remove()
+          } else {
+            splitline
+              .enter()
+                .append('line')
+              .merge(splitline)
+                .attr('x1', 0)
+                .attr('y1', valScale)
+                .attr('x2', axisWidth)
+                .attr('y2', valScale)
+            splitline.exit().remove()
+          }
+      }
     }
   
     // 初次 绘制 chart
     render({ strData, valData } = this) {
+      this.renderSplitLine({ strData, valData })
       this.renderChart({ strData, valData })
       this.renderAxis({ strData, valData })
       return this

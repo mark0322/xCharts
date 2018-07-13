@@ -18,7 +18,10 @@
 const options = {
   container: document.querySelector('#container'),
   strData: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
-  valData: [55, 77, 33, 22, 99, 10, 100, 60, 80, 10]
+  valData: [55, 77, 33, 22, 99, 10, 100, 60, 80, 10],
+  splitLine: {
+    show: true
+  }
 }
 
 // new 绘图对象 drawBarChart
@@ -27,7 +30,6 @@ const drawBarChart = new BarChart(options)
 drawBarChart
   .render()  // 渲染 chart
   .tooltip() // 为 chart 增加 tooltip
-  .splitLine() // 为 chart 增加 splitLine
 ```
 
 

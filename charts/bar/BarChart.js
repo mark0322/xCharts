@@ -92,17 +92,24 @@ export default class BarChart {
       .append('g')
       .attr('class', 'g_wrap')
       .attr('transform', `translate(${padding.left}, ${padding.top})`)
+    this.g_splitLine = this.g.append('g').attr('class', 'g-warp-splitLine')
     this.g_bars = this.g.append('g').attr('class', 'g-warp-bars')
     this.g_labels = this.g.append('g').attr('class', 'g-warp-labels')
     this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
     this.t = d3.transition().duration(animation ? 800 : 0)
   }
 
-  renderChart({ strData, valData } = this) {
-    const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
-    let {strScale, valScale} = this
+  // 输出 strScale & valScale
+  processScale({ strData, valData } = this) {
+    let { strScale, valScale, bar } = this
     strScale = strScale.domain(strData).padding(bar.gap || 0.5)
     valScale = valScale.domain([0, d3.max(valData) * 1.1])
+    return { strScale, valScale }
+  }
+
+  renderChart({ strData, valData } = this) {
+    const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
+    const { strScale, valScale } = this.processScale({ strData, valData })
 
     // g wrap - bar
     const columns = g_bars.selectAll('rect').data(valData)
@@ -197,10 +204,9 @@ export default class BarChart {
 
   renderAxis({ strData, valData } = this) {
     const {axisWidth, axisHeight, isHoriz, g_axis, strAxis, valAxis, bar} = this
-    let {strScale, valScale} = this
+    const { strScale, valScale } = this.processScale({ strData, valData })
+
     g_axis.selectAll('g').remove() // update 时，清空之前的 axis
-    strScale = strScale.domain(strData).padding(bar.gap || 0.5)
-    valScale = valScale.domain([0, d3.max(valData) * 1.1])
 
     const gXAxis = g_axis.append('g')
       .attr('class', 'axis xAxis')
@@ -223,13 +229,14 @@ export default class BarChart {
     return this
   }
 
-  tooltip() {
+  tooltip(show = true) {
+    let oDiv = document.querySelector('.bar-tooltip')
     // 单例模式：tooltip 只能绘制一次
-    if (!this.hasTooltip) {
+    if (show && !this.hasTooltip) {
       this.hasTooltip = true
 
       const { container, g } = this
-      const oDiv = document.createElement('div')
+      oDiv = document.createElement('div')
       oDiv.classList.add('bar-tooltip')
       oDiv.style.cssText = 'padding:10px 15px;background:rgba(0,0,0,0.7);position:fixed;color:white;border-radius: 10px;display:none;'
       container.appendChild(oDiv)
@@ -247,12 +254,54 @@ export default class BarChart {
         .on('mouseout', () => {
           oDiv.style.display = 'none'
         });
+    } else {
+        d3.select(oDiv).remove()
     }
     return this
   }
 
+  renderSplitLine({ strData, valData }) {
+    const {show, color, lineWidth, dasharray, opacity} = this.splitLine
+    const {g_splitLine, isHoriz, axisHeight, axisWidth} = this
+    const { valScale, strScale } = this.processScale({ strData, valData })
+
+    if (show) {
+      const splitline = g_splitLine
+        .attr('class', 'splitline')
+        .attr('stroke', color)
+        .attr('stroke-width', lineWidth)
+        .attr('opacity', opacity)
+        .attr('stroke-dasharray', dasharray)
+        .selectAll('line')
+        .data(valScale.ticks().slice(1))
+
+        if (isHoriz) {
+          splitline
+            .enter()
+              .append('line')
+            .merge(splitline)
+              .attr('x1', valScale)
+              .attr('y1', 0)
+              .attr('x2', valScale)
+              .attr('y2', axisHeight)
+          splitline.exit().remove()
+        } else {
+          splitline
+            .enter()
+              .append('line')
+            .merge(splitline)
+              .attr('x1', 0)
+              .attr('y1', valScale)
+              .attr('x2', axisWidth)
+              .attr('y2', valScale)
+          splitline.exit().remove()
+        }
+    }
+  }
+
   // 初次 绘制 chart
   render({ strData, valData } = this) {
+    this.renderSplitLine({ strData, valData })
     this.renderChart({ strData, valData })
     this.renderAxis({ strData, valData })
     return this
