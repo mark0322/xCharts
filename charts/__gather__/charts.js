@@ -29,6 +29,9 @@ let BarChart = null;
         
       }
     },
+    splitLine: {
+
+    },
     animation: true,
     // isHoriz: true, // 将 bar 设为水平
   }
@@ -49,17 +52,17 @@ let BarChart = null;
     // 初始化：全局属性和方法
     _init(options) {
       Object.assign(this, defaults, options)
-
+  
       const {container, padding, animation, isHoriz, axis} = this
       this.svgWidth = container.clientWidth
       this.svgHeight = container.clientHeight
       this.axisWidth = this.svgWidth - padding.left - padding.right
       this.axisHeight = this.svgHeight - padding.top - padding.bottom
-
+  
        // 条形图 or 柱状图
       if (isHoriz) {
         const strAxis = axis.strAxis || {}
-
+  
         this.strScale = d3.scaleBand().range([this.axisHeight, 0])
         this.valScale = d3.scaleLinear().range([0, this.axisWidth])
   
@@ -72,7 +75,7 @@ let BarChart = null;
           .tickSize(axis.tickSize)
       } else {
         const strAxis = axis.strAxis || {}
-
+  
         this.strScale = d3.scaleBand().range([0, this.axisWidth])
         this.valScale = d3.scaleLinear().range([this.axisHeight, 0])
   
@@ -84,7 +87,7 @@ let BarChart = null;
           .tickPadding(axis.tickPadding)
           .tickSize(axis.tickSize)
       }
-
+  
       this.svg = d3.select(container)
         .append('svg')
         .attr('width', this.svgWidth)
@@ -98,125 +101,126 @@ let BarChart = null;
       this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
       this.t = d3.transition().duration(animation ? 800 : 0)
     }
-  
-    renderChart({ strData, valData } = this) {
-        const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
-        let {strScale, valScale} = this
-        strScale = strScale.domain(strData).padding(bar.gap || 0.5)
-        valScale = valScale.domain([0, d3.max(valData) * 1.1])
 
-        // g wrap - bar
-        const columns = g_bars.selectAll('rect').data(valData)
-
-        // g warp - label
-        const labels = g_labels
-          .attr('fill', label.color || '#ccc')
-          .attr('font-size', label.fontSize || 14)
-          .selectAll('text').data(valData)
-        
-        // mappingColor: function for interpolateColor
-        let interpolateColor = null;
-
-        isHoriz
-          ? drawHorizontalBar(strData)
-          : drawVerticalBar(strData)
-
-        // define function
-        function drawVerticalBar(strData) {
-          columns
-            .enter()
-              .append('rect')
-            .merge(columns) // update
-              .attr('x', (d, i) => strScale(strData[i]))
-              .attr('y', valScale(0))
-              .attr('width', strScale.bandwidth())
-              .transition(t)
-              .attr('y', valScale)
-              .attr('height', d => axisHeight - valScale(d))
-              .attr('fill', (d, i) => isMappingColor() ? interpolateColor(i) : bar.color || 'steelblue')
-          columns.exit().remove()
-    
-          labels
-            .enter()
-              .append('text')
-            .merge(labels)
-              .attr('x', (d, i) => strScale(strData[i]) + strScale.bandwidth() / 2)
-              .attr('y', valScale)
-              .attr('text-anchor', 'middle')
-              .text(d => d)
-              .attr('dx', label.dx)
-              .attr('dy', label.dy)
-              .attr('opacity', 0)
-              .transition(t)
-              .attr('opacity', 1)
-          labels.exit().remove() // exit
-        }
-        function drawHorizontalBar(strData) {
-          columns
-            .enter()
-              .append('rect')
-            .merge(columns) // update
-              .attr('y', (d, i) => strScale(strData[i]))
-              .attr('height', strScale.bandwidth())
-              .attr('x', 0)
-              .transition(t)
-              .attr('width', d => valScale(d))
-              .attr('fill', (d, i) => isMappingColor() ? interpolateColor(i) : bar.color || 'steelblue')
-          columns.exit().remove()
-    
-          labels
-            .enter()
-              .append('text')
-            .merge(labels)
-              .attr('x', d => valScale(d))
-              .attr('y', (d, i) => strScale(strData[i]))
-              .text(d => d)
-              .attr('dx', label.dx)
-              .attr('dy', strScale.bandwidth() / 2)
-              .attr('text-anchor', 'end')
-              .attr('dominant-baseline', 'middle')
-              .attr('opacity', 0)
-              .transition(t)
-              .attr('opacity', 1)
-          labels.exit().remove() // exit
-        }
-
-        // 判断 bar 与 bar 间是否使用渐变色
-        function isMappingColor() {
-          const isMappingColor = 
-            bar.isMappingColor && bar.colorRange[0] && bar.colorRange[1]
-          if (isMappingColor) {
-            interpolateColor = d3.scaleLinear()
-              .domain([0, strData.length])
-              .range([bar.colorRange[0], bar.colorRange[1]])
-            return true
-          }
-          return false
-        }
-        return this
-    }
-
-    renderAxis({ strData, valData } = this) {
-      const {axisWidth, axisHeight, isHoriz, g_axis, strAxis, valAxis, bar} = this
-      let {strScale, valScale} = this
-      g_axis.selectAll('g').remove() // update 时，清空之前的 axis
+    // 输出 strScale & valScale
+    processScale({ strData, valData } = this) {
+      let { strScale, valScale, bar } = this
       strScale = strScale.domain(strData).padding(bar.gap || 0.5)
       valScale = valScale.domain([0, d3.max(valData) * 1.1])
+      return { strScale, valScale }
+    }
+  
+    renderChart({ strData, valData } = this) {
+      const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
+      const { strScale, valScale } = this.processScale({ strData, valData })
+  
+      // g wrap - bar
+      const columns = g_bars.selectAll('rect').data(valData)
+  
+      // g warp - label
+      const labels = g_labels
+        .attr('fill', label.color || '#ccc')
+        .attr('font-size', label.fontSize || 14)
+        .selectAll('text').data(valData)
+      
+      // mappingColor: function for interpolateColor
+      let interpolateColor = null;
+  
+      isHoriz
+        ? drawHorizontalBar(strData)
+        : drawVerticalBar(strData)
+  
+      // define function
+      function drawVerticalBar(strData) {
+        columns
+          .enter()
+            .append('rect')
+          .merge(columns) // update
+            .attr('x', (d, i) => strScale(strData[i]))
+            .attr('y', valScale(0))
+            .attr('width', strScale.bandwidth())
+            .transition(t)
+            .attr('y', valScale)
+            .attr('height', d => axisHeight - valScale(d))
+            .attr('fill', (d, i) => isMappingColor() ? interpolateColor(i) : bar.color || 'steelblue')
+        columns.exit().remove()
+  
+        labels
+          .enter()
+            .append('text')
+          .merge(labels)
+            .attr('x', (d, i) => strScale(strData[i]) + strScale.bandwidth() / 2)
+            .attr('y', valScale)
+            .attr('text-anchor', 'middle')
+            .text(d => d)
+            .attr('dx', label.dx)
+            .attr('dy', label.dy)
+            .attr('opacity', 0)
+            .transition(t)
+            .attr('opacity', 1)
+        labels.exit().remove() // exit
+      }
+      function drawHorizontalBar(strData) {
+        columns
+          .enter()
+            .append('rect')
+          .merge(columns) // update
+            .attr('y', (d, i) => strScale(strData[i]))
+            .attr('height', strScale.bandwidth())
+            .attr('x', 0)
+            .transition(t)
+            .attr('width', d => valScale(d))
+            .attr('fill', (d, i) => isMappingColor() ? interpolateColor(i) : bar.color || 'steelblue')
+        columns.exit().remove()
+  
+        labels
+          .enter()
+            .append('text')
+          .merge(labels)
+            .attr('x', d => valScale(d))
+            .attr('y', (d, i) => strScale(strData[i]))
+            .text(d => d)
+            .attr('dx', label.dx)
+            .attr('dy', strScale.bandwidth() / 2)
+            .attr('text-anchor', 'end')
+            .attr('dominant-baseline', 'middle')
+            .attr('opacity', 0)
+            .transition(t)
+            .attr('opacity', 1)
+        labels.exit().remove() // exit
+      }
+  
+      // 判断 bar 与 bar 间是否使用渐变色
+      function isMappingColor() {
+        const isMappingColor = 
+          bar.isMappingColor && bar.colorRange[0] && bar.colorRange[1]
+        if (isMappingColor) {
+          interpolateColor = d3.scaleLinear()
+            .domain([0, strData.length])
+            .range([bar.colorRange[0], bar.colorRange[1]])
+          return true
+        }
+        return false
+      }
+      return this
+    }
+  
+    renderAxis({ strData, valData } = this) {
+      const {axisWidth, axisHeight, isHoriz, g_axis, strAxis, valAxis, bar} = this
+      const { strScale, valScale } = this.processScale({ strData, valData })
 
+      g_axis.selectAll('g').remove() // update 时，清空之前的 axis
+  
       const gXAxis = g_axis.append('g')
         .attr('class', 'axis xAxis')
         .attr('transform', `translate(0, ${axisHeight})`)
       const gYAxis = g_axis.append('g')
         .attr('class', 'axis yAxis')
-
-      // isHoriz
-      //   ? gXAxis.ca
-      //   : drawVerticalAxis(strData)
-
+  
       isHoriz
         ? drawHorizontalChart()
         : drawVerticalAxis()
-
+  
       function drawHorizontalChart() {
         gXAxis.call(valAxis)
         gYAxis.call(strAxis)
@@ -227,13 +231,15 @@ let BarChart = null;
       }
       return this
     }
-
+  
     tooltip(show = true) {
-      if (!this.hasTooltip) {
+      let oDiv = document.querySelector('.bar-tooltip')
+      // 单例模式：tooltip 只能绘制一次
+      if (show && !this.hasTooltip) {
         this.hasTooltip = true
-
+  
         const { container, g } = this
-        const oDiv = document.createElement('div')
+        oDiv = document.createElement('div')
         oDiv.classList.add('bar-tooltip')
         oDiv.style.cssText = 'padding:10px 15px;background:rgba(0,0,0,0.7);position:fixed;color:white;border-radius: 10px;display:none;'
         container.appendChild(oDiv)
@@ -251,16 +257,24 @@ let BarChart = null;
           .on('mouseout', () => {
             oDiv.style.display = 'none'
           });
+      } else {
+          d3.select(oDiv).remove()
       }
       return this
     }
 
+    splitLine(show = true) {
+
+    }
+  
+    // 初次 绘制 chart
     render({ strData, valData } = this) {
       this.renderChart({ strData, valData })
       this.renderAxis({ strData, valData })
       return this
     }
-
+  
+    // 更新 chart
     update({ strData, valData } = this) {
       this.render({ strData, valData })
       return this
