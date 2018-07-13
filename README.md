@@ -11,7 +11,7 @@
 ```
 
 ## charts，使用方法：
-以 bar 为例：
+绘图方式，以 bar 为例：
 ```bash
 // 设置配置项， 以设置所绘制chart的细节，
 // 可配置的信息与 BarChart.js 中 defaults 变量内容一致。
@@ -36,8 +36,8 @@ drawBarChart
 ```bash
 ├── /charts/          
 │ ├── /bar/       
-│    ├── BarChart.js        # 
-│    ├── bar - demo.html    # 为drawBar.js 的 demo 示范，可直接直接打开看效果
+│    ├── BarChart.js        # 模块代码
+│    ├── bar - demo.html    # 为drawBar.js 的 demo 示范，可直接打开看效果
 ```
 
 ## util，使用方法：
