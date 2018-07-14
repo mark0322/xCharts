@@ -8,7 +8,7 @@ import sumArray from '../../util/array/sumArray'
  */
 
 function drawDonutsBoard(container, options) {
-  container.innerHTML = ''; // 清空 容器内容
+  container.innerHTML = '' // 清空 容器内容
   let // *** 全局参数 ***
     data = options.data,
     svgWidth = container.offsetWidth,

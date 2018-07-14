@@ -9,7 +9,7 @@ function deepClone(obj) {
             result[key] = o
         }
     }
-    return result;
+    return result
 }
 
 export default deepClone

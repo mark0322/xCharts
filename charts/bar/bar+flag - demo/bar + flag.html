@@ -59,7 +59,7 @@ let data = [
       }
     },
     {
-      "count": 2002200,
+      "count": 7,
       "key": "46.180.150.90",
       "pot_dict": {
         "city_name": "Kemerovo",
@@ -74,7 +74,7 @@ let data = [
       }
     },
     {
-      "count": 1,
+      "count": 5,
       "key": "5.35.113.117",
       "pot_dict": {
         "city_name": "",
@@ -113,7 +113,7 @@ function bar(container, data) {
         g = svg.append('g').attr('class', 'g_wrap')
                .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
-    let gRows = g.selectAll('g')
+    const gRows = g.selectAll('g')
         .data(data)
         .enter()
         .append('g')
@@ -162,8 +162,7 @@ function bar(container, data) {
         .call(xAxis)
 
     function getMaxCount(arr) {
-        let tempArr = arr.map(d => d.count)
-        return Math.max.apply(null, tempArr)
+        return Math.max(...arr.map(d => d.count))
     }
 }
 

@@ -9,7 +9,7 @@ import parseStamp2Day from './util/time/parseStamp2Day'
 import zip from './util/array/zip'
 
 function drawOneLine(container, options) {
-  container.innerHTML = ''; // 清空 容器内容
+  container.innerHTML = '' // 清空 容器内容
 
   const // *** 全局数据 ***
     data = options.data,
@@ -51,7 +51,7 @@ function drawOneLine(container, options) {
     const bgBar = options.bgBar || {}
     if (bgBar.show) {
       bgBar.padding ? x.padding(bgBar.padding) : x.padding(0.5)
-      const gBGbars = g.append('g').attr('class', 'bg-bars');
+      const gBGbars = g.append('g').attr('class', 'bg-bars')
 
       // draw bgBar
       gBGbars
@@ -166,7 +166,7 @@ function drawOneLine(container, options) {
           .attr('dx', xAxisUnit.fontDx)
           .attr('dy', xAxisUnit.fontDy)
       }
-      const yAxisUnit = axis.yAxisUnit || {};
+      const yAxisUnit = axis.yAxisUnit || {}
       if (yAxisUnit.name) {
         gYAxisyAxis
           .append('text')

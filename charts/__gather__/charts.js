@@ -213,7 +213,7 @@ let BarChart = null;
     }
 
     renderAxis({ strData, valData } = this) {
-      const {axisWidth, axisHeight, isHoriz, g_axis, strAxis, valAxis, bar} = this
+      const { axisWidth, axisHeight, isHoriz, g_axis, strAxis, valAxis, bar } = this
       const { strScale, valScale } = this.processScale({ strData, valData })
 
       g_axis.selectAll('g').remove() // update 时，清空之前的 axis

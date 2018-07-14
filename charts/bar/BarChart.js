@@ -109,7 +109,7 @@ export default class BarChart {
   }
 
   renderChart({ strData, valData } = this) {
-    const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
+    const { bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz } = this
     const { strScale, valScale } = this.processScale({ strData, valData })
 
     // g wrap - bar
@@ -122,7 +122,7 @@ export default class BarChart {
       .selectAll('text').data(valData)
     
     // mappingColor: function for interpolateColor
-    let interpolateColor = null;
+    let interpolateColor = null
 
     isHoriz
       ? drawHorizontalBar(strData)
@@ -247,7 +247,7 @@ export default class BarChart {
         })
         .on('mouseout', () => {
           oTooltipWrap.style.display = 'none'
-        });
+        })
     }
     return this
   }

@@ -34,7 +34,7 @@ function drawBubbles(container, options) {
   const root = d3.hierarchy({ children: data })
     .sum(d => Math.sqrt(d.val) + 3) // Math.sqrt(d.val) + 3目的是：当 val 为 0 时， ○ 大小适中
     .each(d => {
-      d.group = d.data.groups;
+      d.group = d.data.groups
     })
 
   const node = g.selectAll('.node')

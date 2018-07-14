@@ -18,7 +18,7 @@ function drawHeatMap(container, options) {
     },
     axisHeight = svgHeight - padding.top - padding.bottom,
     axisWidth = svgWidth - padding.left - padding.right,
-    maxVal = Math.max.apply(null, flatten(data)),
+    maxVal = Math.max(...flatten(data)),
     interpolateColor = d3.interpolate(blocks['minColor'], blocks['maxColor'])
 
   const // 定义画布 & g_wrawp
@@ -28,9 +28,9 @@ function drawHeatMap(container, options) {
       .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
   // draw blocks
-  let blockHeight = axisHeight / data.length - gap
+  const blockHeight = axisHeight / data.length - gap
   for (let i = 0, l = data.length; i < l; i++) {
-    let blockWidth = axisWidth / data[i].length - gap
+    const blockWidth = axisWidth / data[i].length - gap
     g.append('g')
       .attr('class', 'g-row')
       .selectAll('rect')

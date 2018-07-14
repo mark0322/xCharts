@@ -6,15 +6,15 @@
  *      ->  [[1, 'a', 'x'],[2, 'b', 'x'],[3, 'c', 'z']]
  */
 function zip(...args) {
-  if (args.length === 0) return [];
-  let result = [];
-  let minLengthForTempArr = Math.min(...args.map(d => d.length));
+  if (args.length === 0) return []
+  const result = []
+  const minLengthForTempArr = Math.min(...args.map(d => d.length))
 
   for (let i = 0; i < minLengthForTempArr; i++) {
-      result.push(args.map(d => d[i]));
+      result.push(args.map(d => d[i]))
   }
 
-  return result;
+  return result
 }
 
 export default zip
