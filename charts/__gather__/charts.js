@@ -112,14 +112,15 @@ let BarChart = null;
     // 输出 strScale & valScale
     processScale({ strData, valData } = this) {
       let { strScale, valScale, bar } = this
-      strScale = strScale.domain(strData).padding(bar.gap || 0.5)
-      valScale = valScale.domain([0, d3.max(valData) * 1.1])
+      strScale.domain(strData).padding(bar.gap || 0.5)
+      valScale.domain([0, d3.max(valData) * 1.1])
       return { strScale, valScale }
     }
 
     renderChart({ strData, valData } = this) {
-      const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
       const { strScale, valScale } = this.processScale({ strData, valData })
+
+      const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
   
       // g wrap - bar
       const columns = g_bars.selectAll('rect').data(valData)
@@ -213,8 +214,7 @@ let BarChart = null;
     }
 
     renderAxis({ strData, valData } = this) {
-      const { axisWidth, axisHeight, isHoriz, g_axis, strAxis, valAxis, bar } = this
-      const { strScale, valScale } = this.processScale({ strData, valData })
+      const { axisHeight, isHoriz, g_axis, strAxis, valAxis, bar } = this
 
       g_axis.selectAll('g').remove() // update 时，清空之前的 axis
   
@@ -264,7 +264,6 @@ let BarChart = null;
     renderSplitLine({ strData, valData }) {
       const {show, color, lineWidth, dasharray, opacity} = this.splitLine
       const {g_splitLine, isHoriz, axisHeight, axisWidth} = this
-      const { valScale, strScale } = this.processScale({ strData, valData })
 
       if (show) {
         const splitline = g_splitLine
@@ -274,16 +273,16 @@ let BarChart = null;
           .attr('opacity', opacity)
           .attr('stroke-dasharray', dasharray)
           .selectAll('line')
-          .data(valScale.ticks().slice(1))
+          .data(this.valScale.ticks().slice(1))
 
           if (isHoriz) {
             splitline
               .enter()
                 .append('line')
               .merge(splitline)
-                .attr('x1', valScale)
+                .attr('x1', this.valScale)
                 .attr('y1', 0)
-                .attr('x2', valScale)
+                .attr('x2', this.valScale)
                 .attr('y2', axisHeight)
             splitline.exit().remove()
           } else {
@@ -292,9 +291,9 @@ let BarChart = null;
                 .append('line')
               .merge(splitline)
                 .attr('x1', 0)
-                .attr('y1', valScale)
+                .attr('y1', this.valScale)
                 .attr('x2', axisWidth)
-                .attr('y2', valScale)
+                .attr('y2', this.valScale)
             splitline.exit().remove()
           }
       }
@@ -302,9 +301,9 @@ let BarChart = null;
   
     // 初次 绘制 chart
     render({ strData, valData } = this) {
-      this.renderSplitLine({ strData, valData })
       this.renderChart({ strData, valData })
       this.renderAxis({ strData, valData })
+      this.renderSplitLine({ strData, valData })
       return this
     }
   
