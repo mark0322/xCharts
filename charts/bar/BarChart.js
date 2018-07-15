@@ -30,7 +30,7 @@ const defaults = {
     }
   },
   animation: true,
-  isHoriz: true, // 将 bar 设为水平
+  isHoriz: false, // 将 bar 设为水平
 }
 
 export default class BarChart {
@@ -43,13 +43,12 @@ export default class BarChart {
    * }
   */
   constructor(options) {
-    this._init(options)
-  }
-
-  // 初始化：全局属性和方法
-  _init(options) {
     Object.assign(this, defaults, options)
 
+    this._init()
+  }
+
+  _init(options) {
     const {container, padding, animation, isHoriz, axis} = this
     this.svgWidth = container.clientWidth
     this.svgHeight = container.clientHeight

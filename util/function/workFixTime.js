@@ -12,7 +12,7 @@
  * fn('ccc') -> nothing
  */
 function workFixTime(func, time = 1) {
-  if (typeof func != 'function') {
+  if (typeof func !== 'function') {
     throw new TypeError('第一个参数必须是函数！');
   }
   let i = -1

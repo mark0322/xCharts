@@ -1,4 +1,4 @@
-let BarChart = null;
+let BarChart = null
 {
   const defaults = {
     container: null, // div - wrap of the chart
@@ -50,13 +50,12 @@ let BarChart = null;
      * }
     */
     constructor(options) {
+      Object.assign(this, defaults, options)
+
       this._init(options)
     }
-  
-    // 初始化：全局属性和方法
-    _init(options) {
-      Object.assign(this, defaults, options)
-  
+
+    _init() {
       const {container, padding, animation, isHoriz, axis} = this
       this.svgWidth = container.clientWidth
       this.svgHeight = container.clientHeight
@@ -314,7 +313,7 @@ let BarChart = null;
 }
 
 
-let Heatmap = null;
+let Heatmap = null
 {
   const defaults = {
     animation: true,
@@ -351,13 +350,13 @@ let Heatmap = null;
      * ]
      */
     constructor(options) {
-      this._init(options)
+      Object.assign(this, defaults, options)
+
+      this._init()
     }
 
     // 初始化：全局属性和方法
-    _init(options) {
-      Object.assign(this, defaults, options)
-
+    _init() {
       const { container, padding, colorRange, animation } = this
 
       this.svgWidth = container.clientWidth
@@ -615,10 +614,11 @@ let Heatmap = null;
 
       bar_wrap
         .append('rect')
-        .attr('height', y.bandwidth() - gap)
         .attr('fill', barColor || '#666')
         .attr('width', 0)
+        .attr('height', 0)
         .transition(t)
+        .attr('height', y.bandwidth() - gap)
         .attr('width', d => x_scaleLinear_rightSide(d.count))
       bar_wrap
         .append('text')
@@ -658,6 +658,45 @@ let Heatmap = null;
   }
 }
 
+
+const tween = arc => {
+  return (path, angle) => {
+    path.attrTween('d', d => {
+      const i = d3.interpolate(d.endAngle, angle)
+      return t => {
+        d.endAngle = i(t)
+        return arc(d)
+      }
+    })
+  }
+}
+
+
+
+
+let Donuts = null
+{
+  const defaults = {
+    padding: { top: 40, left: 40, right: 40, bottom: 40 },
+
+    donutGap: 20, // 环与环的间距
+    donutWidth: 30, // 环的宽度
+
+    valueColor: '#333',
+    valueFontSize: 22,
+    valueDx: '0em',
+    valueDy: '0em',
+
+    nameColor: '#333',
+    nameFontSize: 22,
+    nameDx: '0em',
+    nameDy: '0em'
+
+  }
+  Donuts = class Donuts {
+
+  }
+}
 
 
 function drawLines(container, options) {
@@ -1137,9 +1176,12 @@ function drawDonutsBoard(container, options) {
       .enter()
       .append('path')
       .attr('class', 'bgDonuts')
-      .attr('d', d => arcPath(d))
       .attr('fill', data[i].color)
+      // .attr('opacity', 0)
       .attr('opacity', 0.3)
+      // .attr('d', arcPath(0))
+      // .transition(d3.transition().duration(800))
+      .attr('d', d => arcPath(d))
 
     // define actual donuts data
     const actualDonutsData = [{
@@ -1153,17 +1195,26 @@ function drawDonutsBoard(container, options) {
       .enter()
       .append('path')
       .attr('class', 'actualDonuts')
-      .attr('d', d => arcPath(d))
-      .attr('fill', data[i].color)
+      .attr('d', d => {
+        // log(d, arcPath(d), arcPath(d.endAngle))
+        return arcPath(d)
+      })
+      // .attr('fill', data[i].color)
       .attr('opacity', 0.8)
+      .transition(d3.transition().duration(800))
+      // .attrTween("fill", function(d) {
+      //   log(d)
+      //   return d3.interpolateRgb("red", "blue");
+      // });
 
     // text - val
     gBoard.append('text')
       .attr('class', 'donut-val')
-      .text(data[i]['val'])
       .attr('text-anchor', 'middle')
       .attr('fill', valLabel.color)
       .attr('font-size', valLabel.fontSize)
+      // .transition(d3.transition().duration(800))
+      .text(data[i]['val'])
 
     // text - name
     gBoard.append('text')

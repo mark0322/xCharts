@@ -46,7 +46,8 @@ const heatmap = new Heatmap({
   labelFontSize: 18
 })
 
-heatmap.render(data)  // 绘制 heatmap
+heatmap
+  .render(data)  // 绘制 heatmap
   .renderSideBar(data) // 绘制 上 、 右 两侧的 bar
 
 </script>

@@ -9,4 +9,4 @@ function countOccurrences(arr, val) {
   }, 0)
 }
 
-export default countOccurrences;
+export default countOccurrences

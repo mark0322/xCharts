@@ -37,13 +37,12 @@ export default class Heatmap {
    * ]
    */
   constructor(options) {
-    this._init(options)
-  }
-
-  // 初始化：全局属性和方法
-  _init(options) {
     Object.assign(this, defaults, options)
 
+    this._init()
+  }
+
+  _init() {
     const { container, padding, colorRange, animation } = this
 
     this.svgWidth = container.clientWidth
@@ -301,10 +300,11 @@ export default class Heatmap {
 
     bar_wrap
       .append('rect')
-      .attr('height', y.bandwidth() - gap)
       .attr('fill', barColor || '#666')
       .attr('width', 0)
+      .attr('height', 0)
       .transition(t)
+      .attr('height', y.bandwidth() - gap)
       .attr('width', d => x_scaleLinear_rightSide(d.count))
     bar_wrap
       .append('text')

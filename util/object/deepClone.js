@@ -4,7 +4,7 @@ function deepClone(obj) {
     for (let key of Object.keys(obj)) {
         let o = obj[key]
         if (o && typeof o === 'object') {
-            result[key] = deepClone(o);
+            result[key] = deepClone(o)
         } else {
             result[key] = o
         }

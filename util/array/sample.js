@@ -1,4 +1,5 @@
 import random from '../number/random'
+import deepClone from '../object/deepClone'
 
 /**
  * 从数组中随机抽取 1 ~ arr.length 个元素
@@ -22,10 +23,12 @@ function sample(arr, sampleSize = 1) {
   }
 
   const result = [],
-    inputArr = JSON.parse(JSON.stringify(arr))
+    inputArr = deepClone(arr)
   while (result.length < sampleSize) {
     let i = random(0, inputArr.length, true)
     result.push(...inputArr.splice(i, 1))
   }
   return result
 }
+
+export default sample
