@@ -27,30 +27,36 @@
 <script src="../__gather__/charts.js"></script>
 <script type="text/javascript">
 const options = {
-  data: [
+  data1: [
       {name: '待通报', val: 487, color: 'red'},
       {name: '已通报', val: 386, color: '#122645'},
       {name: '处置中', val: 108, color: '#122645'},
       {name: '已整改', val: 815, color: '#1b5b6c'}
   ],
-  padding: { top: 40, left: 40, right: 40, bottom: 40 },
-  donutGap: 20, // 环与环 的间距
-  donutWidth: 30, // 环的宽度
-  valLabel: { // 环中间的 value 值
-      color: '#333',
-      fontSize: 22,
-      dy: '1em', // TODO
-      dx: '1em' // TODO
-  },
-  nameLabel: { // 环下部的 name 值
-      color: '#333',
-      fontSize: 22,
-      dy: '1em',
-      dx: '0em'
-  }
+  data2: [
+      {name: '待通报', val: 1487, color: 'red'},
+      {name: '已通报', val: 3386, color: '#122645'},
+      {name: '处置中', val: 1108, color: '#122645'},
+      {name: '已整改', val: 6815, color: '#1b5b6c'}
+  ],
+
 }
 
-drawDonutsBoard(document.querySelector('#container'), options)
+const donuts = new Donuts({
+  container: document.querySelector('#container'),
+  // data: options.data1,
+  nameDy: '1em',
+  nameColor: '#666',
+  nameFontSize: 16,
+})
+
+donuts.render(options.data1)
+
+
+setTimeout(function() {
+  donuts.update(options.data2)
+}, 1500)
+
 
 
 </script>
