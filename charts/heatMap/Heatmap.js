@@ -25,7 +25,7 @@ export default class Heatmap {
    * {
    *   container: document.querySelector('#box'),  // 必须
    *   data // 可选, 亦可在 render(data) 加入 data
-   *   defaults // 可选， 亦覆盖 defaults 的默认参数
+   *   defaults // 可选， 即覆盖 defaults 的默认参数
    * }
    *
    * @example
@@ -42,6 +42,7 @@ export default class Heatmap {
     this._init()
   }
 
+  // 初始化：全局属性和方法
   _init() {
     const { container, padding, colorRange, animation } = this
 
@@ -60,12 +61,13 @@ export default class Heatmap {
         .attr('class', 'g_wrap')
         .attr('transform', `translate(${padding.left}, ${padding.top})`)
 
-    this.interpolateColor = d3.interpolate(colorRange[0], colorRange[1])
+    this.interpolateColor = d3.interpolate(...colorRange)
 
     this.x = d3.scaleBand().range([0, this.axisWidth])
     this.y = d3.scaleBand().range([0, this.axisHeight])
 
     this.t = d3.transition().duration(animation ? 800 : 0)
+
     this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
     this.g_heatmap_wrap = this.g.append('g').attr('class', 'g-warp-heatmap')
     this.g_topSideBar_wrap = this.g.append('g').attr('class', 'g-warp-topsidebar')
@@ -144,8 +146,8 @@ export default class Heatmap {
     const maxVal = d3.max(flatten(data), d => Number(d.count))
 
     const blockHeight = axisHeight / data_heatmap.length - gap
+    const blockWidth = axisWidth / data_heatmap[0].length - gap
     for (let i = 0, l = data_heatmap.length; i < l; i++) {
-      const blockWidth = axisWidth / data_heatmap[i].length - gap
       const g_row = g_heatmap_wrap.append('g').attr('class', 'g-row')
       const g_block = g_row
         .selectAll('g')
@@ -153,9 +155,9 @@ export default class Heatmap {
         .enter()
         .append('g')
         .attr('class', 'g-block')
-        .attr('transform', (d, i1) => {
+        .attr('transform', (d, j) => {
             return `translate(
-                ${(blockWidth + gap) * i1},
+                ${(blockWidth + gap) * j},
                 ${(blockHeight + gap) * i}
             )`;
         })
@@ -163,8 +165,6 @@ export default class Heatmap {
       // draw block
       g_block
         .append('rect')
-        .attr('height', 0)
-        .attr('width', 0)
         .transition(t)
         .attr('height', blockHeight)
         .attr('width', blockWidth)
@@ -173,8 +173,6 @@ export default class Heatmap {
       // draw label
       g_block
         .append('text')
-        .attr('x', 0)
-        .attr('y', 0)
         .transition(t)
         .attr('x', blockWidth / 2)
         .attr('y', blockHeight / 2)
@@ -236,7 +234,6 @@ export default class Heatmap {
 
     bar_wrap
       .append('rect')
-      .attr('width', 0)
       .transition(t)
       .attr('width', x.bandwidth() - gap)
       .attr('height', d => y_scaleLinear_topSide(d.count))
@@ -248,7 +245,6 @@ export default class Heatmap {
       .attr('text-anchor', 'middle')
       .attr('fill', labelColor)
       .attr('font-size', labelFontSize)
-      .attr('x', 0)
       .transition(t)
       .attr('x', x.bandwidth() / 2)
   }
@@ -266,7 +262,8 @@ export default class Heatmap {
      *   ...
      * ]
      */
-    const data_rightSide_bar = d3.nest()
+    const data_rightSide_bar = d3
+      .nest()
       .key(d => d.y_category)
       .entries(data)
       .map(d => d.values)
@@ -300,9 +297,7 @@ export default class Heatmap {
 
     bar_wrap
       .append('rect')
-      .attr('fill', barColor || '#666')
-      .attr('width', 0)
-      .attr('height', 0)
+      .attr('fill', barColor)
       .transition(t)
       .attr('height', y.bandwidth() - gap)
       .attr('width', d => x_scaleLinear_rightSide(d.count))
@@ -314,7 +309,6 @@ export default class Heatmap {
       .attr('text-anchor', 'end')
       .attr('fill', labelColor)
       .attr('font-size', labelFontSize)
-      .attr('x', 0)
       .transition(t)
       .attr('x', d => x_scaleLinear_rightSide(d.count) - 4)
   }
