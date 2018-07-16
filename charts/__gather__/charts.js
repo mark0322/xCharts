@@ -641,7 +641,7 @@ let Donuts = null
     padding: { top: 40, left: 40, right: 40, bottom: 40 },
 
     donutGap: 20, // 环与环的间距
-    donutWidth: 30, // 环的宽度
+    thickness: 30, // 环的宽度
 
     valueColor: '#333',
     valueFontSize: 22,
@@ -692,7 +692,7 @@ let Donuts = null
     }
 
     renderDonuts(data = this.data) {
-      const { svg, padding, donutWidth, axisHeight, axisWidth, donutGap, arcAngle } = this
+      const { svg, padding, thickness, axisHeight, axisWidth, donutGap, arcAngle } = this
       const { valueColor, valueFontSize, valueDx, valueDy } = this
       const { nameColor, nameFontSize, nameDx, nameDy } = this
 
@@ -705,7 +705,7 @@ let Donuts = null
       } else {
         outerRadius = tempOuterRadius
       }
-      innerRadius = outerRadius - donutWidth
+      innerRadius = outerRadius - thickness
 
       svg.select('g').remove()
       const g = svg.append('g').attr('class', 'g_wrap')

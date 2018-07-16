@@ -5,14 +5,12 @@
  * @param {Number} count 每一批创建的节点数量
  */
 
-function timeChunk(ary, fn, count) {
-  let obj, 
-      t
+function timeChunk(ary, fn, count = 1) {
+  let t
 
-  let start = function() {
-    for (let i = 0; i < Math.min(count || 1, ary.length); i++) {
-      let obj = ary.shift()
-      fn(obj)
+  const start = function() {
+    for (let i = 0; i < Math.min(count, ary.length); i++) {
+      fn(ary.shift())
     }
   }
 

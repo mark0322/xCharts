@@ -8,7 +8,7 @@
     o -> {x: 111, y: 222}
  */
 function mutateAttrNameForObj(obj, aMatchAttr) {
-  let m = new Map(aMatchAttr)
+  const m = new Map(aMatchAttr)
   for (let attr of Object.keys(obj)) {
     if (m.has(attr)) {
       obj[m.get(attr)] = obj[attr]

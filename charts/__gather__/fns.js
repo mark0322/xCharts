@@ -264,8 +264,8 @@
 }
 
 { // *** string ***
-  function appendSeparator(tar, separator, step, reverse) {
-    let aStr = reverse
+  function appendSeparator(tar, separator, step, isReverse) {
+    let aStr = isReverse
           ? String(tar).split('').reverse()
           : String(tar).split(''),
       aTemp = []
@@ -274,8 +274,7 @@
       aTemp.push(separator)
     }
     aTemp.pop()
-    log(aTemp, '1')
-    return reverse
+    return isReverse
       ? aTemp.reverse().join('')
       : aTemp.join('')
   }

@@ -12,9 +12,8 @@
 function getNoUndefined_proxy(obj) {
   const handler = {
     get(target, prop) {
-      target[prop] = prop in target ?
-        target[prop] :
-        {}
+      target[prop] =
+        prop in target ? target[prop] : {}
       if (typeof target[prop] === 'object') {
         return new Proxy(target[prop], handler)
       }
@@ -25,4 +24,4 @@ function getNoUndefined_proxy(obj) {
   return new Proxy(obj, handler)
 }
 
-export default getNoUndefined_proxy;
+export default getNoUndefined_proxy

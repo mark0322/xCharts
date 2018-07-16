@@ -17,7 +17,7 @@ import deepFlatten from '../array/deepFlatten'
  * eg2 getMinForArrsOfObj(val, ['email', 'VPN']) -> 3
  */
 function getMinForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
-  let tempArr = []
+  const tempArr = []
   for (let attr of targetAttrs) {
     if (Array.isArray(obj[attr])) {
       tempArr.push(...deepFlatten(obj[attr]))
