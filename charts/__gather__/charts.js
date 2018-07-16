@@ -651,8 +651,9 @@ let Donuts = null
     nameColor: '#333',
     nameFontSize: 22,
     nameDx: '0em',
-    nameDy: '0em'
+    nameDy: '0em',
 
+    arcAngle: 0.75, // 则 donut 弧度为: (Math.PI * -0.75) ~ (Math.PI * 0.75)
   }
   Donuts = class Donuts {
     /**
@@ -691,19 +692,20 @@ let Donuts = null
     }
 
     renderDonuts(data = this.data) {
-      const { svg, padding, donutWidth, axisHeight, axisWidth, donutGap } = this
+      const { svg, padding, donutWidth, axisHeight, axisWidth, donutGap, arcAngle } = this
       const { valueColor, valueFontSize, valueDx, valueDy } = this
       const { nameColor, nameFontSize, nameDx, nameDy } = this
 
       // 计算 donuts 的 内、外 半径
       let tempOuterRadius = (axisWidth - donutGap * (data.length - 1)) / (data.length * 2),
-        outerRadius
+        outerRadius,
+        innerRadius
       if (tempOuterRadius > axisHeight / 2) {
         outerRadius = axisHeight / 2
       } else {
         outerRadius = tempOuterRadius
       }
-      let innerRadius = outerRadius - donutWidth
+      innerRadius = outerRadius - donutWidth
 
       svg.select('g').remove()
       const g = svg.append('g').attr('class', 'g_wrap')
@@ -716,14 +718,14 @@ let Donuts = null
 
       // bg donus data
       const bgDonutsData = {
-        startAngle: Math.PI * -0.75,
-        endAngle: Math.PI * 0.75
+        startAngle: Math.PI * -arcAngle,
+        endAngle: Math.PI * arcAngle
       }
 
       // actual donuts data - scale
       const actualScale = d3.scaleLinear()
         .domain([0, sumArray(data, d => d.val)])
-        .range([-0.75, 0.75])
+        .range([-arcAngle, arcAngle])
 
       // 每次循环 绘制一组 donut board
       for (let i = 0, l = data.length; i < l; i++) {
@@ -742,7 +744,7 @@ let Donuts = null
 
         // define actual donuts data
         const actualDonutsData = {
-          startAngle: Math.PI * -0.75,
+          startAngle: Math.PI * -arcAngle,
           endAngle: Math.PI * actualScale(data[i].val)
         }
 
@@ -800,8 +802,6 @@ let Donuts = null
     update(data = this.data) {
       this.render(data)
     }
-
-
   }
 }
 

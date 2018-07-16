@@ -41,7 +41,6 @@ export default class Donuts {
 
     this._init()
   }
-
   _init() {
     const { container, padding } = this
 
@@ -56,7 +55,7 @@ export default class Donuts {
   }
 
   renderDonuts(data = this.data) {
-    const { svg, padding, donutWidth, axisHeight, axisWidth, donutGap } = this
+    const { svg, padding, donutWidth, axisHeight, axisWidth, donutGap, arcAngle } = this
     const { valueColor, valueFontSize, valueDx, valueDy } = this
     const { nameColor, nameFontSize, nameDx, nameDy } = this
 
@@ -82,14 +81,14 @@ export default class Donuts {
 
     // bg donus data
     const bgDonutsData = {
-      startAngle: Math.PI * -0.75,
-      endAngle: Math.PI * 0.75
+      startAngle: Math.PI * -arcAngle,
+      endAngle: Math.PI * arcAngle
     }
 
-    // scale - actual donuts data 
+    // actual donuts data - scale
     const actualScale = d3.scaleLinear()
       .domain([0, sumArray(data, d => d.val)])
-      .range([-0.75, 0.75])
+      .range([-arcAngle, arcAngle])
 
     // 每次循环 绘制一组 donut board
     for (let i = 0, l = data.length; i < l; i++) {
@@ -108,7 +107,7 @@ export default class Donuts {
 
       // define actual donuts data
       const actualDonutsData = {
-        startAngle: Math.PI * -0.75,
+        startAngle: Math.PI * -arcAngle,
         endAngle: Math.PI * actualScale(data[i].val)
       }
 
