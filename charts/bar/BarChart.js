@@ -29,6 +29,12 @@ const defaults = {
       
     }
   },
+  splitLine: {
+    color: '#74706d',
+    lineWidth: 1,
+    dasharray: '5 5',
+    opacity: 0.5,
+  },
   animation: true,
   isHoriz: false, // 将 bar 设为水平
 }
@@ -48,8 +54,9 @@ export default class BarChart {
     this._init()
   }
 
-  _init(options) {
-    const {container, padding, animation, isHoriz, axis} = this
+  _init() {
+    const { container, padding, animation, isHoriz } = this
+    const { strAxisTicksNum, axisTickPadding, axisTickSize } = this
     this.svgWidth = container.clientWidth
     this.svgHeight = container.clientHeight
     this.axisWidth = this.svgWidth - padding.left - padding.right
@@ -57,31 +64,27 @@ export default class BarChart {
 
      // 条形图 or 柱状图
     if (isHoriz) {
-      const strAxis = axis.strAxis || {}
-
       this.strScale = d3.scaleBand().range([this.axisHeight, 0])
       this.valScale = d3.scaleLinear().range([0, this.axisWidth])
 
       this.strAxis = d3.axisLeft(this.strScale)
-        .ticks(strAxis.ticksNum || 5)
-        .tickPadding(axis.tickPadding)
-        .tickSize(axis.tickSize)
+        .ticks(strAxisTicksNum)
+        .tickPadding(axisTickPadding)
+        .tickSize(axisTickSize)
       this.valAxis = d3.axisBottom(this.valScale)
-        .tickPadding(axis.tickPadding)
-        .tickSize(axis.tickSize)
+        .tickPadding(axisTickPadding)
+        .tickSize(axisTickSize)
     } else {
-      const strAxis = axis.strAxis || {}
-
       this.strScale = d3.scaleBand().range([0, this.axisWidth])
       this.valScale = d3.scaleLinear().range([this.axisHeight, 0])
 
       this.strAxis = d3.axisBottom(this.strScale)
-        .ticks(strAxis.ticksNum || 5)
-        .tickPadding(axis.tickPadding)
-        .tickSize(axis.tickSize)
+        .ticks(strAxisTicksNum)
+        .tickPadding(axisTickPadding)
+        .tickSize(axisTickSize)
       this.valAxis = d3.axisLeft(this.valScale)
-        .tickPadding(axis.tickPadding)
-        .tickSize(axis.tickSize)
+        .tickPadding(axisTickPadding)
+        .tickSize(axisTickSize)
     }
 
     this.svg = d3.select(container)
@@ -92,10 +95,12 @@ export default class BarChart {
       .append('g')
       .attr('class', 'g_wrap')
       .attr('transform', `translate(${padding.left}, ${padding.top})`)
+
     this.g_splitLine = this.g.append('g').attr('class', 'g-warp-splitLine')
     this.g_bars = this.g.append('g').attr('class', 'g-warp-bars')
     this.g_labels = this.g.append('g').attr('class', 'g-warp-labels')
     this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
+
     this.t = d3.transition().duration(animation ? 800 : 0)
   }
 
@@ -110,7 +115,7 @@ export default class BarChart {
   renderChart({ strData, valData } = this) {
     const { strScale, valScale } = this.processScale({ strData, valData })
 
-    const {bar, axisWidth, axisHeight, g_bars, g_labels, t, label, isHoriz} = this
+    const { bar, axisHeight, g_bars, g_labels, t, label, isHoriz } = this
 
     // g wrap - bar
     const columns = g_bars.selectAll('rect').data(valData)
@@ -195,16 +200,15 @@ export default class BarChart {
       if (isMappingColor) {
         interpolateColor = d3.scaleLinear()
           .domain([0, strData.length])
-          .range([bar.colorRange[0], bar.colorRange[1]])
+          .range(bar.colorRange)
         return true
       }
       return false
     }
-    return this
   }
 
-  renderAxis({ strData, valData } = this) {
-    const { axisHeight, isHoriz, g_axis, strAxis, valAxis, bar } = this
+  renderAxis() {
+    const { axisHeight, isHoriz, g_axis, strAxis, valAxis } = this
 
     g_axis.selectAll('g').remove() // update 时，清空之前的 axis
 
@@ -215,10 +219,10 @@ export default class BarChart {
       .attr('class', 'axis yAxis')
 
     isHoriz
-      ? drawHorizontalChart()
+      ? drawHorizontalAxis()
       : drawVerticalAxis()
 
-    function drawHorizontalChart() {
+    function drawHorizontalAxis() {
       gXAxis.call(valAxis)
       gYAxis.call(strAxis)
     }
@@ -226,11 +230,9 @@ export default class BarChart {
       gXAxis.call(strAxis)
       gYAxis.call(valAxis)
     }
-    return this
   }
 
-  tooltip(show = true) {
-    if (show) {
+  tooltip() {
       const oTooltipWrap = tooltip_wrap()
       const { g } = this
       const rects = g.selectAll('.g-warp-bars rect')
@@ -247,59 +249,56 @@ export default class BarChart {
         .on('mouseout', () => {
           oTooltipWrap.style.display = 'none'
         })
-    }
     return this
   }
 
-  renderSplitLine({ strData, valData }) {
-    const {show, color, lineWidth, dasharray, opacity} = this.splitLine
-    const {g_splitLine, isHoriz, axisHeight, axisWidth} = this
+  renderSplitLine() {
+    const { color, lineWidth, dasharray, opacity } = this.splitLine
+    const { g_splitLine, isHoriz, axisHeight, axisWidth, valScale } = this
 
-    if (show) {
-      const splitline = g_splitLine
-        .attr('class', 'splitline')
-        .attr('stroke', color)
-        .attr('stroke-width', lineWidth)
-        .attr('opacity', opacity)
-        .attr('stroke-dasharray', dasharray)
-        .selectAll('line')
-        .data(this.valScale.ticks().slice(1))
+    const splitline = g_splitLine
+      .attr('class', 'splitline')
+      .attr('stroke', color || '#74706d')
+      .attr('stroke-width', lineWidth || 1)
+      .attr('opacity', opacity || 0.5)
+      .attr('stroke-dasharray', dasharray || '5 5')
+      .selectAll('line')
+      .data(valScale.ticks().slice(1))
 
-        if (isHoriz) {
-          splitline
-            .enter()
-              .append('line')
-            .merge(splitline)
-              .attr('x1', this.valScale)
-              .attr('y1', 0)
-              .attr('x2', this.valScale)
-              .attr('y2', axisHeight)
-          splitline.exit().remove()
-        } else {
-          splitline
-            .enter()
-              .append('line')
-            .merge(splitline)
-              .attr('x1', 0)
-              .attr('y1', this.valScale)
-              .attr('x2', axisWidth)
-              .attr('y2', this.valScale)
-          splitline.exit().remove()
-        }
-    }
+      if (isHoriz) {
+        splitline
+          .enter()
+            .append('line')
+          .merge(splitline)
+            .attr('x1', valScale)
+            .attr('y1', 0)
+            .attr('x2', valScale)
+            .attr('y2', axisHeight)
+        splitline.exit().remove()
+      } else {
+        splitline
+          .enter()
+            .append('line')
+          .merge(splitline)
+            .attr('x1', 0)
+            .attr('y1', valScale)
+            .attr('x2', axisWidth)
+            .attr('y2', valScale)
+        splitline.exit().remove()
+      }
+
   }
 
   // 初次 绘制 chart
   render({ strData, valData } = this) {
     this.renderChart({ strData, valData })
-    this.renderAxis({ strData, valData })
-    this.renderSplitLine({ strData, valData })
+    this.renderAxis()
+    this.renderSplitLine()
     return this
   }
 
   // 更新 chart
   update({ strData, valData } = this) {
     this.render({ strData, valData })
-    return this
   }
 }

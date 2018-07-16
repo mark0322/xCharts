@@ -166,7 +166,5 @@ export default class Donuts {
   update(data = this.data) {
     this.render(data)
   }
-
-
 }
 

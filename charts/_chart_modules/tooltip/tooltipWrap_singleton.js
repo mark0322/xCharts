@@ -26,11 +26,11 @@ const initTooltipWrap = function() {
 /** 
  * 单例模式 - 模板
 */
-const getSingleton = function(fn) {
+const tooltip_wrap = function(fn) {
   let instance = null
   return function() {
     return instance || (instance = fn(...arguments))
   }
 }
 
-export default getSingleton(initTooltipWrap)
+export default tooltip_wrap(initTooltipWrap)
