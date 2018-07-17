@@ -28,15 +28,12 @@ const defaults = {
   animation: true
 }
 
-export default class Donut {
-  /** 
-   * 指定 container 为绘图容器， 圆环自动撑满该容器
-   * @param options 中必须包含
-  */
+export default class Donut extends Text {
   constructor(options) {
-    // mixin
-    Object.assign(this, defaults, options)
+    Object.assign(defaults, options)
+    super(defaults)
 
+    Object.assign(this, defaults)
     this._init()
   }
 
@@ -71,34 +68,6 @@ export default class Donut {
       arcPath.cornerRadius(outerRadius - innerRadius)
     }
     return arcPath
-  }
-
-  renderVal(val = this.val) {
-    const { svg, svgHeight, svgWidth, t } = this
-    const { valColor, valDy, valSize, valUnit } = this
-    if (!val) throw new Error('未初始 val 值！')
-
-    svg.select('g.g-val').remove()
-    const g = svg.append('g')
-      .attr('transform', `translate(${svgWidth / 2}, ${svgHeight / 2})`)
-      .attr('class', 'g-val')
-
-    g.append('text')
-      .attr('fill', valColor)
-      .attr('font-size', valSize)
-      .attr('dy', valDy)
-      .attr('text-anchor', 'middle')
-      .transition(t)
-      .text(val)
-      .tween('d', function() {
-        const val = d3.select(this).text()
-        const i = d3.interpolateNumber(0, val)
-        return t => {
-          d3.select(this).text((i(t) | 0) + valUnit)
-        }
-      })
-
-    return this
   }
 
   renderName() {

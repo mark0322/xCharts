@@ -806,6 +806,60 @@ let Donuts = null
 }
 
 
+class Text {
+    constructor(options) {
+      Object.assign(this, options)
+      this.init()
+    }
+
+    init({ container, isDonut, animation, padding } = this) {
+      padding = this.padding || 40
+      if (typeof animation === 'undefined') {
+        animation = true
+      }
+
+      this.svgHeight = container.clientHeight - padding * 2
+      this.svgWidth = container.clientWidth - padding * 2
+
+      if (!isDonut) {
+        this.svg = d3.select(container)
+          .append('svg')
+          .attr('width', this.svgWidth)
+          .attr('height', this.svgHeight)
+          .attr('transform', `translate(${padding}, ${padding})`)
+      }
+
+      this.t = d3.transition().duration(animation ? 1000 : 0)
+    }
+
+    renderVal(val = this.val) {
+      const { svg, svgHeight, svgWidth, t } = this
+      const { valColor, valDy, valSize, valUnit } = this
+      if (!val) throw new Error('未初始 val 值！')
+
+      svg.select('g.g-val').remove()
+      const g = svg.append('g')
+        .attr('transform', `translate(${svgWidth / 2}, ${svgHeight / 2})`)
+        .attr('class', 'g-val')
+
+      g.append('text')
+        .attr('fill', valColor || '#fff')
+        .attr('font-size', valSize || 64)
+        .attr('dy', valDy || '0.5em')
+        .attr('text-anchor', 'middle')
+        .transition(t)
+        .text(val)
+        .tween('d', function() {
+          const val = d3.select(this).text()
+          const i = d3.interpolateNumber(0, val)
+          return t => {
+            d3.select(this).text((i(t) | 0) + valUnit)
+          }
+        })
+    }
+}
+
+
 let Donut = null
 {
   const defaults = {
@@ -823,6 +877,7 @@ let Donut = null
     valSize: 64,
     valColor: '#fff',
     valDy: '0.5em',
+    isDonut: true, // 供继承 Text 类 使用
 
     isRoundCap: true, // 是否为圆角
     
@@ -834,15 +889,12 @@ let Donut = null
     animation: true
   }
 
-  Donut = class Donut {
-    /** 
-     * 指定 container 为绘图容器， 圆环自动撑满该容器
-     * @param options 中必须包含
-    */
+  Donut = class Donut extends Text {
     constructor(options) {
-      // mixin
-      Object.assign(this, defaults, options)
+      Object.assign(defaults, options)
+      super(defaults)
 
+      Object.assign(this, defaults)
       this._init()
     }
 
@@ -877,34 +929,6 @@ let Donut = null
         arcPath.cornerRadius(outerRadius - innerRadius)
       }
       return arcPath
-    }
-
-    renderVal(val = this.val) {
-      const { svg, svgHeight, svgWidth, t } = this
-      const { valColor, valDy, valSize, valUnit } = this
-      if (!val) throw new Error('未初始 val 值！')
-
-      svg.select('g.g-val').remove()
-      const g = svg.append('g')
-        .attr('transform', `translate(${svgWidth / 2}, ${svgHeight / 2})`)
-        .attr('class', 'g-val')
-
-      g.append('text')
-        .attr('fill', valColor)
-        .attr('font-size', valSize)
-        .attr('dy', valDy)
-        .attr('text-anchor', 'middle')
-        .transition(t)
-        .text(val)
-        .tween('d', function() {
-          const val = d3.select(this).text()
-          const i = d3.interpolateNumber(0, val)
-          return t => {
-            d3.select(this).text((i(t) | 0) + valUnit)
-          }
-        })
-
-      return this
     }
 
     renderName() {

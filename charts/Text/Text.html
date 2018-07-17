@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Donut</title>
+  <title>Text</title>
   <style type="text/css">
     html,
     body {
@@ -27,17 +27,15 @@
 <script src="../__gather__/charts.js"></script>
 <script type="text/javascript">
 
-const donut = new Donut({
+const t = new Text({
     container: document.querySelector('#container'),
     val: 75,
-    maxVal: 100,
     valUnit: '%',
-    name: 'ios 11'
-    // isRoundCap: false
+    valColor: '#fe3',
+    valSize: 78
 })
-donut.randerDonut()
-.renderVal()
-    // .renderName()
+t.renderVal(11122)
+
 
 
 </script>
