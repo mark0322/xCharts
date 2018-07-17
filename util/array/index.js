@@ -6,8 +6,6 @@ import difference from './difference'
 import flatten from './flatten'
 import intersection from './intersection'
 import matchArrayVal from './matchArrayVal'
-import maxArray from './maxArray'
-import minArray from './minArray'
 import mutateAttrNameForObjOfArray from './mutateAttrNameForObjOfArray'
 import range from './range'
 import sample from './sample'
@@ -24,8 +22,6 @@ export {
   flatten,
   intersection,
   matchArrayVal,
-  maxArray,
-  minArray,
   mutateAttrNameForObjOfArray,
   range,
   sample,

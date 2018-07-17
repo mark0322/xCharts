@@ -55,24 +55,6 @@
     return arr.map(d => d / sum * matchVal)
   }
 
-  function maxArray(arr, callback = d => d) {
-    try {
-      arr = compactArray(...arguments)
-    } catch (e) {
-      throw new Error('输入参数有误！')
-    }
-    return Math.max(...arr)
-  }
-
-  function minArray(arr, iteratee = d => d) {
-    try {
-      arr = compactArray(...arguments)
-    } catch (e) {
-      throw new Error('输入参数有误！')
-    }
-    return Math.min(...arr)
-  }
-
   function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
     arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))
   }
