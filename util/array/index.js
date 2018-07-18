@@ -9,7 +9,6 @@ import matchArrayVal from './matchArrayVal'
 import mutateAttrNameForObjOfArray from './mutateAttrNameForObjOfArray'
 import range from './range'
 import sample from './sample'
-import sumArray from './sumArray'
 import union from './union'
 import zip from './zip'
 
@@ -25,7 +24,6 @@ export {
   mutateAttrNameForObjOfArray,
   range,
   sample,
-  sumArray,
   union,
   zip
 }

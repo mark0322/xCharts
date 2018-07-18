@@ -73,15 +73,6 @@
     return range
   }
 
-  function sumArray(arr, iteratee = d => d) {
-    try {
-      arr = compactArray(...arguments)
-    } catch (e) {
-      throw new Error('输入参数有误！')
-    }
-    return arr.reduce((a, b) => a + b)
-  }
-
   function sample(arr, sampleSize = 1) {
     if (sampleSize === 1) {
       return arr[random(0, arr.length, true)]

@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import { sumArray } from '../../util/array'
 
 const defaults = {
   padding: { top: 40, left: 40, right: 40, bottom: 40 },
@@ -87,7 +86,7 @@ export default class Donuts {
 
     // actual donuts data - scale
     const actualScale = d3.scaleLinear()
-      .domain([0, sumArray(data, d => d.val)])
+      .domain([0, d3.sum(data, d => d.val)])
       .range([-arcAngle, arcAngle])
 
     // 每次循环 绘制一组 donut board

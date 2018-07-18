@@ -1,8 +1,8 @@
 import * as d3Selection from 'd3-selection'
-const d3 = Object.assign({}, d3Selection)
+import * as d3Array from 'd3-array'
+const d3 = Object.assign({}, d3Selection, d3Array)
 
 import chunk from '../../util/array/chunk'
-import sumArray from '../../util/array/sumArray'
 
 /**
  * 使用基本<rect>而非d3.treemap()绘制treemap
@@ -23,7 +23,7 @@ function drawTreemap(container, options) {
     svgHeight = container.offsetHeight,
     axisWidth = svgWidth - padding.left - padding.right,
     axisHeight = svgHeight - padding.top - padding.bottom,
-    totalVal = sumArray(data, o => o.val)
+    totalVal = d3.sum(data, o => o.val)
 
   const // 定义画布 & g_wrawp
     svg = d3.select(container).append('svg')
@@ -46,7 +46,7 @@ function drawTreemap(container, options) {
     const aEveryRowsHeight = (() => {
       let aEveryRowsTotalVal = []; // 将每行所有的 block 的 val 相加
       for (let chunkEle of aChunkData) { // 将每行所有的 block 的 val 相加
-        let rowsTotalVal = sumArray(chunkEle, o => o.val)
+        let rowsTotalVal = d3.sum(chunkEle, o => o.val)
         aEveryRowsTotalVal.push(rowsTotalVal)
       }
       return aEveryRowsTotalVal.map(d => axisHeight * d / totalVal - gap)
@@ -56,7 +56,7 @@ function drawTreemap(container, options) {
     const aEveryBlockWidth = (arr => {
       let aTempEveryBlockWidth = []
       for (let aOneRowItems of arr) { // 以行为单位，遍历 aChunkData
-        let rowsTotalVal = sumArray(aOneRowItems, o => o.val) // 一行内的 sum(blocks.val)
+        let rowsTotalVal = d3.sum(aOneRowItems, o => o.val) // 一行内的 sum(blocks.val)
 
         // 获得一行内，每个 block 的宽
         let aOneRowWidth = aOneRowItems.map(d => axisWidth * d.val / rowsTotalVal - gap)
