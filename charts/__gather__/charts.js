@@ -92,7 +92,7 @@ let BarChart = null
       this.g_labels = this.g.append('g').attr('class', 'g-warp-labels')
       this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
   
-      this.t = d3.transition().duration(animation ? 800 : 0)
+      this.t = d3.transition().duration(animation ? 1000 : 0)
     }
   
     // 输出 strScale & valScale
@@ -362,7 +362,7 @@ let Heatmap = null
       this.x = d3.scaleBand().range([0, this.axisWidth])
       this.y = d3.scaleBand().range([0, this.axisHeight])
 
-      this.t = d3.transition().duration(animation ? 800 : 0)
+      this.t = d3.transition().duration(animation ? 1000 : 0)
 
       this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
       this.g_heatmap_wrap = this.g.append('g').attr('class', 'g-warp-heatmap')

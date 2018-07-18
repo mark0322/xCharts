@@ -66,7 +66,7 @@ export default class Heatmap {
     this.x = d3.scaleBand().range([0, this.axisWidth])
     this.y = d3.scaleBand().range([0, this.axisHeight])
 
-    this.t = d3.transition().duration(animation ? 800 : 0)
+    this.t = d3.transition().duration(animation ? 1000 : 0)
 
     this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
     this.g_heatmap_wrap = this.g.append('g').attr('class', 'g-warp-heatmap')

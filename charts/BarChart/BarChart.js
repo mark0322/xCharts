@@ -101,7 +101,7 @@ export default class BarChart {
     this.g_labels = this.g.append('g').attr('class', 'g-warp-labels')
     this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
 
-    this.t = d3.transition().duration(animation ? 800 : 0)
+    this.t = d3.transition().duration(animation ? 1000 : 0)
   }
 
   // 输出 strScale & valScale

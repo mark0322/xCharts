@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import Text from '../Text/Text'
 
 // default config.
 const defaults = {
