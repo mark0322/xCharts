@@ -6,7 +6,7 @@ export default class Text {
     this.init()
   }
 
-  init({ container, isDonut, animation, padding } = this) {
+  init({ container, hasSvg, animation, padding } = this) {
     padding = this.padding || 40
     if (typeof animation === 'undefined') {
       animation = true
@@ -16,7 +16,7 @@ export default class Text {
     this.svgWidth = container.clientWidth - padding * 2
 
     // 当被 Donut 继承时，则不需再添加 svg 画布
-    if (!isDonut) {
+    if (!hasSvg) {
       this.svg = d3.select(container)
         .append('svg')
         .attr('width', this.svgWidth)

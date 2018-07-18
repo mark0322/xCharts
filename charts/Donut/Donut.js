@@ -1,12 +1,15 @@
 import * as d3 from 'd3'
 
-
 // default config.
 const defaults = {
   padding: 40,
+  container: null, // options中，必填
 
-  // name 值
-  name: '',
+  // 供继承 extends Text 使用
+  // 避免 Text 类多绘 svg 画布
+  hasSvg: true,
+
+  name: '', // name 值
   nameSize: 24,
   nameColor: '#aaa',
   nameDy: '0em',
@@ -24,7 +27,6 @@ const defaults = {
   bgDonutColor: '#ccc', // 背景环的颜色
   hasBGDonut: true,
   thickness: 12, // 环的宽度
-  container: null, // 必填
   animation: true
 }
 
@@ -85,7 +87,6 @@ export default class Donut extends Text {
       .attr('font-size', nameSize)
       .attr('dy', nameDy)
       .attr('text-anchor', 'middle')
-      .transition(t)
       .text(name)
 
     return this
@@ -106,7 +107,6 @@ export default class Donut extends Text {
     g.append('path')
       .datum({ endAngle: Math.PI * 2 })
       .attr('class', 'bg-donut')
-      // .attr('d', arcPath)
       .attr('d', arcPath)
       .attr('fill', bgDonutColor)
       .attr('opacity', '0.3')
@@ -116,7 +116,6 @@ export default class Donut extends Text {
     g.append('path')
       .datum({ endAngle: Math.PI * 2 * rate })
       .attr('class', 'actual-donut')
-      // .attr('d', arcPath)
       .attr('fill', donutColor)
       .transition(t)
       .attrTween('d', d => {

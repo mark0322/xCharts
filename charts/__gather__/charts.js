@@ -812,7 +812,7 @@ class Text {
       this.init()
     }
 
-    init({ container, isDonut, animation, padding } = this) {
+    init({ container, hasSvg, animation, padding } = this) {
       padding = this.padding || 40
       if (typeof animation === 'undefined') {
         animation = true
@@ -821,7 +821,7 @@ class Text {
       this.svgHeight = container.clientHeight - padding * 2
       this.svgWidth = container.clientWidth - padding * 2
 
-      if (!isDonut) {
+      if (!hasSvg) {
         this.svg = d3.select(container)
           .append('svg')
           .attr('width', this.svgWidth)
@@ -856,6 +856,8 @@ class Text {
             d3.select(this).text((i(t) | 0) + valUnit)
           }
         })
+      
+      return this
     }
 }
 
@@ -864,9 +866,13 @@ let Donut = null
 {
   const defaults = {
     padding: 40,
+    container: null, // options中，必填
 
-    // name 值
-    name: '',
+    // 供继承 extends Text 使用
+    // 避免 Text 类多绘 svg 画布
+    hasSvg: true,
+
+    name: '', // name 值
     nameSize: 24,
     nameColor: '#aaa',
     nameDy: '0em',
@@ -877,7 +883,6 @@ let Donut = null
     valSize: 64,
     valColor: '#fff',
     valDy: '0.5em',
-    isDonut: true, // 供继承 Text 类 使用
 
     isRoundCap: true, // 是否为圆角
     
@@ -885,7 +890,6 @@ let Donut = null
     bgDonutColor: '#ccc', // 背景环的颜色
     hasBGDonut: true,
     thickness: 12, // 环的宽度
-    container: null, // 必填
     animation: true
   }
 
@@ -932,7 +936,7 @@ let Donut = null
     }
 
     renderName() {
-      const { svg, svgHeight, svgWidth, t } = this
+      const { svg, svgHeight, svgWidth } = this
       const { name, nameColor, nameDy, nameSize } = this
       if (!name) throw new Error('未初始 name 值！')
 
@@ -946,7 +950,6 @@ let Donut = null
         .attr('font-size', nameSize)
         .attr('dy', nameDy)
         .attr('text-anchor', 'middle')
-        .transition(t)
         .text(name)
 
       return this
@@ -967,7 +970,6 @@ let Donut = null
       g.append('path')
         .datum({ endAngle: Math.PI * 2 })
         .attr('class', 'bg-donut')
-        // .attr('d', arcPath)
         .attr('d', arcPath)
         .attr('fill', bgDonutColor)
         .attr('opacity', '0.3')
@@ -977,7 +979,6 @@ let Donut = null
       g.append('path')
         .datum({ endAngle: Math.PI * 2 * rate })
         .attr('class', 'actual-donut')
-        // .attr('d', arcPath)
         .attr('fill', donutColor)
         .transition(t)
         .attrTween('d', d => {
