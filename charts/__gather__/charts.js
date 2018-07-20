@@ -19,7 +19,7 @@ let BarChart = null
     axisTickPadding: 8,
     axisTickSize: 4,
     strAxisTicksNum: 5,
-    
+
     splitLine: {
       color: '#74706d',
       lineWidth: 1,
@@ -31,7 +31,7 @@ let BarChart = null
   }
 
   BarChart = class BarChart {
-    /** 
+    /**
      * options 必包含以下属性：
      * {
      *  container: document.querySelector('#box'),
@@ -41,10 +41,10 @@ let BarChart = null
     */
     constructor(options) {
       Object.assign(this, defaults, options)
-  
+
       this._init()
     }
-  
+
     _init() {
       const { container, padding, animation, isHoriz } = this
       const { strAxisTicksNum, axisTickPadding, axisTickSize } = this
@@ -52,12 +52,12 @@ let BarChart = null
       this.svgHeight = container.clientHeight
       this.axisWidth = this.svgWidth - padding.left - padding.right
       this.axisHeight = this.svgHeight - padding.top - padding.bottom
-  
+
        // 条形图 or 柱状图
       if (isHoriz) {
         this.strScale = d3.scaleBand().range([this.axisHeight, 0])
         this.valScale = d3.scaleLinear().range([0, this.axisWidth])
-  
+
         this.strAxis = d3.axisLeft(this.strScale)
           .ticks(strAxisTicksNum)
           .tickPadding(axisTickPadding)
@@ -68,7 +68,7 @@ let BarChart = null
       } else {
         this.strScale = d3.scaleBand().range([0, this.axisWidth])
         this.valScale = d3.scaleLinear().range([this.axisHeight, 0])
-  
+
         this.strAxis = d3.axisBottom(this.strScale)
           .ticks(strAxisTicksNum)
           .tickPadding(axisTickPadding)
@@ -77,7 +77,7 @@ let BarChart = null
           .tickPadding(axisTickPadding)
           .tickSize(axisTickSize)
       }
-  
+
       this.svg = d3.select(container)
         .append('svg')
         .attr('width', this.svgWidth)
@@ -86,15 +86,15 @@ let BarChart = null
         .append('g')
         .attr('class', 'g_wrap')
         .attr('transform', `translate(${padding.left}, ${padding.top})`)
-  
+
       this.g_splitLine = this.g.append('g').attr('class', 'g-warp-splitLine')
       this.g_bars = this.g.append('g').attr('class', 'g-warp-bars')
       this.g_labels = this.g.append('g').attr('class', 'g-warp-labels')
       this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
-  
+
       this.t = d3.transition().duration(animation ? 1000 : 0)
     }
-  
+
     // 输出 strScale & valScale
     processScale({ strData, valData } = this) {
       let { strScale, valScale, bar } = this
@@ -102,28 +102,28 @@ let BarChart = null
       valScale.domain([0, d3.max(valData) * 1.1])
       return { strScale, valScale }
     }
-  
+
     renderChart({ strData, valData } = this) {
       const { strScale, valScale } = this.processScale({ strData, valData })
-  
+
       const { bar, axisHeight, g_bars, g_labels, t, label, isHoriz } = this
-  
+
       // g wrap - bar
       const columns = g_bars.selectAll('rect').data(valData)
-  
+
       // g warp - label
       const labels = g_labels
         .attr('fill', label.color || '#ccc')
         .attr('font-size', label.fontSize || 14)
         .selectAll('text').data(valData)
-      
+
       // mappingColor: function for interpolateColor
       let interpolateColor = null
-  
+
       isHoriz
         ? drawHorizontalBar(strData)
         : drawVerticalBar(strData)
-  
+
       // define function
       function drawVerticalBar(strData) {
         columns
@@ -138,7 +138,7 @@ let BarChart = null
             .attr('height', d => axisHeight - valScale(d))
             .attr('fill', (d, i) => isMappingColor() ? interpolateColor(i) : bar.color || 'steelblue')
         columns.exit().remove()
-  
+
         labels
           .enter()
             .append('text')
@@ -166,7 +166,7 @@ let BarChart = null
             .attr('width', d => valScale(d))
             .attr('fill', (d, i) => isMappingColor() ? interpolateColor(i) : bar.color || 'steelblue')
         columns.exit().remove()
-  
+
         labels
           .enter()
             .append('text')
@@ -183,10 +183,10 @@ let BarChart = null
             .attr('opacity', 1)
         labels.exit().remove() // exit
       }
-  
+
       // 判断 bar 与 bar 间是否使用渐变色
       function isMappingColor() {
-        const isMappingColor = 
+        const isMappingColor =
           bar.isMappingColor && bar.colorRange[0] && bar.colorRange[1]
         if (isMappingColor) {
           interpolateColor = d3.scaleLinear()
@@ -197,22 +197,22 @@ let BarChart = null
         return false
       }
     }
-  
+
     renderAxis() {
       const { axisHeight, isHoriz, g_axis, strAxis, valAxis } = this
-  
+
       g_axis.selectAll('g').remove() // update 时，清空之前的 axis
-  
+
       const gXAxis = g_axis.append('g')
         .attr('class', 'axis xAxis')
         .attr('transform', `translate(0, ${axisHeight})`)
       const gYAxis = g_axis.append('g')
         .attr('class', 'axis yAxis')
-  
+
       isHoriz
         ? drawHorizontalAxis()
         : drawVerticalAxis()
-  
+
       function drawHorizontalAxis() {
         gXAxis.call(valAxis)
         gYAxis.call(strAxis)
@@ -222,12 +222,12 @@ let BarChart = null
         gYAxis.call(valAxis)
       }
     }
-  
+
     tooltip() {
         const oTooltipWrap = tooltip_wrap()
         const { g } = this
         const rects = g.selectAll('.g-warp-bars rect')
-    
+
         rects
           .on('mouseenter', d => {
             oTooltipWrap.innerHTML = d
@@ -242,11 +242,11 @@ let BarChart = null
           })
       return this
     }
-  
+
     renderSplitLine() {
       const { color, lineWidth, dasharray, opacity } = this.splitLine
       const { g_splitLine, isHoriz, axisHeight, axisWidth, valScale } = this
-  
+
       const splitline = g_splitLine
         .attr('class', 'splitline')
         .attr('stroke', color || '#74706d')
@@ -255,7 +255,7 @@ let BarChart = null
         .attr('stroke-dasharray', dasharray || '5 5')
         .selectAll('line')
         .data(valScale.ticks().slice(1))
-  
+
         if (isHoriz) {
           splitline
             .enter()
@@ -277,9 +277,9 @@ let BarChart = null
               .attr('y2', valScale)
           splitline.exit().remove()
         }
-  
+
     }
-  
+
     // 初次 绘制 chart
     render({ strData, valData } = this) {
       this.renderChart({ strData, valData })
@@ -287,7 +287,7 @@ let BarChart = null
       this.renderSplitLine()
       return this
     }
-  
+
     // 更新 chart
     update({ strData, valData } = this) {
       this.render({ strData, valData })
@@ -384,7 +384,7 @@ let Heatmap = null
         .map(d => d.values)
     }
 
-    /** 
+    /**
      * 指定 x / y 的 domain
      * 计算 xTicks / yTicks
      * 注：必须在 processDataForDrawHeatmap() 后执行
@@ -856,7 +856,7 @@ class Text {
             d3.select(this).text((i(t) | 0) + valUnit)
           }
         })
-      
+
       return this
     }
 }
@@ -885,7 +885,7 @@ let Donut = null
     valDy: '0.5em',
 
     isRoundCap: true, // 是否为圆角
-    
+
     donutColor: '#e38', // 圆环颜色
     bgDonutColor: '#ccc', // 背景环的颜色
     hasBGDonut: true,
@@ -975,7 +975,7 @@ let Donut = null
         .attr('d', arcPath)
         .attr('fill', bgDonutColor)
         .attr('opacity', '0.3')
-      
+
       // actucl donut
       const rate = val / maxVal
       g.append('path')
@@ -992,6 +992,169 @@ let Donut = null
         })
 
       return this
+    }
+  }
+}
+
+
+let Treemap = null;
+{
+  const defaults = {
+    columnsCount: 3, // 设 treemap 的列数
+    color: 'steelblue', // or: ['#88e4dd', '#c4e4db', '#99b7c8'] (与 data.groups 映射)
+    gap: 4,
+    padding: {
+      top: 20,
+      left: 20,
+      right: 20,
+      bottom: 20
+    },
+
+    labelColor: '#333',
+    labelFontSize: 18,
+
+    animation: true
+  }
+  Treemap = class Treemap {
+    constructor(options) {
+      // data - template
+      // options.data: [ // groups 可与 color 映射， 设置每块的颜色
+      //     {name: 'A', val: 1, groups: 0}, {name: 'B', val: 2, groups: 1},
+      //     {name: 'C', val: 3, groups: 2}, {name: 'D', val: 4, groups: 0},
+      //     {name: 'E', val: 5, groups: 1}, {name: 'F', val: 6, groups: 2}
+      //     ],
+
+      Object.assign(this, defaults, options)
+      this._init()
+    }
+
+    _init() {
+      const { container, padding, animation } = this
+      this.svgWidth = container.clientWidth
+      this.svgHeight = container.clientHeight
+
+      this.axisWidth = this.svgWidth - padding.left - padding.right
+      this.axisHeight = this.svgHeight - padding.top - padding.bottom
+
+      this.svg = d3.select(container)
+        .append('svg')
+        .attr('width', this.svgWidth)
+        .attr('height', this.svgHeight)
+
+      this.t = d3.transition().duration(animation ? 1000 : 0)
+    }
+
+    /**
+     * 得到每行的高 & 每块的宽
+     * @returns { aEveryRowsHeight, aEveryBlockWidth }
+    */
+    width_height_blocks(data = this.data) {
+      const { gap, axisWidth, axisHeight, columnsCount } = this
+
+      const totalVal = d3.sum(data, o => o.val)
+
+      // 将 data 分组，称为 treemap 的 二维数组结构
+      const aChunkData = chunk(data, columnsCount)
+
+      // 得到每行的高
+      const aEveryRowsHeight = (chunkData => {
+        let aEveryRowsTotalVal = [] // 将每行所有的 block 的 val 相加
+        for (let rowData of chunkData) { // 将每行所有的 block 的 val 相加
+          const oneRowTotalVal = d3.sum(rowData, o => o.val)
+          aEveryRowsTotalVal.push(oneRowTotalVal)
+        }
+        return aEveryRowsTotalVal.map(d => axisHeight * d / totalVal - gap)
+      })(aChunkData)
+
+      // 得到每块的宽
+      const aEveryBlockWidth = (chunkData => {
+        const result = []
+        for (let rowData of chunkData) { // 以行为单位，遍历 aChunkData
+          const oneRowTotalVal = d3.sum(rowData, o => o.val) // 一行内的 sum(blocks.val)
+
+          // 获得一行内，每块的宽
+          const aOneRowWidth = rowData.map(d => axisWidth * d.val / oneRowTotalVal - gap)
+          result.push(aOneRowWidth)
+        }
+        return result
+      })(aChunkData)
+
+      return { aEveryRowsHeight, aEveryBlockWidth }
+    }
+
+    renderChart(data = this.data) {
+      // 绘制出每块
+      const { svg, padding, gap, color, labelColor, labelFontSize, t } = this
+      const { aEveryBlockWidth, aEveryRowsHeight } = this.width_height_blocks(data)
+
+      svg.select('g').remove()
+      const g = svg.append('g').attr('class', 'gWrap')
+        .attr('transform', `translate(${padding.left}, ${padding.top})`)
+
+      // g-wrap-blocks
+      const gRows = g.append('g').attr('class', 'g-blocks')
+
+      // 绘制 <rect>
+      let yPos = 0 // position-x
+      for (let i = 0; i < aEveryBlockWidth.length; i++) {
+        if (i > 0) {
+          yPos += aEveryRowsHeight[i - 1] + gap
+        }
+
+        // 遍历一行中的每一块
+        let xPos = 0 // position-y
+        for (let j = 0; j < aEveryBlockWidth[i].length; j++) {
+          if (j > 0) {
+            xPos += aEveryBlockWidth[i][j - 1] + gap
+          }
+
+          // draw every block
+          gRows.append('g')
+            .attr('class', 'block')
+            .attr('transform', `translate(${xPos}, ${yPos})`)
+            .append('rect')
+            .attr('width', aEveryBlockWidth[i][j])
+            .attr('height', aEveryRowsHeight[i])
+            .transition(t)
+            .attr('opacity', 1)
+        }
+      }
+
+      const gBlocks = g.select('g.g-blocks').selectAll('g.block').data(data)
+      
+      // fill color
+      gBlocks
+        .select('rect')
+        .attr('fill', d => Array.isArray(color) ? color[d['groups']] : color)
+  
+      // label
+      const g_label = gBlocks.append('g')
+        .attr('fill', () => labelColor)
+        .attr('font-size', () => labelFontSize)
+        .attr('class', 'label')
+        .attr('text-anchor', 'middle')
+        .attr('transform', function() {
+          const rectWidth = d3.select(this.parentNode).select('rect').attr('width')
+          const rectHeight = d3.select(this.parentNode).select('rect').attr('height')
+          return `translate(${rectWidth / 2}, ${rectHeight / 2})`
+        })
+      g_label
+        .append('text')
+        .text(d => d.name)
+        .attr('class', 'label-name')
+      g_label
+        .append('text')
+        .text(d => d.val)
+        .attr('dy', '1em')
+        .attr('class', 'label-value')
+    }
+
+    render(data = this.data) {
+      this.renderChart(data)
+    }
+
+    update(data = this.data) {
+      this.render(data)
     }
   }
 }
@@ -1171,7 +1334,7 @@ function drawLines(container, options) {
         .attr('fill', d => bgBar.color || '#666')
 
       let offsetXPos = 2 // 记录 tooltips 在X轴的偏移量
-        
+
       // 单例模式 - 渲染并获得 div - tooltipWarp
       const oTooltipWrap = getSingleton(initTooltipWrap)()
       gBGbars.selectAll('rect')
@@ -1186,7 +1349,7 @@ function drawLines(container, options) {
               .text(parseStamp2DayIncludeYear(d['date']))
               .attr('class', 'tooltip-date')
               .style('text-align', 'center')
-  
+
             const tooltipsRow = tooltipWrap.append('div')
               .attr('class', 'tooltip-body')
               .selectAll('div')
@@ -1196,7 +1359,7 @@ function drawLines(container, options) {
               .attr('class', 'tooltip-row')
               .style('text-align', 'left')
               .style('font-size', '14px')
-  
+
             tooltipsRow.append('span')
               .attr('class', 'tooltip-row-dot')
               .style('background', d => z(d[0]))
@@ -1205,7 +1368,7 @@ function drawLines(container, options) {
               .style('border-radius', '100%')
               .style('margin-right', '10px')
               .style('display', 'inline-block')
-  
+
             tooltipsRow.append('span')
               .attr('class', 'tooltip-row-name')
               .text(d => d[0] + ': ')
@@ -1405,152 +1568,6 @@ function drawBubbles(container, options) {
 
   } catch (e) {
     console.warn('bubble style', e)
-  }
-}
-
-// --
-function drawTreemap(container, options) {
-  container.innerHTML = '' // 清空 容器内容
-
-  const // *** 全局数据 ***
-    data = options.data,
-    blocks = options.blocks || {},
-    padding = options.padding || {
-      top: 4,
-      left: 4,
-      right: 4,
-      bottom: 4
-    },
-    svgWidth = container.offsetWidth,
-    svgHeight = container.offsetHeight,
-    axisWidth = svgWidth - padding.left - padding.right,
-    axisHeight = svgHeight - padding.top - padding.bottom,
-    totalVal = d3.sum(data, o => o.val)
-
-  const // 定义画布 & g_wrawp
-    svg = d3.select(container).append('svg')
-    .attr('width', svgWidth).attr('height', svgHeight),
-    g = svg.append('g').attr('class', 'gWrap')
-    .attr('transform', `translate(${padding.left}, ${padding.top})`)
-
-  // 定义 blocks 相关的数据
-  const
-    color = blocks.color || 'steelblue',
-    gap = blocks.gap || 1,
-    columnsCount = blocks.columns || 3, // treemap 的列数
-
-    // rowsCount = Math.ceil(data.length / blocks.columns), // treemap 的行数
-    aChunkData = chunk(data, columnsCount) // 生成绘制 treemap 的数据
-
-  try { // drawBlocks
-
-    // 得到treemap每行的高
-    const aEveryRowsHeight = (() => {
-      let aEveryRowsTotalVal = []; // 将每行所有的 block 的 val 相加
-      for (let chunkEle of aChunkData) { // 将每行所有的 block 的 val 相加
-        let rowsTotalVal = d3.sum(chunkEle, o => o.val)
-        aEveryRowsTotalVal.push(rowsTotalVal)
-      }
-      return aEveryRowsTotalVal.map(d => axisHeight * d / totalVal - gap)
-    })()
-
-    // 得到treemap每块block的宽
-    const aEveryBlockWidth = (arr => {
-      let aTempEveryBlockWidth = []
-      for (let aOneRowItems of arr) { // 以行为单位，遍历 aChunkData
-        let rowsTotalVal = d3.sum(aOneRowItems, o => o.val) // 一行内的 sum(blocks.val)
-
-        // 获得一行内，每个 block 的宽
-        let aOneRowWidth = aOneRowItems.map(d => axisWidth * d.val / rowsTotalVal - gap)
-        aTempEveryBlockWidth.push(aOneRowWidth)
-      }
-      return aTempEveryBlockWidth
-    })(aChunkData)
-
-    // g-wrap-blocks
-    let gRows = g.append('g').attr('class', 'g-blocks')
-
-    // 遍历每一行
-    let yPos = 0 // position-x
-    for (let i = 0; i < aEveryBlockWidth.length; i++) {
-      if (i > 0) {
-        yPos += aEveryRowsHeight[i - 1] + gap
-      }
-
-      // 遍历一行中的每一块
-      let xPos = 0 // position-y
-      for (let j = 0; j < aEveryBlockWidth[i].length; j++) {
-        if (j > 0) {
-          xPos += aEveryBlockWidth[i][j - 1] + gap
-        }
-
-        // draw every block
-        gRows.append('g')
-          .attr('class', 'block')
-          .attr('transform', `translate(${xPos}, ${yPos})`)
-          .append('rect')
-          .attr('width', aEveryBlockWidth[i][j])
-          .attr('height', aEveryRowsHeight[i])
-      }
-    }
-  } catch (e) {
-    console.warn('drawBlocks', e)
-  }
-
-  { // block style and label
-    const gBlocks = g.select('g.g-blocks')
-      .selectAll('g.block')
-      .data(data)
-      .attr('eventIndex', d => d.name)
-
-    // block color
-    gBlocks
-      .select('rect')
-      .attr('fill', d => Array.isArray(color) ? color[d['groups']] : color)
-
-    // block label
-    const label = blocks.label || {}
-    let labelStyle = o => {
-      o.attr('fill', () => label.color || '#333')
-        .attr('font-size', () => label.fontSize || '12')
-        .attr('text-anchor', 'middle')
-        .attr('x', function() {
-          let rectWidth = d3.select(this.parentNode).select('rect').attr('width')
-          return rectWidth / 2
-        })
-        .attr('y', function() {
-          let rectHeight = d3.select(this.parentNode).select('rect').attr('height')
-          return rectHeight / 2
-        })
-    }
-
-    let names = gBlocks.append('text').text(d => d.name)
-    labelStyle(names)
-
-    let vals = gBlocks.append('text').text(d => d.val).attr('dy', '1em')
-    labelStyle(vals)
-  }
-
-  { // tooltip
-    const oDiv = document.createElement('div')
-    oDiv.classList.add('bar-tooltip')
-    oDiv.style.cssText = 'padding:10px 15px;background:rgba(0,0,0,0.7);position:fixed;color:white;border-radius: 10px;display:none;'
-    container.appendChild(oDiv)
-    const gBlock = d3.select(container).selectAll('g.block').data(data)
-
-    gBlock
-      .on('mouseenter', d => {
-        oDiv.innerHTML = d.name + ': ' + d.val
-        oDiv.style.display = 'block' // TODO hover 至文字上， 会 display = 'none'
-      })
-      .on('mousemove', () => {
-        oDiv.style.display = 'block'
-        oDiv.style.left = d3.event.pageX - oDiv.offsetWidth / 2 + 'px'
-        oDiv.style.top = d3.event.pageY - oDiv.offsetHeight - 5 + 'px'
-      })
-      .on('mouseout', () => {
-        oDiv.style.display = 'none'
-      });
   }
 }
 
