@@ -29,7 +29,7 @@ export default {
     if (!fn) {
       fns && (fns.length = 0)
     } else {
-      for (let l = fns.length; l >= 0; l--) {
+      for (let l = fns.length - 1; l >= 0; l--) {
         const _fn = fns[l]
         if (_fn === fn) fns.splice(l, 1)
       }
