@@ -15,7 +15,7 @@ export default class Text {
     this.svgHeight = container.clientHeight - padding * 2
     this.svgWidth = container.clientWidth - padding * 2
 
-    // 当被 Donut 继承时，则不需再添加 svg 画布
+    // 当被其他类继承时，则不需在添加 SVG 画布
     if (!hasSvg) {
       this.svg = d3.select(container)
         .append('svg')
@@ -28,9 +28,9 @@ export default class Text {
   }
 
   renderVal(val = this.val) {
+    if (!val) throw new Error('未初始 val 值！')
     const { svg, svgHeight, svgWidth, t } = this
     const { valColor, valDy, valSize, valUnit } = this
-    if (!val) throw new Error('未初始 val 值！')
 
     svg.select('g.g-val').remove()
     const g = svg.append('g')
@@ -51,5 +51,7 @@ export default class Text {
           d3.select(this).text((i(t) | 0) + valUnit)
         }
       })
+    
+    return this
   }
 }

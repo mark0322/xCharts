@@ -33,10 +33,11 @@ const defaults = {
 
 export default class Donut extends Text {
   constructor(options) {
-    Object.assign(defaults, options)
-    super(defaults)
+    const _options = {}
+    Object.assign(_options, defaults, options)
+    super(_options)
 
-    Object.assign(this, defaults)
+    Object.assign(this, _options)
     this._init()
   }
 
@@ -74,9 +75,10 @@ export default class Donut extends Text {
   }
 
   renderName() {
-    const { svg, svgHeight, svgWidth, t } = this
     const { name, nameColor, nameDy, nameSize } = this
     if (!name) throw new Error('未初始 name 值！')
+
+    const { svg, svgHeight, svgWidth } = this
 
     svg.select('g.g-name').remove()
     const g = svg.append('g')
@@ -94,8 +96,8 @@ export default class Donut extends Text {
   }
 
   randerDonut({ val, maxVal } = this) {
-    const { getArcPath, svg, svgWidth, svgHeight, bgDonutColor, donutColor, t } = this
     if (!(val && maxVal)) throw new Error('未初始 val 或 maxVal 值！')
+    const { getArcPath, svg, svgWidth, svgHeight, bgDonutColor, donutColor, t } = this
 
     const arcPath = getArcPath.call(this)
 
@@ -129,5 +131,4 @@ export default class Donut extends Text {
 
     return this
   }
-
 }

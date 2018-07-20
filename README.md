@@ -1,7 +1,7 @@
 # 简介
 现阶段该库提供两项功能：
-1、charts：以 D3 为底层库，封装了常用的绘图 class          
-2、util：借鉴 lodash， 以原生 JS 封装了常用的数据处理函数
+1、charts：以 D3 为底层库，封装了 G2 或 echarts 未提供的非常规 chart。       
+2、util：借鉴 lodash， 以原生 JS 封装了常用的数据处理函数。
 
 ## 目录结构
 ```bash
