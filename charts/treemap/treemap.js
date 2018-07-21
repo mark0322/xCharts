@@ -1,7 +1,7 @@
 import { chunk } from '../../util/array'
 
 const defaults = {
-  columnsCount: 3, // 设 treemap 的列数
+  columnsCount: 3, // treemap 的列数
   color: 'steelblue', // or: ['#88e4dd', '#c4e4db', '#99b7c8'] (与 data.groups 映射)
   gap: 4,
   padding: {
@@ -51,7 +51,7 @@ export default class Treemap {
 
   /**
    * 得到每行的高 & 每块的宽
-   * @returns { aEveryRowsHeight, aEveryBlockWidth }
+   * @returns { Array, Array } -> { aEveryRowsHeight, aEveryBlockWidth }
   */
   width_height_blocks(data = this.data) {
     const { gap, axisWidth, axisHeight, columnsCount } = this
@@ -78,8 +78,8 @@ export default class Treemap {
         const oneRowTotalVal = d3.sum(rowData, o => o.val) // 一行内的 sum(blocks.val)
 
         // 获得一行内，每块的宽
-        const aOneRowWidth = rowData.map(d => axisWidth * d.val / oneRowTotalVal - gap)
-        result.push(aOneRowWidth)
+        const aBlocksWidth = rowData.map(d => axisWidth * d.val / oneRowTotalVal - gap)
+        result.push(aBlocksWidth)
       }
       return result
     })(aChunkData)
