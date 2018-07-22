@@ -1,11 +1,10 @@
 # 简介
 现阶段该库提供两项功能：
 1、charts：以 D3 为底层库，封装了 G2 或 echarts 未提供的非常规 chart。       
-2、util：借鉴 lodash， 以原生 JS 封装了常用的数据处理函数。
+2、util：借鉴 lodash， 封装了常用的数据处理函数。
 
 ## 目录结构
 ```bash
-├── /chart_modules/      # 各 chart 所用的公共元素，计划抽离至此，以共用 (如 splitline/tooltip 等)
 ├── /charts/             # chart 绘图函数与demo.html 
 ├── /util/               # 处理处理函数包
 ```
@@ -14,7 +13,7 @@
 绘图方式，以 bar 为例：
 ```bash
 // 设置配置项， 以设置所绘制chart的细节，
-// 可配置的信息与 BarChart.js 中 defaults 变量内容一致。
+// 注：可配置的信息与 BarChart.js 中 defaults 一致。
 const options = {
   container: document.querySelector('#container'),
   strData: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
@@ -24,7 +23,7 @@ const options = {
   }
 }
 
-// new 绘图对象 drawBarChart
+// 实例化绘图对象
 const drawBarChart = new BarChart(options)
 
 drawBarChart
