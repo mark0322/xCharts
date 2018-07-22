@@ -180,7 +180,7 @@ function drawLines(container, options) {
       let offsetXPos = 2 // 记录 tooltips 在X轴的偏移量
         
       // 单例模式 - 渲染并获得 div - tooltipWarp
-      const oTooltipWrap = singletonInitTooltipWrap()
+      const oTooltipWrap = tooltip_wrap()
       gBGbars.selectAll('rect')
         .data(options.aHoverData)
         .on('mouseenter', d => {
