@@ -16,7 +16,7 @@
 
 <script src="../__gather__/d3.js"></script>
 <script>
-const log = (...d) => console.log(...d)
+const log = console.log
 const options = {
     max_n: 10,
     container: null,
@@ -24,6 +24,7 @@ const options = {
     shine_num: 1
 }
 options.container = document.querySelector('#box');
+
 function drawShineSquare(options) {
     const max_n = options.max_n || 10;
     const container = options.container;

@@ -5,7 +5,7 @@
  * @return {Function} 指定了可执行次数的函数
  * 
  * @example
- * const show = n => console.log(n)
+ * const show = console.log
  * let fn = workFixTime(show, 2)
  * fn('aaa') -> 'aaa'
  * fn('bbb') -> 'bbb'

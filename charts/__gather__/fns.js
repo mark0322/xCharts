@@ -274,7 +274,7 @@ function parseStamp2DayIncludeYear(d) {
   day < 10 && (day = '0' + day)
   return year + '-' + month + '-' + day
 }
-const log = (...d) => console.log(...d)
+const log = console.log
 
 
 
