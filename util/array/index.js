@@ -1,5 +1,4 @@
 import chunk from './chunk'
-import compactArray from './compactArray'
 import countOccurrences from './countOccurrences'
 import deepFlatten from './deepFlatten'
 import difference from './difference'
@@ -14,7 +13,6 @@ import zip from './zip'
 
 export {
   chunk,
-  compactArray,
   countOccurrences,
   deepFlatten,
   difference,

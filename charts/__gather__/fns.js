@@ -7,18 +7,6 @@
     return result
   }
 
-  function compactArray(arr, callback = d => d) {
-    const is = Object.is
-    arr = arr.reduce((a, b) => {
-      b = callback(b)
-      const isPassVal = !(is(b, undefined) || is(b, null) || is(b, NaN) || is(b, ''))
-      isPassVal && a.push(b)
-      return a
-    }, [])
-    if (arr.length == 0) throw new Error('输入参数有误！')
-    return arr
-  }
-
   function countOccurrences(arr, val) {
     return arr.reduce((a, b) => {
       return b === val ? a + 1 : a
