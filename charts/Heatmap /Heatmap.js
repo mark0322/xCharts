@@ -88,19 +88,27 @@ export default class Heatmap {
       .map(d => d.values)
   }
 
-  /** 
+  /**
    * 指定 x / y 的 domain
    * 计算 xTicks / yTicks
    * 注：必须在 processDataForDrawHeatmap() 后执行
    */
   processScale() {
-    const xTicks = this.data_heatmap[0].map(d => d.x_category)
-    const yTicks = this.data_heatmap.map(d => d[0].y_category)
-
+    const { xTicks, yTicks } = this.getTicksList(this.data_heatmap);
     const { x, y } = this
     x.domain(xTicks)
     y.domain(yTicks)
     return { x, y, xTicks, yTicks }
+  }
+
+  getTicksList(total_list) {
+    let temp_list = []
+    for (let item of total_list) {
+      temp_list = temp_list.concat(item)
+    }
+    const xTicks = [...new Set(temp_list.map(d => d.x_category))]
+    const yTicks = [...new Set(temp_list.map(d => d.y_category))]
+    return { xTicks, yTicks }
   }
 
   renderAxis() {
@@ -138,50 +146,49 @@ export default class Heatmap {
   renderHeatmap(data = this.data) {
     const { axisWidth, axisHeight, data_heatmap, gap } = this
     const { t, labelFontSize, labelColor } = this
+    const { x, y, xTicks, yTicks } = this.processScale()
 
     this.g_heatmap_wrap.select('g').remove() // update 时，清空之前的 chart
     const g_heatmap_wrap = this.g_heatmap_wrap.append('g')
 
     // 获取 data 中，max(count)
     const maxVal = d3.max(flatten(data), d => Number(d.count))
+    const blockHeight = axisHeight / yTicks.length - gap;
+    const blockWidth = axisWidth / xTicks.length - gap;
+    const blockDatas = data_heatmap.reduce((a, v) => {
+        a = a.concat(v)
+        return a
+    }, [])
 
-    const blockHeight = axisHeight / data_heatmap.length - gap
-    const blockWidth = axisWidth / data_heatmap[0].length - gap
-    for (let i = 0, l = data_heatmap.length; i < l; i++) {
-      const g_row = g_heatmap_wrap.append('g').attr('class', 'g-row')
-      const g_block = g_row
-        .selectAll('g')
-        .data(data_heatmap[i])
-        .enter()
-        .append('g')
-        .attr('class', 'g-block')
-        .attr('transform', (d, j) => {
-            return `translate(
-                ${(blockWidth + gap) * j},
-                ${(blockHeight + gap) * i}
-            )`;
-        })
+    // block
+    g_heatmap_wrap
+      .selectAll('rect')
+      .data(blockDatas)
+      .enter()
+      .append('rect')
+      .attr('x', d => x(d.x_category))
+      .attr('y', d => y(d.y_category))
+      .transition(t)
+      .attr('width', blockWidth)
+      .attr('height', blockHeight)
+      .attr('fill', d => this.interpolateColor(d.count / maxVal))
 
-      // draw block
-      g_block
-        .append('rect')
-        .transition(t)
-        .attr('height', blockHeight)
-        .attr('width', blockWidth)
-        .attr('fill', d => this.interpolateColor(d.count / maxVal))
-
-      // draw label
-      g_block
-        .append('text')
-        .transition(t)
-        .attr('x', blockWidth / 2)
-        .attr('y', blockHeight / 2)
-        .attr('dy', '0.5em')
-        .attr('text-anchor', 'middle')
-        .text(d => d.count)
-        .attr('fill', labelColor)
-        .attr('font-size', labelFontSize)
-    }
+    // label
+    g_heatmap_wrap
+      .selectAll('text')
+      .data(blockDatas)
+      .enter()
+      .append('text')
+      .attr('dy', '0.5em')
+      .attr('text-anchor', 'middle')
+      .attr('x', d => x(d.x_category) + blockWidth / 2)
+      .attr('y', d => y(d.y_category) + blockHeight / 2)
+      .text(d => d.count)
+      .attr('fill', labelColor)
+      .attr('opacity', 0)
+      .transition(t)
+      .attr('opacity', 1)
+      .attr('font-size', labelFontSize)
   }
 
   renderTopSideBar(data = this.data) {
@@ -321,7 +328,6 @@ export default class Heatmap {
 
   render(data = this.data) {
     this.processDataForDrawHeatmap(data)
-    this.processScale()
     this.renderHeatmap(data)
     this.renderAxis()
 

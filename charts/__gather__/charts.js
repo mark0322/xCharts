@@ -334,19 +334,19 @@ let Heatmap = null
      */
     constructor(options) {
       Object.assign(this, defaults, options)
-
+  
       this._init()
     }
-
+  
     // 初始化：全局属性和方法
     _init() {
       const { container, padding, colorRange, animation } = this
-
+  
       this.svgWidth = container.clientWidth
       this.svgHeight = container.clientHeight
       this.axisWidth = this.svgWidth - padding.left - padding.right
       this.axisHeight = this.svgHeight - padding.top - padding.bottom
-
+  
       this.svg = d3
           .select(container)
           .append('svg')
@@ -356,20 +356,20 @@ let Heatmap = null
           .append('g')
           .attr('class', 'g_wrap')
           .attr('transform', `translate(${padding.left}, ${padding.top})`)
-
+  
       this.interpolateColor = d3.interpolate(...colorRange)
-
+  
       this.x = d3.scaleBand().range([0, this.axisWidth])
       this.y = d3.scaleBand().range([0, this.axisHeight])
-
+  
       this.t = d3.transition().duration(animation ? 1000 : 0)
-
+  
       this.g_axis = this.g.append('g').attr('class', 'g-warp-axis')
       this.g_heatmap_wrap = this.g.append('g').attr('class', 'g-warp-heatmap')
       this.g_topSideBar_wrap = this.g.append('g').attr('class', 'g-warp-topsidebar')
       this.g_rightSideBar_wrap = this.g.append('g').attr('class', 'g-warp-rightsidebar')
     }
-
+  
     /**
      * @private
      * 对 y_category 进行 groupby,
@@ -383,31 +383,39 @@ let Heatmap = null
         .entries(data)
         .map(d => d.values)
     }
-
+  
     /**
      * 指定 x / y 的 domain
      * 计算 xTicks / yTicks
      * 注：必须在 processDataForDrawHeatmap() 后执行
      */
     processScale() {
-      const xTicks = this.data_heatmap[0].map(d => d.x_category)
-      const yTicks = this.data_heatmap.map(d => d[0].y_category)
-
+      const { xTicks, yTicks } = this.getTicksList(this.data_heatmap);
       const { x, y } = this
       x.domain(xTicks)
       y.domain(yTicks)
       return { x, y, xTicks, yTicks }
     }
-
+  
+    getTicksList(total_list) {
+      let temp_list = []
+      for (let item of total_list) {
+        temp_list = temp_list.concat(item)
+      }
+      const xTicks = [...new Set(temp_list.map(d => d.x_category))]
+      const yTicks = [...new Set(temp_list.map(d => d.y_category))]
+      return { xTicks, yTicks }
+    }
+  
     renderAxis() {
       const { g_axis, axisHeight, x, y, tickColor, tickSize, t } = this
-
+  
       g_axis.selectAll('g').remove() // update 时，清空之前的 axis
-
+  
       // define axis
       const xAxis = d3.axisBottom(x)
       const yAxis = d3.axisLeft(y)
-
+  
       // draw axia
       g_axis
         .append('g')
@@ -420,7 +428,7 @@ let Heatmap = null
         .attr('class', 'axis yAxis')
         .transition(t)
         .call(yAxis)
-
+  
       // axis style
       g_axis.selectAll('g.axis path').remove()
       g_axis.selectAll('g.axis g.tick line').remove()
@@ -430,60 +438,59 @@ let Heatmap = null
         .attr('font-size', tickSize)
       g_axis.selectAll('g.yAxis-scaleBand g.tick text').attr('dx', '5')
     }
-
+  
     renderHeatmap(data = this.data) {
       const { axisWidth, axisHeight, data_heatmap, gap } = this
       const { t, labelFontSize, labelColor } = this
-
+      const { x, y, xTicks, yTicks } = this.processScale()
+  
       this.g_heatmap_wrap.select('g').remove() // update 时，清空之前的 chart
       const g_heatmap_wrap = this.g_heatmap_wrap.append('g')
-
+  
       // 获取 data 中，max(count)
       const maxVal = d3.max(flatten(data), d => Number(d.count))
-
-      const blockHeight = axisHeight / data_heatmap.length - gap
-      const blockWidth = axisWidth / data_heatmap[0].length - gap
-      for (let i = 0, l = data_heatmap.length; i < l; i++) {
-        const g_row = g_heatmap_wrap.append('g').attr('class', 'g-row')
-        const g_block = g_row
-          .selectAll('g')
-          .data(data_heatmap[i])
-          .enter()
-          .append('g')
-          .attr('class', 'g-block')
-          .attr('transform', (d, j) => {
-              return `translate(
-                  ${(blockWidth + gap) * j},
-                  ${(blockHeight + gap) * i}
-              )`;
-          })
-
-        // draw block
-        g_block
-          .append('rect')
-          .transition(t)
-          .attr('height', blockHeight)
-          .attr('width', blockWidth)
-          .attr('fill', d => this.interpolateColor(d.count / maxVal))
-
-        // draw label
-        g_block
-          .append('text')
-          .transition(t)
-          .attr('x', blockWidth / 2)
-          .attr('y', blockHeight / 2)
-          .attr('dy', '0.5em')
-          .attr('text-anchor', 'middle')
-          .text(d => d.count)
-          .attr('fill', labelColor)
-          .attr('font-size', labelFontSize)
-      }
+      const blockHeight = axisHeight / yTicks.length - gap;
+      const blockWidth = axisWidth / xTicks.length - gap;
+      const blockDatas = data_heatmap.reduce((a, v) => {
+          a = a.concat(v)
+          return a
+      }, [])
+  
+      // block
+      g_heatmap_wrap
+        .selectAll('rect')
+        .data(blockDatas)
+        .enter()
+        .append('rect')
+        .attr('x', d => x(d.x_category))
+        .attr('y', d => y(d.y_category))
+        .transition(t)
+        .attr('width', blockWidth)
+        .attr('height', blockHeight)
+        .attr('fill', d => this.interpolateColor(d.count / maxVal))
+  
+      // label
+      g_heatmap_wrap
+        .selectAll('text')
+        .data(blockDatas)
+        .enter()
+        .append('text')
+        .attr('dy', '0.5em')
+        .attr('text-anchor', 'middle')
+        .attr('x', d => x(d.x_category) + blockWidth / 2)
+        .attr('y', d => y(d.y_category) + blockHeight / 2)
+        .text(d => d.count)
+        .attr('fill', labelColor)
+        .attr('opacity', 0)
+        .transition(t)
+        .attr('opacity', 1)
+        .attr('font-size', labelFontSize)
     }
-
+  
     renderTopSideBar(data = this.data) {
       const { padding, x, g_topSideBar_wrap, gap } = this
       const { barColor, labelColor, labelFontSize, t } = this
-
+  
       /**
        * 获得 top side bar chart的数据
        * @return {Array}
@@ -504,16 +511,16 @@ let Heatmap = null
             })
             return a
         }, [])
-
+  
       const max_count_category = d3.max(data_topSide_bar, d => d.count)
       const min_count_category = d3.min(data_topSide_bar, d => d.count)
-
+  
       const y_scaleLinear_topSide = d3.scaleLinear()
         .domain([min_count_category * 0.7, max_count_category * 1.05])
         .range([0, padding.top])
-
+  
       g_topSideBar_wrap.select('g').remove() // update 时，清空之前的内容
-
+  
       // draw top side barChart
       const bar_wrap = g_topSideBar_wrap
         .append('g')
@@ -527,7 +534,7 @@ let Heatmap = null
             return `translate(${x(d.x_category)}, ${padding.top -
                 y_scaleLinear_topSide(d.count)})`
         })
-
+  
       bar_wrap
         .append('rect')
         .transition(t)
@@ -544,11 +551,11 @@ let Heatmap = null
         .transition(t)
         .attr('x', x.bandwidth() / 2)
     }
-
+  
     renderRightSideBar(data = this.data) {
       const { padding, y, g_rightSideBar_wrap, gap, axisWidth } = this
       const { barColor, labelColor, labelFontSize, t } = this
-
+  
       /**
        *  右侧 bar chart的数据
        * @return {Array}
@@ -572,13 +579,13 @@ let Heatmap = null
         }, [])
       const max_count_BU = d3.max(data_rightSide_bar, d => d.count)
       const min_count_BU = d3.min(data_rightSide_bar, d => d.count)
-
+  
       const x_scaleLinear_rightSide = d3.scaleLinear()
         .domain([min_count_BU * 0.6, max_count_BU * 1.05])
         .range([0, padding.right])
-
+  
       g_rightSideBar_wrap.select('g').remove() // update 时，清空之前的内容
-
+  
       // draw right side barChart
       const bar_wrap = g_rightSideBar_wrap
         .append('g')
@@ -590,7 +597,7 @@ let Heatmap = null
         .append('g')
         .attr('class', 'g-rightSide-singleBar')
         .attr('transform', d => `translate(0, ${y(d.y_category)})`)
-
+  
       bar_wrap
         .append('rect')
         .attr('fill', barColor)
@@ -608,22 +615,21 @@ let Heatmap = null
         .transition(t)
         .attr('x', d => x_scaleLinear_rightSide(d.count) - 4)
     }
-
+  
     renderSideBar(data = this.data) {
       this.isRenderSideBar = true
       this.renderTopSideBar(data)
       this.renderRightSideBar(data)
     }
-
+  
     render(data = this.data) {
       this.processDataForDrawHeatmap(data)
-      this.processScale()
       this.renderHeatmap(data)
       this.renderAxis()
-
+  
       return this
     }
-
+  
     update(data) {
       if (!data) throw new Error('update()中需包含新数据！')
       if (this.isRenderSideBar) {
