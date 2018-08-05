@@ -2,7 +2,6 @@ import round from './round'
 
 /** 
  * 有三种模式，为数字加上单位 (
- * 注：数字长度上限单位为 千亿 (超过12位数字，无法添加单位)，
  * 
  * 模式1: 万 / 亿    
  * eg: format('chinese', 2)(21312) -> '2.13万'
@@ -43,17 +42,17 @@ function format(language = 'chinese', ndigits = 1) {
         step = 0
 
       if (likeEnglish) {
-        units = ['', '千', '百万', '十亿']
+        units = ['', '千', '百万', '十亿', '十兆']
         step = 3
       } else {
-        units = ['', '万', '亿']
+        units = ['', '万', '亿', '兆']
         step = 4
       }
       return processVal(val, step, units)
     },
     english(val) {
-      //K 千， M 百万， B 十亿
-      const units = ['', 'K', 'M', 'B']
+      //K 千， M 百万， G 十亿, T 十兆
+      const units = ['', 'K', 'M', 'B', 'T']
       const step = 3
       return processVal(val, step, units)
     }

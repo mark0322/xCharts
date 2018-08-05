@@ -253,17 +253,17 @@
           step = 0
   
         if (likeEnglish) {
-          units = ['', '千', '百万', '十亿']
+          units = ['', '千', '百万', '十亿', '十兆']
           step = 3
         } else {
-          units = ['', '万', '亿']
+          units = ['', '万', '亿', '兆']
           step = 4
         }
         return processVal(val, step, units)
       },
       english(val) {
-        //K 千， M 百万， B 十亿
-        const units = ['', 'K', 'M', 'B']
+        //K 千， M 百万， G 十亿, T 十兆
+        const units = ['', 'K', 'M', 'B', 'T']
         const step = 3
         return processVal(val, step, units)
       }
