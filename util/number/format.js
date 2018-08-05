@@ -13,7 +13,7 @@ import round from './round'
  * eg: format('english', 2)(21312) -> '21.31K'
  */
 function format(language = 'chinese', ndigits = 1) {
-  const processVal = (val, step, units) => {
+  const processVal = (val, units, step = 3) => {
     if (typeof val !== 'number') {
       throw new Error('val 必须是数字！')
     }
@@ -39,22 +39,20 @@ function format(language = 'chinese', ndigits = 1) {
   const funcs = {
     chinese(val, likeEnglish) {
       let units = [],
-        step = 0
+        step = 3
 
       if (likeEnglish) {
         units = ['', '千', '百万', '十亿', '十兆']
-        step = 3
       } else {
         units = ['', '万', '亿', '兆']
         step = 4
       }
-      return processVal(val, step, units)
+      return processVal(val, units, step)
     },
     english(val) {
       //K 千， M 百万， G 十亿, T 十兆
-      const units = ['', 'K', 'M', 'B', 'T']
-      const step = 3
-      return processVal(val, step, units)
+      const units = ['', 'K', 'M', 'G', 'T']
+      return processVal(val, units)
     }
   }
 
