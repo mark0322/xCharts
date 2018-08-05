@@ -222,6 +222,55 @@
   function round(num, ndigits = 0) {
     return Math.round(num * 10 ** ndigits) / (10 ** ndigits)
   }
+
+  function format(language = 'chinese', ndigits = 1) {
+    const processVal = (val, step, units) => {
+      if (typeof val !== 'number') {
+        throw new Error('val 必须是数字！')
+      }
+  
+      let result = round(val, ndigits)
+  
+      // 分别获取 整数部分 ； 小数部分
+      const [val_integer, val_decimal] = String(val).split('.')
+  
+      const len = val_integer.length,
+        unitsIndex = (len - 1) / step | 0,
+        unit = units[unitsIndex]
+  
+      if (unit) {
+        const tempResult = val_integer / (10 ** (step * unitsIndex))
+  
+        result = round(tempResult, ndigits) + unit
+      }
+  
+      return result
+    }
+  
+    const funcs = {
+      chinese(val, likeEnglish) {
+        let units = [],
+          step = 0
+  
+        if (likeEnglish) {
+          units = ['', '千', '百万', '十亿']
+          step = 3
+        } else {
+          units = ['', '万', '亿']
+          step = 4
+        }
+        return processVal(val, step, units)
+      },
+      english(val) {
+        //K 千， M 百万， B 十亿
+        const units = ['', 'K', 'M', 'B']
+        const step = 3
+        return processVal(val, step, units)
+      }
+    }
+  
+    return funcs[language]
+  }
 }
 
 { // *** string ***

@@ -91,7 +91,6 @@ export default class Heatmap {
   /**
    * 指定 x / y 的 domain
    * 计算 xTicks / yTicks
-   * 注：必须在 processDataForDrawHeatmap() 后执行
    */
   processScale() {
     const { xTicks, yTicks } = this.getTicksList(this.data_heatmap);
