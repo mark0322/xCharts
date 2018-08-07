@@ -1,8 +1,8 @@
 /** 
  * 责任链模式
 */
-Function.prototype.after = function (fn) {
-  // _self 指向调用 .after() 的函数本身
+Function.prototype.after_ChainOfResponsibility = function (fn) {
+  // _self 指向调用 .after_ChainOfResponsibility() 的函数本身
   const _self = this
 
   return (...args) => {
@@ -43,6 +43,8 @@ function orderNormal(orderType, pay, stack) {
   }
 }
 
-const order = order500.after(order200).after(orderNormal)
+const order = order500.after_ChainOfResponsibility(order200).after_ChainOfResponsibility(orderNormal)
 order(1, true, 200) // -> 获得100元优惠券
 order(2, true, 200) // -> 获得50元优惠券
+order(3, false, 200) // -> 正常购买
+order(3, false, 0) // -> 无库存
