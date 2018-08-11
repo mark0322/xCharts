@@ -7,12 +7,6 @@
     return result
   }
 
-  function countOccurrences(arr, val) {
-    return arr.reduce((a, b) => {
-      return b === val ? a + 1 : a
-    }, 0)
-  }
-
   function difference(arr1, arr2) {
     let s1 = new Set(arr1),
       s2 = new Set(arr2)
@@ -47,20 +41,6 @@
     arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))
   }
 
-  function range(start, stop, step = 1) {
-    (arguments.length == 1) && (stop = start, start = 0)
-  
-    let i = -1,
-      n = Math.max(0, Math.ceil((stop - start) / step)),
-      range = new Array(n)
-  
-    while (++i < n) {
-      range[i] = start + step * i
-    }
-  
-    return range
-  }
-
   function sample(arr, sampleSize = 1) {
     if (sampleSize === 1) {
       return arr[random(0, arr.length, true)]
@@ -77,10 +57,6 @@
       result.push(...inputArr.splice(i, 1))
     }
     return result
-  }
-
-  function union(arr1, arr2) {
-    return [...new Set([...arr1, ...arr2])]
   }
 
   function zip(...args) {
