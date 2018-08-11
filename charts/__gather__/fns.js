@@ -272,19 +272,39 @@
 }
 
 { // *** string ***
-  function appendSeparator(tar, separator, step, isReverse) {
-    let aStr = isReverse
-          ? String(tar).split('').reverse()
-          : String(tar).split(''),
-      aTemp = []
-    for (let i = 0, l = aStr.length; i < l;) {
-      aTemp.push(...aStr.slice(i, i += step))
+  function appendSeparator(val, separator = ',', step = 3, reverse = true) {
+    let sVal = String(val)
+  
+    let numSign = '' // 数字的 负数符号
+    let numDecimalPart = '' // 数字的 小数位
+    if (typeof val === 'number') {
+      if (val < 0) { // 判断为负数
+        numSign = '-'
+        sVal = sVal.split('-')[1]
+      }
+  
+      if (sVal.split('.')[1]) { // 判断为小数
+        numDecimalPart = `.${sVal.split('.')[1]}`
+        sVal = sVal.split('.')[0]
+      }
+    }
+  
+    let aVal = reverse
+      ? sVal.split('').reverse()
+      : sVal.split('')
+  
+    let aTemp = []
+    for (let i = 0, l = aVal.length; i < l;) {
+      aTemp.push(...aVal.slice(i, (i += step)))
       aTemp.push(separator)
     }
     aTemp.pop()
-    return isReverse
+  
+    let tempResult = reverse
       ? aTemp.reverse().join('')
       : aTemp.join('')
+  
+    return numSign + tempResult + numDecimalPart
   }
   
   function trim(s) {
