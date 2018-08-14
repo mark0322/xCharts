@@ -124,13 +124,15 @@
     return [Math.min(...array), Math.max(...array)]
   }
 
-  function getLastElementForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
-    let result = {}
-    for (let attr of targetAttrs) {
+  function getLastElementForAttrs(obj = {}, attrs = Object.keys(obj)) {
+    const result = {}
+  
+    for (let attr of attrs) {
       if (Array.isArray(obj[attr])) {
         result[attr] = obj[attr].slice(-1)[0]
       }
     }
+  
     return result
   }
 

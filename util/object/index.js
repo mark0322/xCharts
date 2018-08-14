@@ -2,7 +2,7 @@ import changeAttrName from './changeAttrName'
 import deepClone from './deepClone'
 import each from './each'
 import extentForAttrs from './extentForAttrs'
-import getLastElementForArrsOfObj from './getLastElementForArrsOfObj'
+import getLastElementForAttrs from './getLastElementForAttrs'
 import getNoUndefined_proxy from './getNoUndefined_proxy'
 import isEqual from './isEqual'
 
@@ -11,7 +11,7 @@ export {
   deepClone,
   each,
   extentForAttrs,
-  getLastElementForArrsOfObj,
+  getLastElementForAttrs,
   getNoUndefined_proxy,
   isEqual,
 }

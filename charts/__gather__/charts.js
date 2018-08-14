@@ -1220,7 +1220,7 @@ function drawLines(container, options) {
     const label = lines.label || {}
 
     // linesName的数据：拿到 data.val 下每条线数组的最后一个元素
-    const xTextVal = getLastElementForArrsOfObj(data.val)
+    const xTextVal = getLastElementForAttrs(data.val)
     for (let item of linesName) { // draw lines
       gWrapLines
         .append('path')

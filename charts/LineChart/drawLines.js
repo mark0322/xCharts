@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import zip from '../../util/array/zip'
 import extentForAttrs from '../../util/object/extentForAttrs'
-import getLastElementForArrsOfObj from '../../util/object/getLastElementForArrsOfObj'
+import getLastElementForAttrs from '../../util/object/getLastElementForAttrs'
 import singletonInitTooltipWrap from '../../chart_modules/tooltip/singletonInitTooltipWrap'
 
 function drawLines(container, options) {
@@ -59,7 +59,7 @@ function drawLines(container, options) {
     const label = lines.label || {}
 
     // linesName的数据：拿到 data.val 下每条线数组的最后一个元素
-    const xTextVal = getLastElementForArrsOfObj(data.val)
+    const xTextVal = getLastElementForAttrs(data.val)
     for (let item of linesName) { // draw lines
       gWrapLines
         .append('path')
