@@ -37,10 +37,6 @@
     return arr.map(d => d / sum * matchVal)
   }
 
-  function mutateAttrNameForObjOfArray(arr, aMatchAttr) {
-    arr.forEach(d => mutateAttrNameForObj(d, aMatchAttr))
-  }
-
   function sample(arr, sampleSize = 1) {
     if (sampleSize === 1) {
       return arr[random(0, arr.length, true)]
@@ -73,6 +69,24 @@
 }
 
 { // *** object ***
+  function changeAttrName(obj = {}, aMatchAttr) {
+    const result = deepClone(obj)
+    const m = new Map(aMatchAttr)
+  
+    for (let attr of Object.keys(result)) {
+      if (m.has(attr)) {
+  
+        // 新属性名
+        result[m.get(attr)] = result[attr]
+  
+        // 删除原属性名
+        delete result[attr]
+      }
+    }
+  
+    return result
+  }
+
   function deepClone(obj) {
     const result = {}
     for (let key of Object.keys(obj)) {
@@ -135,15 +149,6 @@
     return true
   }
 
-  function mutateAttrNameForObj(obj, aMatchAttr) {
-    let m = new Map(aMatchAttr)
-    for (let attr of Object.keys(obj)) {
-      if (m.has(attr)) {
-        obj[m.get(attr)] = obj[attr]
-        delete obj[attr]
-      }
-    }
-  }
 }
 
 { // *** function ***
