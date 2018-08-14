@@ -92,6 +92,24 @@
     }
   }
 
+  function extentForAttrs(obj, targetAttrs = Object.keys(obj)) {
+    let array = [] 
+  
+    for (let attr of targetAttrs) {
+      if (Array.isArray(obj[attr])) {
+        array.push(...deepFlatten(obj[attr]))
+      }
+      if (typeof obj[attr] === 'number') {
+       array.push(obj[attr])
+      }
+    }
+  
+    // 过滤非数字
+    array = array.filter(d => typeof d === 'number')
+  
+    return [Math.min(...array), Math.max(...array)]
+  }
+
   function getLastElementForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
     let result = {}
     for (let attr of targetAttrs) {
@@ -100,26 +118,6 @@
       }
     }
     return result
-  }
-
-  function getMaxForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
-    let tempArr = []
-    for (let attr of targetAttrs) {
-      if (Array.isArray(obj[attr])) {
-        tempArr.push(...deepFlatten(obj[attr]))
-      }
-    }
-    return Math.max(...tempArr)
-  }
-
-  function getMinForArrsOfObj(obj, targetAttrs = Object.keys(obj)) {
-    let tempArr = []
-    for (let attr of targetAttrs) {
-      if (Array.isArray(obj[attr])) {
-        tempArr.push(...deepFlatten(obj[attr]))
-      }
-    }
-    return Math.min(...tempArr)
   }
 
   function isEqual(obj1, obj2) {

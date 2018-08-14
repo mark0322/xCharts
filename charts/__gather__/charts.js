@@ -1184,7 +1184,7 @@ function drawLines(container, options) {
     axisWidth = svgWidth - padding.left - padding.right,
     axisHeight = svgHeight - padding.top - padding.bottom,
     linesName = Object.keys(data.val), // 获得每条 lien 的 name
-    maxVal = getMaxForArrsOfObj(data.val), // 获得val最大值
+    maxVal = extentForAttrs(data.val)[1],  // 获得val最大值
     aDateForXAxis = data.date.map(d => parseStamp2Day(d)) // 将 x 轴 时间戳转为 可读时间
 
   const // 定义画布 & g_wrawp
