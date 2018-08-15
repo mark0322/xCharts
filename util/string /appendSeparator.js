@@ -1,10 +1,10 @@
 /**
  * 以指定步长，为字符串添加分隔符
- * @param {String || Number} tar 指定需被分割的数字或字符串
- * @param {String} separator 分隔符
- * @param {Number} step 步长
- * @param {Boolean} isReverse 判断是从左或右开始计算 step
- * @return {String} 加入分隔符后的字符串
+ * @param {String || Number} val 指定需被分割的数字或字符串
+ * @param {String} [separator = ','] 分隔符
+ * @param {Number} [step = 3] 步长
+ * @param {Boolean} [reverse = true] 判断是从左或右开始计算 step
+ * @return {String}
  * 
  * 注： 默认为数字加千分位分隔符
  * eg: appendSeparator(-123456789.3333) -> "-123,456,789.3333"
