@@ -1,7 +1,7 @@
 import deepFlatten from '../array/deepFlatten'
 
 /**
- * 获得对象中的 extent: [最小值, 最大值] 
+ * 获得对象所有属性中 数值的 [最小值, 最大值] （即extent）
  * 注：只能获得一层对象的 extent，深层对象无法处理
  *
  * @param {Object} obj
@@ -15,7 +15,7 @@ import deepFlatten from '../array/deepFlatten'
  *        'VOP': [84,2,12,69,92,17, [1000, 1]],
  *        'x': 'sss',
  *        'y': true,
-     'z': -30
+ *        'z': -30
  *     }
  * eg: extentForAttrs(val) -> [-30, 1000]
  *

@@ -1,8 +1,15 @@
 import * as d3 from 'd3'
 
+const defaults = {
+  valColor: '#999', 
+  valDy: '0.5em',
+  valSize: 28, 
+  valUnit: ''
+}
+
 export default class Text {
   constructor(options) {
-    Object.assign(this, options)
+    Object.assign(this, defaults, options)
     this.init()
   }
 
@@ -14,7 +21,6 @@ export default class Text {
 
     this.svgHeight = container.clientHeight - padding * 2
     this.svgWidth = container.clientWidth - padding * 2
-
     // 当被其他类继承时，则不需在添加 SVG 画布
     if (!hasSvg) {
       this.svg = d3.select(container)
@@ -38,9 +44,9 @@ export default class Text {
       .attr('class', 'g-val')
 
     g.append('text')
-      .attr('fill', valColor || '#fff')
-      .attr('font-size', valSize || 64)
-      .attr('dy', valDy || '0.5em')
+      .attr('fill', valColor)
+      .attr('font-size', valSize)
+      .attr('dy', valDy)
       .attr('text-anchor', 'middle')
       .transition(t)
       .text(val)
@@ -51,7 +57,7 @@ export default class Text {
           d3.select(this).text((i(t) | 0) + valUnit)
         }
       })
-    
+
     return this
   }
 }
