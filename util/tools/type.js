@@ -16,12 +16,10 @@ const type = {
    * @return {String} 该变量类型的名字
    * 
    * type.name(123) -> 'number'
-   * type.name(NaN) -> 'number'
-   * type.name(Infinity) -> 'number'
-   * 
    * type.name(true) -> 'boolean'
    * type.name('123') -> 'string'
    * type.name([]) -> 'array'
+   * type.name(() => console.log(12)) -> 'function'
    * type.name({}) -> 'object'
    * type.name(Symbol('test')) -> 'Symbol('test')'
    * type.name(null) -> 'null'
@@ -42,9 +40,6 @@ const type = {
   * 注：NaN / Infinity 为 Number 类型
   *
   * type.isNumber(123) -> true
-  * type.isNumber(NaN) -> true
-  * type.isNumber(Infinity) -> true
-  * 
   * type.isBoolean(true) -> true
   * type.isString('123') -> true
   * type.isArray([]) -> true
@@ -61,6 +56,3 @@ for (const item of typeList) {
 }
 
 export default type
-
-
-
