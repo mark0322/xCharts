@@ -4,6 +4,6 @@
  */
 function getDistance(x1, y1, x2 = 0, y2 = 0) {
 	const w = x1 - x2;
-	const y = y1 - y2;
-	return Math.sqrt(w ** 2 + y ** 2);
+	const h = y1 - y2;
+	return Math.sqrt(w ** 2 + h ** 2);
 }
