@@ -4,12 +4,14 @@
  * -> ["123", "456", "789", "0ab", "cde"]
  */
 
-function splitString(str, step, result=[]) {
+function splitString(str, step=Infinity, result=[]) {
+
 	result.push(str.slice(0, step));
-	str = str.slice(step);
+	str = str.slice(step);	
+
 	if (str.length > step) {
 		result = splitString(str, step, result);
-	} else {
+	} else if (str.length !== 0) {
 		result.push(str);
 	}
 	return result;
