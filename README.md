@@ -3,6 +3,12 @@
 1、charts：以D3为底层库，封装了部分非常规chart。     
 2、util：封装了部分数据可视化上常用的数据处理函数。
 
+test
+![d](https://github.com/mark0322/xCharts/blob/master/imgs/donut-segment.gif)
+
+![ddd](https://github.com/mark0322/xCharts/blob/master/imgs/donut.png)
+
+
 ## 目录结构
 ```bash
 ├── /charts/             # chart 绘图函数与demo.html 
